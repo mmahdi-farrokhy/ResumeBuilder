@@ -19,9 +19,11 @@ public class Education {
     private int id;
 
     @Column(name = "degree_level")
+    @Enumerated(EnumType.STRING)
     private DegreeLevel degreeLevel;
 
     @Column(name = "major")
+    @Enumerated(EnumType.STRING)
     private Major major;
 
     @Column(name = "university")

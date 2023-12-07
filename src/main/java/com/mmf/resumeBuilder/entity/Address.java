@@ -23,8 +23,6 @@ public class Address {
     @Column(name = "region")
     private String region;
 
-
-
     public String toJson() {
         return new Gson().toJson(this, Address.class);
     }
