@@ -25,17 +25,17 @@ public class ResumeBuilderApplication {
     }
 
     private void addUserCareerEducation(UserDAO userDAO, CareerDAO careerDAO, EducationDAO educationDAO) {
-        System.out.println("\n\nSaving user ...");
+        System.out.println("\nSaving user ...");
         userDAO.save(createUser(createUserDetail(createAddress())));
-        System.out.println("User saved!\n\n");
+        System.out.println("User saved!\n");
 
-        System.out.println("\n\nSaving career ...");
+        System.out.println("\nSaving career ...");
         careerDAO.save(createCareer(createCity(createCountry())));
-        System.out.println("Career saved!\n\n");
+        System.out.println("Career saved!\n");
 
-        System.out.println("\n\nSaving education ...");
+        System.out.println("\nSaving education ...");
         educationDAO.save(createEducation());
-        System.out.println("Education saved!\n\n");
+        System.out.println("Education saved!\n");
     }
 
     private Education createEducation() {
@@ -50,18 +50,11 @@ public class ResumeBuilderApplication {
     }
 
     private City createCity(Country country) {
-        City city = new City();
-        city.setName("Los Angeles");
-        city.setCountry(country);
-        city.setId(12407);
-        return city;
+        return City.LAGHOUAT;
     }
 
     private Country createCountry() {
-        Country country = new Country();
-        country.setName("United States");
-        country.setIso("US");
-        return country;
+        return Country.UNITED_STATES;
     }
 
     private Career createCareer(City city) {

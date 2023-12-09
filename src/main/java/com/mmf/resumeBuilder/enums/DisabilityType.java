@@ -4,5 +4,5 @@ public enum DisabilityType {
     NONE,
     PHYSICAL,
     MENTAL,
-    SENSORY
+    SENSORY;
 }

@@ -26,7 +26,7 @@ public class UserDetail {
     @Enumerated(EnumType.STRING)
     private MaritalStatus maritalStatus;
 
-    @Column(name = "gender")
+    @Column(name = "gender", columnDefinition = "VARCHAR(15)")
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -40,7 +40,7 @@ public class UserDetail {
     @Column(name = "foreigner")
     private boolean foreigner;
 
-    @Column(name = "disability_type")
+    @Column(name = "disability_type", columnDefinition = "VARCHAR(15)")
     @Enumerated(EnumType.STRING)
     private DisabilityType disabilityType;
 

@@ -1,5 +1,6 @@
 package com.mmf.resumeBuilder.entity;
 
+import com.mmf.resumeBuilder.enums.City;
 import com.mmf.resumeBuilder.enums.JobCategory;
 import com.mmf.resumeBuilder.enums.JobStatus;
 import com.mmf.resumeBuilder.enums.SeniorityLevel;
