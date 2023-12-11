@@ -1,6 +1,7 @@
 package com.mmf.resumeBuilder.enums;
 
 public enum Major {
+    NONE,
     ELECTRICAL_ENGINEERING,
     COMPUTER_ENGINEERING,
     MECHANICAL_ENGINEERING,

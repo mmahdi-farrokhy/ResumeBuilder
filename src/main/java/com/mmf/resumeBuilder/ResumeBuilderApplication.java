@@ -26,11 +26,11 @@ public class ResumeBuilderApplication {
 
     private void addUserCareerEducation(UserDAO userDAO, CareerDAO careerDAO, EducationDAO educationDAO) {
         System.out.println("\nSaving user ...");
-        userDAO.save(createUser(createUserDetail(createAddress())));
+        userDAO.save(createUser(createUserDetail(createUserAddress())));
         System.out.println("User saved!\n");
 
         System.out.println("\nSaving career ...");
-        careerDAO.save(createCareer(createCity(createCountry())));
+        careerDAO.save(createCareer(createLocation()));
         System.out.println("Career saved!\n");
 
         System.out.println("\nSaving education ...");
@@ -40,62 +40,61 @@ public class ResumeBuilderApplication {
 
     private Education createEducation() {
         Education education = new Education();
-        education.setDegreeLevel(DegreeLevel.MASTER);
-        education.setMajor(Major.CINEMA);
-        education.setUniversity("Harvard University");
-        education.setGpa(19);
-        education.setStartYear(2000);
-        education.setEndYear(2004);
+        education.setDegreeLevel(DegreeLevel.NONE);
+        education.setMajor(Major.NONE);
+        education.setUniversity("");
+        education.setGpa(0);
+        education.setStartYear(0);
+        education.setEndYear(0);
         return education;
     }
 
-    private City createCity(Country country) {
-        return City.LAGHOUAT;
+    private Location createLocation() {
+        Location location = new Location();
+        location.setId(1);
+        location.setCityName(City.Los_Angeles);
+        location.setCountryId(location.getCityName().getCountryId());
+        return location;
     }
 
-    private Country createCountry() {
-        return Country.UNITED_STATES;
-    }
-
-    private Career createCareer(City city) {
+    private Career createCareer(Location location) {
         Career career = new Career();
-        career.setJobTitle("Actress");
+        career.setJobTitle("Actor");
         career.setJobCategory(JobCategory.FILM_CINEMA);
         career.setSeniorityLevel(SeniorityLevel.SENIOR);
-        career.setCompanyName("Hollywood");
-        career.setJobDescription("A brilliant actress staring in great movies.");
-        career.setStartDate(LocalDate.of(1994, 5, 19));
-        career.setEndDate(LocalDate.now());
+        career.setCompanyName("Universal Pictures");
+        career.setJobDescription("An actor who stared in fantastic movies like Seven, Fight Club and Inglorious Bastards");
+        career.setStartDate(LocalDate.of(1992, 8, 8));
         career.setJobStatus(JobStatus.OCCUPIED);
-        career.setCity(city);
+        career.setLocation(location);
         return career;
     }
 
-    private static User createUser(UserDetail userDetail) {
+    private Address createUserAddress() {
+        Address address = new Address();
+        address.setCity(City.Los_Angeles);
+        address.setRegion("Hollywood, Fame Boulevard");
+        return address;
+    }
+
+    private UserDetail createUserDetail(Address userAddress) {
+        UserDetail userDetail = new UserDetail();
+        userDetail.setMaritalStatus(MaritalStatus.MARRIED);
+        userDetail.setGender(Gender.MALE);
+        userDetail.setMilitaryServiceStatus(MilitaryServiceStatus.NOT_SERVED_YET);
+        userDetail.setBirthDate(LocalDate.of(1973, 8, 28));
+        userDetail.setForeigner(false);
+        userDetail.setDisabilityType(DisabilityType.NONE);
+        userDetail.setUserAddress(userAddress);
+        return userDetail;
+    }
+
+    private User createUser(UserDetail userDetail) {
         User user = new User();
-        user.setFirstName("Natalie");
-        user.setLastName("Portman");
+        user.setFirstName("Brad");
+        user.setLastName("Pitt");
         user.setPhoneNumber("09123456789");
         user.setUserDetail(userDetail);
         return user;
-    }
-
-    private static Address createAddress() {
-        Address userAddress = new Address();
-        userAddress.setCity("New York");
-        userAddress.setRegion("Wall St.");
-        return userAddress;
-    }
-
-    private static UserDetail createUserDetail(Address userAddress) {
-        UserDetail userDetail = new UserDetail();
-        userDetail.setMaritalStatus(MaritalStatus.MARRIED);
-        userDetail.setGender(Gender.FEMALE);
-        userDetail.setMilitaryServiceStatus(MilitaryServiceStatus.COMPLETED);
-        userDetail.setBirthDate(LocalDate.of(1981, 6, 9));
-        userDetail.setForeigner(false);
-        userDetail.setDisabilityType(DisabilityType.MENTAL);
-        userDetail.setUserAddress(userAddress);
-        return userDetail;
     }
 }

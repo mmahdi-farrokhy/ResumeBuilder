@@ -1,6 +1,7 @@
 package com.mmf.resumeBuilder.enums;
 
 public enum MilitaryServiceStatus {
+    NONE,
     COMPLETED,
     EXEMPTED,
     EDUCATIONAL_EXEMPTION,

@@ -1,5 +1,9 @@
 package com.mmf.resumeBuilder.enums;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
 public enum City {
     Kabul(Country.AFGHANISTAN.getId()),
     Herat(Country.AFGHANISTAN.getId()),

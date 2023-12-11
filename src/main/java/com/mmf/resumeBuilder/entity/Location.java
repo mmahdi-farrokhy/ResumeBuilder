@@ -10,17 +10,16 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "address")
-public class Address {
+@Table(name = "location")
+public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "city", columnDefinition = "VARCHAR(50)")
-    @Enumerated(EnumType.STRING)
-    private City city;
+    @Column(name = "city_name", columnDefinition = "VARCHAR(50)")
+    private City cityName;
 
-    @Column(name = "region")
-    private String region;
+    @Column(name = "country_id")
+    private int countryId;
 }

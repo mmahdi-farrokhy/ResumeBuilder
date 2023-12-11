@@ -1,6 +1,5 @@
 package com.mmf.resumeBuilder.entity;
 
-import com.mmf.resumeBuilder.enums.City;
 import com.mmf.resumeBuilder.enums.JobCategory;
 import com.mmf.resumeBuilder.enums.JobStatus;
 import com.mmf.resumeBuilder.enums.SeniorityLevel;
@@ -49,7 +48,7 @@ public class Career {
     @Enumerated(EnumType.STRING)
     private JobStatus jobStatus;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "city_id")
-    private City city;
+    @OneToOne()
+    @JoinColumn(name = "location_id")
+    private Location location;
 }
