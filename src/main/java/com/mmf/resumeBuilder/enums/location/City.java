@@ -1,7 +1,6 @@
-package com.mmf.resumeBuilder.enums;
+package com.mmf.resumeBuilder.enums.location;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public enum City {

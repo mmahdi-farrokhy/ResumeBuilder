@@ -1,8 +1,8 @@
 package com.mmf.resumeBuilder.entity;
 
-import com.mmf.resumeBuilder.enums.JobCategory;
-import com.mmf.resumeBuilder.enums.JobStatus;
-import com.mmf.resumeBuilder.enums.SeniorityLevel;
+import com.mmf.resumeBuilder.enums.job.JobCategory;
+import com.mmf.resumeBuilder.enums.job.JobStatus;
+import com.mmf.resumeBuilder.enums.user.detail.SeniorityLevel;
 import jakarta.persistence.*;
 import lombok.*;
 

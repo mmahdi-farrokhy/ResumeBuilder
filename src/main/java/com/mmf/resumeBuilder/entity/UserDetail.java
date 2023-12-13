@@ -1,9 +1,9 @@
 package com.mmf.resumeBuilder.entity;
 
-import com.mmf.resumeBuilder.enums.DisabilityType;
-import com.mmf.resumeBuilder.enums.Gender;
-import com.mmf.resumeBuilder.enums.MaritalStatus;
-import com.mmf.resumeBuilder.enums.MilitaryServiceStatus;
+import com.mmf.resumeBuilder.enums.user.detail.DisabilityType;
+import com.mmf.resumeBuilder.enums.user.detail.Gender;
+import com.mmf.resumeBuilder.enums.user.detail.MaritalStatus;
+import com.mmf.resumeBuilder.enums.user.detail.MilitaryServiceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

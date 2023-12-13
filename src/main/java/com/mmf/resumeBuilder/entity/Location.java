@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.entity;
 
-import com.mmf.resumeBuilder.enums.City;
+import com.mmf.resumeBuilder.enums.location.City;
 import jakarta.persistence.*;
 import lombok.*;
 

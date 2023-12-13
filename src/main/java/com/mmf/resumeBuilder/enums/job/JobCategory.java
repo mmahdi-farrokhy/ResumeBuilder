@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.enums;
+package com.mmf.resumeBuilder.enums.job;
 
 public enum JobCategory {
     SALES_MARKETING_SPECIALIST,

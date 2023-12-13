@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder.entity;
 
-import com.mmf.resumeBuilder.enums.DegreeLevel;
-import com.mmf.resumeBuilder.enums.Major;
+import com.mmf.resumeBuilder.enums.education.DegreeLevel;
+import com.mmf.resumeBuilder.enums.education.Major;
 import jakarta.persistence.*;
 import lombok.*;
 

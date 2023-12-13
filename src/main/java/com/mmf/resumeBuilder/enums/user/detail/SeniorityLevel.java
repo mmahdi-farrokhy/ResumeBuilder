@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.enums;
+package com.mmf.resumeBuilder.enums.user.detail;
 
 public enum SeniorityLevel {
     WORKER,
