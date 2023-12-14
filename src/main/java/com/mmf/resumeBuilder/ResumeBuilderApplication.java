@@ -3,7 +3,7 @@ package com.mmf.resumeBuilder;
 import com.mmf.resumeBuilder.dao.CareerDAO;
 import com.mmf.resumeBuilder.dao.EducationDAO;
 import com.mmf.resumeBuilder.dao.UserDAO;
-import com.mmf.resumeBuilder.entity.*;
+import com.mmf.resumeBuilder.entities.*;
 import com.mmf.resumeBuilder.enums.education.DegreeLevel;
 import com.mmf.resumeBuilder.enums.education.Major;
 import com.mmf.resumeBuilder.enums.job.JobCategory;
@@ -62,8 +62,8 @@ public class ResumeBuilderApplication {
         return location;
     }
 
-    private Career createCareer(Location location) {
-        Career career = new Career();
+    private JobExperience createCareer(Location location) {
+        JobExperience career = new JobExperience();
         career.setJobTitle("Actor");
         career.setJobCategory(JobCategory.FILM_CINEMA);
         career.setSeniorityLevel(SeniorityLevel.SENIOR);
