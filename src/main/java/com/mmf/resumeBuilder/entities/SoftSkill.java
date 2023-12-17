@@ -18,4 +18,8 @@ public class SoftSkill {
 
     @Column(name = "title")
     private String title;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 }

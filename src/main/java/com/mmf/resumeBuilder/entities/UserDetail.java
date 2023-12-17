@@ -43,8 +43,4 @@ public class UserDetail {
     @Column(name = "disability_type", columnDefinition = "VARCHAR(15)")
     @Enumerated(EnumType.STRING)
     private DisabilityType disabilityType;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_address_id")
-    private Address userAddress;
 }

@@ -32,4 +32,8 @@ public class Patent {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 }

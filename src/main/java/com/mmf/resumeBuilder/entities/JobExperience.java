@@ -51,4 +51,8 @@ public class JobExperience {
     @OneToOne()
     @JoinColumn(name = "location_id")
     private Location location;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 }

@@ -10,8 +10,8 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "contact_information")
-public class ContactInformation {
+@Table(name = "contact_method")
+public class ContactMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,4 +22,8 @@ public class ContactInformation {
 
     @Column(name = "value")
     private String value;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 }

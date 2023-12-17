@@ -1,19 +1,94 @@
--- Create language table
-CREATE TABLE IF NOT EXISTS resume_builder.language (
+-- Create user_detail table
+CREATE TABLE resume_builder.user_detail (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(30) NOT NULL,
-    speaking_level VARCHAR(30) NOT NULL,
-    writing_level VARCHAR(30) NOT NULL,
-    reading_level VARCHAR(30) NOT NULL,
-    listening_level VARCHAR(30) NOT NULL,
-    researching_level VARCHAR(30) NOT NULL
+    marital_status VARCHAR(20) NOT NULL,
+    gender VARCHAR(20) NOT NULL,
+    military_service_status VARCHAR(20) NOT NULL,
+    birth_date DATE NOT NULL,
+    foreigner BOOLEAN NOT NULL,
+    disability_type VARCHAR(20) NOT NULL
 );
 
--- Create skill table
-CREATE TABLE resume_builder.skill (
+-- Create user table
+CREATE TABLE resume_builder.user (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    skill_type VARCHAR(100) NOT NULL,
-    skill_level VARCHAR(100) NOT NULL
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    user_detail_id INT,
+    FOREIGN KEY (user_detail_id) REFERENCES user_detail(id)
+);
+
+-- Create summary table
+CREATE TABLE resume_builder.summary (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    text VARCHAR(2000) NOT NULL
+);
+
+-- Create resume table
+CREATE TABLE resume_builder.resume (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    summary_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (summary_id) REFERENCES summary(id)
+);
+
+-- Create contact_method table
+CREATE TABLE resume_builder.contact_method (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    type VARCHAR(30),
+    value VARCHAR(150),
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume(id)
+);
+
+-- Create education table
+CREATE TABLE resume_builder.education (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    degree_level VARCHAR(20) NOT NULL,
+    major VARCHAR(50) NOT NULL,
+    university VARCHAR(100) NOT NULL,
+    gpa DOUBLE NOT NULL,
+    start_year INT NOT NULL,
+    end_year INT NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume(id)
+);
+
+-- Create teaching_assistance table
+CREATE TABLE resume_builder.teaching_assistance (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL,
+    university VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume(id)
+);
+
+-- Create location table
+CREATE TABLE resume_builder.location (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    city_name VARCHAR(50) NOT NULL,
+    country_id INT NOT NULL
+);
+
+-- Create job_experience table
+CREATE TABLE resume_builder.job_experience (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    job_title VARCHAR(100) NOT NULL,
+    job_category VARCHAR(100) NOT NULL,
+    seniority_level VARCHAR(20) NOT NULL,
+    company_name VARCHAR(100) NOT NULL,
+    job_description VARCHAR(1000) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    job_status VARCHAR(20) NOT NULL,
+    location_id INT,
+    resume_id INT,
+    FOREIGN KEY (location_id) REFERENCES location(id),
+    FOREIGN KEY (resume_id) REFERENCES resume(id)
 );
 
 -- Create former_colleague table
@@ -22,7 +97,21 @@ CREATE TABLE resume_builder.former_colleague (
     full_name VARCHAR(100) NOT NULL,
     position VARCHAR(100) NOT NULL,
     organization_name VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(20) NOT NULL
+    phone_number VARCHAR(20) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume(id)
+);
+
+-- Create research table
+CREATE TABLE resume_builder.research (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(150) NOT NULL,
+    publisher VARCHAR(100) NOT NULL,
+    reference_link VARCHAR(150) NOT NULL,
+    date DATE NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
 );
 
 -- Create course table
@@ -30,20 +119,39 @@ CREATE TABLE resume_builder.course (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     institute VARCHAR(100) NOT NULL,
-    credential_id VARCHAR(100) NOT NULL UNIQUE
+    credential_id VARCHAR(100) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
+);
+
+-- Create hard_skill table
+CREATE TABLE resume_builder.hard_skill (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    hard_skill_type VARCHAR(100) NOT NULL,
+    hard_skill_level VARCHAR(100) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
 );
 
 -- Create soft_skill table
 CREATE TABLE resume_builder.soft_skill (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(100) NOT NULL
+    title VARCHAR(100) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
 );
 
--- Create honor table
-CREATE TABLE resume_builder.honor (
+-- Create language table
+CREATE TABLE resume_builder.language (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(100) NOT NULL,
-    year INT NOT NULL
+    name VARCHAR(30) NOT NULL,
+    speaking_level VARCHAR(30) NOT NULL,
+    writing_level VARCHAR(30) NOT NULL,
+    reading_level VARCHAR(30) NOT NULL,
+    listening_level VARCHAR(30) NOT NULL,
+    researching_level VARCHAR(30) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
 );
 
 -- Create project table
@@ -54,25 +162,9 @@ CREATE TABLE resume_builder.project (
     start_date DATE NOT NULL,
     end_date DATE,
     status VARCHAR(20) NOT NULL,
-    reference_link VARCHAR(150)
-);
-
--- Create publication table
-CREATE TABLE resume_builder.publication (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(150) NOT NULL,
-    author VARCHAR(100) NOT NULL,
-    publisher VARCHAR(100) NOT NULL,
-    publication_date DATE NOT NULL,
-    publication_url VARCHAR(150),
-    description VARCHAR(2000) NOT NULL
-);
-
--- Create volunteering table
-CREATE TABLE resume_builder.volunteering (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(150) NOT NULL,
-    year INT NOT NULL
+    reference_link VARCHAR(150),
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
 );
 
 -- Create patent table
@@ -82,12 +174,66 @@ CREATE TABLE resume_builder.patent (
     registration_number VARCHAR(150) NOT NULL,
     registration_date DATE NOT NULL,
     reference_link VARCHAR(150),
-    description VARCHAR(2000)
+    description VARCHAR(2000),
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
 );
 
--- Create contact_information table
-CREATE TABLE resume_builder.contact_information (
+-- Create presentation table
+CREATE TABLE resume_builder.presentation (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    type VARCHAR(20) NOT NULL,
-    value VARCHAR(150) NOT NULL
+    title VARCHAR(150) NOT NULL,
+    date DATE NOT NULL,
+    reference_link VARCHAR(150),
+    description VARCHAR(500) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
+);
+
+-- Create award table
+CREATE TABLE resume_builder.award (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(150) NOT NULL,
+    year INT NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume(id)
+);
+
+-- Create publication table
+CREATE TABLE resume_builder.publication (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(150) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    publisher VARCHAR(100) NOT NULL,
+    date DATE NOT NULL,
+    reference_link VARCHAR(150),
+    description VARCHAR(2000) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
+);
+
+-- Create volunteer_activity table
+CREATE TABLE resume_builder.volunteer_activity (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(150) NOT NULL,
+    year INT NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
+);
+
+-- Create membership table
+CREATE TABLE resume_builder.membership (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(150) NOT NULL,
+    date DATE NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
+);
+
+-- Create hobby table
+CREATE TABLE resume_builder.hobby (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    resume_id INT,
+    FOREIGN KEY (resume_id) REFERENCES resume (id)
 );

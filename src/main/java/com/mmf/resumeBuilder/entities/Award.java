@@ -9,21 +9,18 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "course")
-public class Course {
+@Table(name = "award")
+public class Award {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "institute")
-    private String institute;
-
-    @Column(name = "credential_id")
-    private String credentialId;
+    @Column(name = "year")
+    private int year;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")

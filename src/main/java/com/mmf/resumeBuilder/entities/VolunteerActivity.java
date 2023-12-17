@@ -9,8 +9,8 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "volunteering")
-public class Volunteering {
+@Table(name = "volunteer_activity")
+public class VolunteerActivity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,4 +21,8 @@ public class Volunteering {
 
     @Column(name = "year")
     private int year;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 }

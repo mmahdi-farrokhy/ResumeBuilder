@@ -41,4 +41,8 @@ public class Language {
     @Column(name = "researching_level")
     @Enumerated(EnumType.STRING)
     private LanguageLevel researchingLanguageLevel;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 }

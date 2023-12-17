@@ -31,7 +31,7 @@ public class ResumeBuilderApplication {
 
     private void addUserCareerEducation(UserDAO userDAO, CareerDAO careerDAO, EducationDAO educationDAO) {
         System.out.println("\nSaving user ...");
-        userDAO.save(createUser(createUserDetail(createUserAddress())));
+        userDAO.save(createUser(createUserDetail()));
         System.out.println("User saved!\n");
 
         System.out.println("\nSaving career ...");
@@ -75,14 +75,7 @@ public class ResumeBuilderApplication {
         return career;
     }
 
-    private Address createUserAddress() {
-        Address address = new Address();
-        address.setCity(City.Los_Angeles);
-        address.setRegion("Hollywood, Fame Boulevard");
-        return address;
-    }
-
-    private UserDetail createUserDetail(Address userAddress) {
+    private UserDetail createUserDetail() {
         UserDetail userDetail = new UserDetail();
         userDetail.setMaritalStatus(MaritalStatus.MARRIED);
         userDetail.setGender(Gender.MALE);
@@ -90,7 +83,6 @@ public class ResumeBuilderApplication {
         userDetail.setBirthDate(LocalDate.of(1973, 8, 28));
         userDetail.setForeigner(false);
         userDetail.setDisabilityType(DisabilityType.NONE);
-        userDetail.setUserAddress(userAddress);
         return userDetail;
     }
 
