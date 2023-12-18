@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum IndustrialEngineeringAndManagement implements HardSkillType {
+public enum IndustrialEngineeringAndManagement implements IHardSkillType {
     Arena,
     AnyLogic,
     VIP_PLANOPT,

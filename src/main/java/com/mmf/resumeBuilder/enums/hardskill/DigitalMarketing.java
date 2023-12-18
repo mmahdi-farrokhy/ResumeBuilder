@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum DigitalMarketing implements HardSkillType {
+public enum DigitalMarketing implements IHardSkillType {
     Drupal,
     Joomla,
     Google_Analytics,

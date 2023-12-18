@@ -19,10 +19,11 @@ public class HardSkill {
     private int id;
 
     @Column(name = "hard_skill_type")
-    private HardSkillType skillType;
+    private HardSkillType type;
 
     @Column(name = "hard_skill_level")
-    private HardSkillLevel skillLevel;
+    @Enumerated(EnumType.STRING)
+    private HardSkillLevel level;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")

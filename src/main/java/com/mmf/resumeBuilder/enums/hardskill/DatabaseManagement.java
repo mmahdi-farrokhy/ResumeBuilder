@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum DatabaseManagement implements HardSkillType {
+public enum DatabaseManagement implements IHardSkillType {
     Oracle_Database,
     PostgreSql,
     MySql,

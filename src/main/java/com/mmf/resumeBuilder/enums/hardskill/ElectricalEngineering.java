@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum ElectricalEngineering implements HardSkillType {
+public enum ElectricalEngineering implements IHardSkillType {
     MATLAB,
     Latex,
     Labview,

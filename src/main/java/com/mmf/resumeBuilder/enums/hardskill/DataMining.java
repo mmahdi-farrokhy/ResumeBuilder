@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum DataMining implements HardSkillType {
+public enum DataMining implements IHardSkillType {
     Tableau,
     Qliksense,
     Qlikview,

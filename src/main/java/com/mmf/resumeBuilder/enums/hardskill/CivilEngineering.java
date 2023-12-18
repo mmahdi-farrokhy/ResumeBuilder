@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum CivilEngineering implements HardSkillType {
+public enum CivilEngineering implements IHardSkillType {
     ETABS,
     CSI_Bridge,
     Canvas,

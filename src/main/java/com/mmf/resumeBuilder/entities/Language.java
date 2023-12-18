@@ -24,23 +24,23 @@ public class Language {
 
     @Column(name = "speaking_level")
     @Enumerated(EnumType.STRING)
-    private LanguageLevel speakingLanguageLevel;
+    private LanguageLevel speakingLevel;
 
     @Column(name = "writing_level")
     @Enumerated(EnumType.STRING)
-    private LanguageLevel writingLanguageLevel;
+    private LanguageLevel writingLevel;
 
     @Column(name = "reading_level")
     @Enumerated(EnumType.STRING)
-    private LanguageLevel readingLanguageLevel;
+    private LanguageLevel readingLevel;
 
     @Column(name = "listening_level")
     @Enumerated(EnumType.STRING)
-    private LanguageLevel listeningLanguageLevel;
+    private LanguageLevel listeningLevel;
 
     @Column(name = "researching_level")
     @Enumerated(EnumType.STRING)
-    private LanguageLevel researchingLanguageLevel;
+    private LanguageLevel researchingLevel;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")

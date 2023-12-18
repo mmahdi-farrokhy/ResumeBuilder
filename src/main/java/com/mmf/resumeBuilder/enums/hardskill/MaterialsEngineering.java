@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum MaterialsEngineering  implements HardSkillType {
+public enum MaterialsEngineering  implements IHardSkillType {
     Dips,
     Datamine_Studio,
     ARCGIS,

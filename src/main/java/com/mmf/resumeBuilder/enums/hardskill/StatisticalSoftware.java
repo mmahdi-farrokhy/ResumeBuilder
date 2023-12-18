@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum StatisticalSoftware  implements HardSkillType {
+public enum StatisticalSoftware implements IHardSkillType {
     ESBStats,
     ESBPDF_Analysis,
     BMDP,

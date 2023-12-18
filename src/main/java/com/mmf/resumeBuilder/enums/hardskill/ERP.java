@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum ERP implements HardSkillType {
+public enum ERP implements IHardSkillType {
     SAP,
     Oracle_ERP,
     Microsoft_ERP,

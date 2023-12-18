@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum CRM implements HardSkillType {
+public enum CRM implements IHardSkillType {
     Microsoft_Dynamics("Microsoft Dynamics"),
     Sales_Force("Sales Force"),
     Sugar("Sugar"),

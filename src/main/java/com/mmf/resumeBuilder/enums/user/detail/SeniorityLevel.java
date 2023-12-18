@@ -9,5 +9,5 @@ public enum SeniorityLevel {
     DIRECTOR,
     BUSINESS,
     HEAD,
-    CEO
+    Junior, Mid_Level, Intern, CEO
 }

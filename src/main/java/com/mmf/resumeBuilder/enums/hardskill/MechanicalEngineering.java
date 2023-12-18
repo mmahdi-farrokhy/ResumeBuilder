@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum MechanicalEngineering  implements HardSkillType {
+public enum MechanicalEngineering  implements IHardSkillType {
     Adams,
     Abaqus,
     Advanced_Aircraft_Analysis,

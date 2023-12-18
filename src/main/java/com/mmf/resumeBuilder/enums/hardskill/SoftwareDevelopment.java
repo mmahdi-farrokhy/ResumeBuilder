@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum SoftwareDevelopment implements HardSkillType {
+public enum SoftwareDevelopment implements IHardSkillType {
     Netbeans,
     Eclipse,
     Visual_Studio,

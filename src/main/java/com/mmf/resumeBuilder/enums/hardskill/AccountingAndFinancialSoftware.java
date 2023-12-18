@@ -3,7 +3,7 @@ package com.mmf.resumeBuilder.enums.hardskill;
 import lombok.Getter;
 
 @Getter
-public enum AccountingAndFinancialSoftware implements HardSkillType {
+public enum AccountingAndFinancialSoftware implements IHardSkillType {
     Hamkaran_System("همکاران سیستم"),
     Rayvarz("رایورز"),
     Tadbir("تدبیر"),
@@ -21,7 +21,7 @@ public enum AccountingAndFinancialSoftware implements HardSkillType {
     Payvast("پیوست"),
     Varanegar("ورا نگر"),
     Sepidz("سپیدز");
-    
+
     private String persianTitle;
 
     AccountingAndFinancialSoftware(String persianTitle) {

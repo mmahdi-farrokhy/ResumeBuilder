@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum ChemicalEngineering  implements HardSkillType {
+public enum ChemicalEngineering  implements IHardSkillType {
     Aspen_MUSE,
     Aspen_HYSYS,
     Applied_Flow_Technology_Fathom,

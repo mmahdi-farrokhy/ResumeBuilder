@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum MicrosoftOffice implements HardSkillType {
+public enum MicrosoftOffice implements IHardSkillType {
     Microsoft_Access,
     Microsoft_Excel,
     Microsoft_Word,

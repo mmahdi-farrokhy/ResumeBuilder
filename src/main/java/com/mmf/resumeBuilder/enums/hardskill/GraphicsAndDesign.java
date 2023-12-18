@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum GraphicsAndDesign implements HardSkillType {
+public enum GraphicsAndDesign implements IHardSkillType {
     Adobe_Flash,
     Adobe_Dreamweaver,
     ACD_See,

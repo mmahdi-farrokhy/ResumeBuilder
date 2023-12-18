@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum NetworkAndHardware implements HardSkillType {
+public enum NetworkAndHardware implements IHardSkillType {
     GFI_LAN_GUARD,
     ISA_Server,
     TMG,

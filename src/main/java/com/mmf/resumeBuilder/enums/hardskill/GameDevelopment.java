@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
-public enum GameDevelopment implements HardSkillType {
+public enum GameDevelopment implements IHardSkillType {
     AppGameKit,
     SpriteKit,
     Corona_SDK,

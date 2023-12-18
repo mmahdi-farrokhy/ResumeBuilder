@@ -21,12 +21,12 @@ public class JobExperience {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "job_title")
-    private String jobTitle;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "job_category")
+    @Column(name = "category")
     @Enumerated(EnumType.STRING)
-    private JobCategory jobCategory;
+    private JobCategory category;
 
     @Column(name = "seniority_level")
     @Enumerated(EnumType.STRING)
@@ -35,8 +35,8 @@ public class JobExperience {
     @Column(name = "company_name")
     private String companyName;
 
-    @Column(name = "job_description")
-    private String jobDescription;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -46,9 +46,9 @@ public class JobExperience {
 
     @Column(name = "job_status")
     @Enumerated(EnumType.STRING)
-    private JobStatus jobStatus;
+    private JobStatus status;
 
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location location;
 
