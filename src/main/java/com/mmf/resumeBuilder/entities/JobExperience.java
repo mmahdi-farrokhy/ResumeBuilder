@@ -44,11 +44,11 @@ public class JobExperience {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "job_status")
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private JobStatus status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "location_id")
     private Location location;
 
