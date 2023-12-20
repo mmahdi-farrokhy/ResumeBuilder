@@ -5,7 +5,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -28,4 +27,15 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_detail_id")
     private UserDetail userDetail;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id + "\n" +
+                ", firstName='" + firstName +"\n" +
+                ", lastName='" + lastName  +"\n" +
+                ", phoneNumber='" + phoneNumber +"\n" +
+                ", userDetail=" + userDetail +
+                '}';
+    }
 }

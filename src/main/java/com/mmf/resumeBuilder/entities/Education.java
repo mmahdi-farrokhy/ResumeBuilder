@@ -7,7 +7,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -41,4 +40,17 @@ public class Education {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+    @Override
+    public String toString() {
+        return "Education{" +
+                "id=" + id + "\n" +
+                ", degreeLevel=" + degreeLevel +"\n" +
+                ", major=" + major +"\n" +
+                ", university='" + university + "\n" +
+                ", gpa=" + gpa +"\n" +
+                ", startYear=" + startYear +"\n" +
+                ", endYear=" + endYear +"\n" +
+                '}';
+    }
 }

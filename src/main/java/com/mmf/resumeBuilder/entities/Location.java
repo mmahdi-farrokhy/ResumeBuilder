@@ -18,6 +18,7 @@ public class Location {
     private int id;
 
     @Column(name = "city_name", columnDefinition = "VARCHAR(50)")
+    @Enumerated(EnumType.STRING)
     private City cityName;
 
     @Column(name = "country_id")

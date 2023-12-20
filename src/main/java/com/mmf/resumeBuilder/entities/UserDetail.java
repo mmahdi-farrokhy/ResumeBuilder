@@ -11,7 +11,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -43,4 +42,17 @@ public class UserDetail {
     @Column(name = "disability_type", columnDefinition = "VARCHAR(15)")
     @Enumerated(EnumType.STRING)
     private DisabilityType disabilityType;
+
+    @Override
+    public String toString() {
+        return "UserDetail{" +
+                "id=" + id + "\n" +
+                ", maritalStatus=" + maritalStatus +"\n" +
+                ", gender=" + gender +"\n" +
+                ", militaryServiceStatus=" + militaryServiceStatus +"\n" +
+                ", birthDate=" + birthDate +"\n" +
+                ", foreigner=" + foreigner +"\n" +
+                ", disabilityType=" + disabilityType +"\n" +
+                '}';
+    }
 }

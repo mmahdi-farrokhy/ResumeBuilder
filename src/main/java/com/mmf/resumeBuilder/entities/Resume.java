@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
+//@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -295,5 +295,12 @@ public class Resume {
     public void removeHobby(Hobby hobby) {
         if (this.hobbies != null && this.hobbies.contains(hobby))
             this.hobbies.remove(hobby);
+    }
+
+    @Override
+    public String toString() {
+        return "Resume{" +
+                "id=" + id +
+                '}';
     }
 }

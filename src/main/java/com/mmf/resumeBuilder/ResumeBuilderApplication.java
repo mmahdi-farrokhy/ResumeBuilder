@@ -1,16 +1,12 @@
 package com.mmf.resumeBuilder;
 
-import com.mmf.resumeBuilder.dao.CareerDAO;
-import com.mmf.resumeBuilder.dao.EducationDAO;
 import com.mmf.resumeBuilder.dao.ResumeDAO;
-import com.mmf.resumeBuilder.dao.UserDAO;
 import com.mmf.resumeBuilder.entities.*;
 import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import com.mmf.resumeBuilder.enums.education.DegreeLevel;
 import com.mmf.resumeBuilder.enums.education.Major;
 import com.mmf.resumeBuilder.enums.hardskill.HardSkillLevel;
 import com.mmf.resumeBuilder.enums.hardskill.HardSkillType;
-import com.mmf.resumeBuilder.enums.hardskill.SoftwareDevelopment;
 import com.mmf.resumeBuilder.enums.job.JobCategory;
 import com.mmf.resumeBuilder.enums.job.JobStatus;
 import com.mmf.resumeBuilder.enums.language.LanguageLevel;
@@ -24,6 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootApplication
 public class ResumeBuilderApplication {
@@ -33,11 +30,130 @@ public class ResumeBuilderApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(UserDAO userDAO, CareerDAO careerDAO, EducationDAO educationDAO, ResumeDAO resumeDAO) {
-        return runner -> addUserCareerEducation(userDAO, careerDAO, educationDAO, resumeDAO);
+    public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
+        return runner -> readResumeFromDatabase(resumeDAO);
     }
 
-    private void addUserCareerEducation(UserDAO userDAO, CareerDAO careerDAO, EducationDAO educationDAO, ResumeDAO resumeDAO) {
+    private void readResumeFromDatabase(ResumeDAO resumeDAO) {
+        int resumeId = 7;
+        Resume resume = resumeDAO.findById(resumeId);
+        User user = resumeDAO.findUser(resumeId);
+        List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
+        List<Education> educations = resumeDAO.findEducations(resumeId);
+//        List<TeachingAssistance> teachingAssistance = resume.getTeachingAssistance();
+//        List<JobExperience> jobExperiences = resume.getJobExperiences();
+//        List<FormerColleague> formerColleagues = resume.getFormerColleagues();
+//        List<Research> researches = resume.getResearches();
+//        List<Course> courses = resume.getCourses();
+//        List<HardSkill> hardSkills = resume.getHardSkills();
+//        List<SoftSkill> softSkills = resume.getSoftSkills();
+//        List<Language> languages = resume.getLanguages();
+//        List<Project> projects = resume.getProjects();
+//        List<Patent> patents = resume.getPatents();
+//        List<Presentation> presentations = resume.getPresentations();
+//        List<Award> awards = resume.getAwards();
+//        List<Publication> publications = resume.getPublications();
+//        List<VolunteerActivity> volunteerActivities = resume.getVolunteerActivities();
+//        List<Membership> memberships = resume.getMemberships();
+//        List<Hobby> hobbies = resume.getHobbies();
+
+        if (user != null)
+            System.out.println("user:" + user + "\n_________________________________________");
+        else
+            System.out.println("user is null\n_________________________________________");
+
+        if (contactInformation != null)
+            System.out.println(contactInformation + "\n_________________________________________");
+        else
+            System.out.println("contactInformation is null\n_________________________________________");
+
+        if (educations != null)
+            System.out.println(educations + "\n_________________________________________");
+        else
+            System.out.println("educations is null" + "\n_________________________________________");
+//
+//        if (teachingAssistance != null)
+//            System.out.println("teachingAssistance:" + teachingAssistance + "\n_________________________________________");
+//        else
+//            System.out.println("teachingAssistance is null" + "\n_________________________________________");
+//
+//        if (jobExperiences != null)
+//            System.out.println("jobExperiences:" + jobExperiences + "\n_________________________________________");
+//        else
+//            System.out.println("jobExperiences is null" + "\n_________________________________________");
+//
+//        if (formerColleagues != null)
+//            System.out.println("formerColleagues:" + formerColleagues + "\n_________________________________________");
+//        else
+//            System.out.println("formerColleagues is null" + "\n_________________________________________");
+//
+//        if (researches != null)
+//            System.out.println("researches:" + researches + "\n_________________________________________");
+//        else
+//            System.out.println("researches is null" + "\n_________________________________________");
+//
+//        if (courses != null)
+//            System.out.println("courses:" + courses + "\n_________________________________________");
+//        else
+//            System.out.println("courses is null" + "\n_________________________________________");
+//
+//        if (hardSkills != null)
+//            System.out.println("hardSkills:" + hardSkills + "\n_________________________________________");
+//        else
+//            System.out.println("hardSkills is null" + "\n_________________________________________");
+//
+//        if (softSkills != null)
+//            System.out.println("softSkills:" + softSkills + "\n_________________________________________");
+//        else
+//            System.out.println("softSkills is null" + "\n_________________________________________");
+//
+//        if (languages != null)
+//            System.out.println("languages:" + languages + "\n_________________________________________");
+//        else
+//            System.out.println("languages is null" + "\n_________________________________________");
+//
+//        if (projects != null)
+//            System.out.println("projects:" + projects + "\n_________________________________________");
+//        else
+//            System.out.println("projects is null" + "\n_________________________________________");
+//
+//        if (patents != null)
+//            System.out.println("patents:" + patents + "\n_________________________________________");
+//        else
+//            System.out.println("patents is null" + "\n_________________________________________");
+//
+//        if (presentations != null)
+//            System.out.println("presentations:" + presentations + "\n_________________________________________");
+//        else
+//            System.out.println("presentations is null" + "\n_________________________________________");
+//
+//        if (awards != null)
+//            System.out.println("awards:" + awards + "\n_________________________________________");
+//        else
+//            System.out.println("awards is null" + "\n_________________________________________");
+//
+//        if (publications != null)
+//            System.out.println("publications:" + publications+ "\n_________________________________________");
+//        else
+//            System.out.println("publications is null"+ "\n_________________________________________");
+//
+//        if (volunteerActivities != null)
+//            System.out.println("volunteerActivities:" + volunteerActivities+ "\n_________________________________________");
+//        else
+//            System.out.println("volunteerActivities is null"+ "\n_________________________________________");
+//
+//        if (memberships != null)
+//            System.out.println("memberships:" + memberships+ "\n_________________________________________");
+//        else
+//            System.out.println("memberships is null"+ "\n_________________________________________");
+//
+//        if (hobbies != null)
+//            System.out.println("hobbies:" + hobbies+ "\n_________________________________________");
+//        else
+//            System.out.println("hobbies is null"+ "\n_________________________________________");
+    }
+
+    private void addResume(ResumeDAO resumeDAO) {
         System.out.println("Creating resume");
         Resume resume = new Resume();
         resume.setUser(CreateUser());
@@ -57,7 +173,6 @@ public class ResumeBuilderApplication {
 
         System.out.println("Saving resume");
         resumeDAO.save(resume);
-
         System.out.println("Resume saved");
     }
 
