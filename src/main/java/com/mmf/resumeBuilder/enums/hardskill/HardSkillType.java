@@ -1,5 +1,7 @@
 package com.mmf.resumeBuilder.enums.hardskill;
 
+import com.mmf.resumeBuilder.enums.utils.Conversion;
+
 public enum HardSkillType {
     Hamkaran_System("همکاران سیستم"),
     Rayvarz("رایورز"),
@@ -532,5 +534,10 @@ public enum HardSkillType {
 
     HardSkillType() {
         this.persianTitle = null;
+    }
+
+    @Override
+    public String toString() {
+        return Conversion.removeUnderScores(this);
     }
 }

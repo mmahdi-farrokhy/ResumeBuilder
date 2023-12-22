@@ -1,5 +1,7 @@
 package com.mmf.resumeBuilder.enums.contactinformation;
 
+import com.mmf.resumeBuilder.enums.utils.Conversion;
+
 public enum ContactType {
     Phone_Number,
     Email,
@@ -17,5 +19,10 @@ public enum ContactType {
     Figma,
     Pinterest,
     GitLab,
-    Address
+    Address;
+
+    @Override
+    public String toString() {
+        return Conversion.removeUnderScores(this);
+    }
 }

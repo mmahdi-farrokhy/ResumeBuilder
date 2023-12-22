@@ -151,7 +151,7 @@ VALUES
 ('Bremen',12),
 ('Nuremberg',12),
 
-('Hong Kong',13),
+('Hong_kong',13),
 ('Kowloon',13),
 ('Victoria',13),
 ('Tuen Mun',13),

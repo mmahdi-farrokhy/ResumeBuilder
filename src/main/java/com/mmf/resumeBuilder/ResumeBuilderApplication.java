@@ -133,24 +133,24 @@ public class ResumeBuilderApplication {
             System.out.println("awards is null" + "\n_________________________________________");
 
         if (publications != null)
-            System.out.println("publications:" + publications+ "\n_________________________________________");
+            System.out.println("publications:" + publications + "\n_________________________________________");
         else
-            System.out.println("publications is null"+ "\n_________________________________________");
+            System.out.println("publications is null" + "\n_________________________________________");
 
         if (volunteerActivities != null)
-            System.out.println("volunteerActivities:" + volunteerActivities+ "\n_________________________________________");
+            System.out.println("volunteerActivities:" + volunteerActivities + "\n_________________________________________");
         else
-            System.out.println("volunteerActivities is null"+ "\n_________________________________________");
+            System.out.println("volunteerActivities is null" + "\n_________________________________________");
 
         if (memberships != null)
-            System.out.println("memberships:" + memberships+ "\n_________________________________________");
+            System.out.println("memberships:" + memberships + "\n_________________________________________");
         else
-            System.out.println("memberships is null"+ "\n_________________________________________");
+            System.out.println("memberships is null" + "\n_________________________________________");
 
         if (hobbies != null)
-            System.out.println("hobbies:" + hobbies+ "\n_________________________________________");
+            System.out.println("hobbies:" + hobbies + "\n_________________________________________");
         else
-            System.out.println("hobbies is null"+ "\n_________________________________________");
+            System.out.println("hobbies is null" + "\n_________________________________________");
     }
 
     private void addResume(ResumeDAO resumeDAO) {
@@ -182,9 +182,9 @@ public class ResumeBuilderApplication {
     }
 
     private void addLanguages(Resume resume) {
-        Language language1 = createLanguage(resume, LanguageName.GERMAN, LanguageLevel.PRE_INTERMEDIATE, LanguageLevel.PRE_INTERMEDIATE, LanguageLevel.PRE_INTERMEDIATE, LanguageLevel.PRE_INTERMEDIATE, LanguageLevel.PRE_INTERMEDIATE);
-        Language language2 = createLanguage(resume, LanguageName.ENGLISH, LanguageLevel.INTERMEDIATE, LanguageLevel.INTERMEDIATE, LanguageLevel.UPPER_INTERMEDIATE, LanguageLevel.UPPER_INTERMEDIATE, LanguageLevel.UPPER_INTERMEDIATE);
-        Language language3 = createLanguage(resume, LanguageName.PERSIAN, LanguageLevel.NATIVE, LanguageLevel.NATIVE, LanguageLevel.NATIVE, LanguageLevel.NATIVE, LanguageLevel.NATIVE);
+        Language language1 = createLanguage(resume, LanguageName.German, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate);
+        Language language2 = createLanguage(resume, LanguageName.English, LanguageLevel.Intermediate, LanguageLevel.Intermediate, LanguageLevel.Upper_Intermediate, LanguageLevel.Upper_Intermediate, LanguageLevel.Upper_Intermediate);
+        Language language3 = createLanguage(resume, LanguageName.Persian, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native);
         resume.addLanguage(language1);
         resume.addLanguage(language2);
         resume.addLanguage(language3);
@@ -198,8 +198,8 @@ public class ResumeBuilderApplication {
     }
 
     private void addHardSkills(Resume resume) {
-        HardSkill hardSkill1 = createHardSkill(resume, HardSkillType.Spring_Boot, HardSkillLevel.BEGINNER);
-        HardSkill hardSkill2 = createHardSkill(resume, HardSkillType.Java, HardSkillLevel.INTERMEDIATE);
+        HardSkill hardSkill1 = createHardSkill(resume, HardSkillType.Spring_Boot, HardSkillLevel.Beginner);
+        HardSkill hardSkill2 = createHardSkill(resume, HardSkillType.Java, HardSkillLevel.Intermediate);
         resume.addHardSkill(hardSkill1);
         resume.addHardSkill(hardSkill2);
     }
@@ -342,7 +342,7 @@ public class ResumeBuilderApplication {
     private JobExperience createJobExperience1(Resume resume) {
         JobExperience jobExperience = new JobExperience();
         jobExperience.setTitle("Software Developer And Consultant");
-        jobExperience.setCategory(JobCategory.SOFTWARE_DEVELOPMENT);
+        jobExperience.setCategory(JobCategory.Software_Development);
         jobExperience.setSeniorityLevel(SeniorityLevel.Junior);
         jobExperience.setCompanyName("Negar Andishgan Co. Ltd.");
         jobExperience.setDescription("Developing and refactoring NrSign.EMG medical test software");
@@ -356,7 +356,7 @@ public class ResumeBuilderApplication {
     private JobExperience createJobExperience2(Resume resume) {
         JobExperience jobExperience = new JobExperience();
         jobExperience.setTitle("C# Developer");
-        jobExperience.setCategory(JobCategory.SOFTWARE_DEVELOPMENT);
+        jobExperience.setCategory(JobCategory.Software_Development);
         jobExperience.setSeniorityLevel(SeniorityLevel.Junior);
         jobExperience.setCompanyName("Zarvan Stun Khodro");
         jobExperience.setDescription("Developing automotive software Diag and Remap");
@@ -388,8 +388,8 @@ public class ResumeBuilderApplication {
 
     private Education CreateEducation(Resume resume) {
         Education education = new Education();
-        education.setDegreeLevel(DegreeLevel.BACHELOR);
-        education.setMajor(Major.COMPUTER_ENGINEERING);
+        education.setDegreeLevel(DegreeLevel.Bachelor);
+        education.setMajor(Major.Computer_Engineering);
         education.setUniversity("Semnan University");
         education.setGpa(16);
         education.setStartYear(2017);
@@ -431,12 +431,12 @@ public class ResumeBuilderApplication {
 
     private UserDetail CreateUserDetail() {
         UserDetail userDetail = new UserDetail();
-        userDetail.setMaritalStatus(MaritalStatus.SINGLE);
-        userDetail.setGender(Gender.MALE);
-        userDetail.setMilitaryServiceStatus(MilitaryServiceStatus.EXEMPTED);
+        userDetail.setMaritalStatus(MaritalStatus.Single);
+        userDetail.setGender(Gender.Male);
+        userDetail.setMilitaryServiceStatus(MilitaryServiceStatus.Exempted);
         userDetail.setBirthDate(LocalDate.of(1999, 7, 29));
         userDetail.setForeigner(false);
-        userDetail.setDisabilityType(DisabilityType.NONE);
+        userDetail.setDisabilityType(DisabilityType.None);
         return userDetail;
     }
 }

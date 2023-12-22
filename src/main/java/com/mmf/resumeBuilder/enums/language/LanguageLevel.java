@@ -1,19 +1,25 @@
 package com.mmf.resumeBuilder.enums.language;
 
+import com.mmf.resumeBuilder.enums.utils.Conversion;
 import lombok.Getter;
 
 @Getter
 public enum LanguageLevel {
-    BASIC("I can understand a little but cannot communicate at all"),
-    PRE_INTERMEDIATE("I can understand and communicate a little"),
-    INTERMEDIATE("I can understand well, but cannot communicate much"),
-    UPPER_INTERMEDIATE("I can understand and communicate well, but sometimes a bit slow"),
-    ADVANCED("I can understand and communicate without any problems"),
-    NATIVE("I understand and communicate as a native");
+    Basic("I can understand a little but cannot communicate at all"),
+    Pre_Intermediate("I can understand and communicate a little"),
+    Intermediate("I can understand well, but cannot communicate much"),
+    Upper_Intermediate("I can understand and communicate well, but sometimes a bit slow"),
+    Advanced("I can understand and communicate without any problems"),
+    Native("I understand and communicate as a native");
 
     private String description;
 
     LanguageLevel(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return Conversion.removeUnderScores(this);
     }
 }

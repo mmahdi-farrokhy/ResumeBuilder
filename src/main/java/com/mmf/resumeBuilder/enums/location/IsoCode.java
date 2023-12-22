@@ -1,5 +1,7 @@
 package com.mmf.resumeBuilder.enums.location;
 
+import com.mmf.resumeBuilder.enums.utils.Conversion;
+
 public enum IsoCode {
     AF,
     AL,
@@ -85,5 +87,13 @@ public enum IsoCode {
     US,
     UZ,
     VN,
-    YE, RU, PS, SY;
+    YE,
+    RU,
+    PS,
+    SY;
+
+    @Override
+    public String toString() {
+        return Conversion.removeUnderScores(this);
+    }
 }

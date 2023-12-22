@@ -1,13 +1,23 @@
 package com.mmf.resumeBuilder.enums.user.detail;
 
+import com.mmf.resumeBuilder.enums.utils.Conversion;
+
 public enum SeniorityLevel {
-    WORKER,
-    EMPLOYEE,
-    SPECIALIST,
-    SENIOR,
-    MANAGER,
-    DIRECTOR,
-    BUSINESS,
-    HEAD,
-    Junior, Mid_Level, Intern, CEO
+    Worker,
+    Employee,
+    Specialist,
+    Senior,
+    Manager,
+    Director,
+    Business,
+    Head,
+    Junior,
+    Mid_Level,
+    Intern,
+    Ceo;
+
+    @Override
+    public String toString() {
+        return Conversion.removeUnderScores(this);
+    }
 }

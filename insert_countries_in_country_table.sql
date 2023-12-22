@@ -1,10 +1,10 @@
 INSERT INTO resumeBuiler.country(name, iso_code)
 VALUES
 ('AFGHANISTAN','AF'),
-('ARGENTINA','AR'),
-('ARMENIA','AM'),
-('AUSTRALIA','AU'),
-('AUSTRIA','AT'),
+('Argentina','AR'),
+('Armenia','AM'),
+('Australia','AU'),
+('Austria','AT'),
 ('AZERBAIJAN','AZ'),
 ('BELGIUM','BE'),
 ('BRAZIL','BR'),
