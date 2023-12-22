@@ -11,6 +11,7 @@ public interface ResumeDAO {
     void updateUser(User updatingUser);
 
     List<ContactMethod> findContactInformation(Integer resumeId);
+    void updateContactMethod(ContactMethod updatingContactMethod);
 
     List<Education> findEducations(Integer resumeId);
 

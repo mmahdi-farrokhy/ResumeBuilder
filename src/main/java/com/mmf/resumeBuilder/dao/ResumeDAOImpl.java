@@ -50,6 +50,12 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
+    @Transactional
+    public void updateContactMethod(ContactMethod updatingContactMethod) {
+        entityManager.merge(updatingContactMethod);
+    }
+
+    @Override
     public List<Education> findEducations(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
                 "LEFT JOIN FETCH r.educations " +

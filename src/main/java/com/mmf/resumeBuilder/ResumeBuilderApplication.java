@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 public class ResumeBuilderApplication {
@@ -31,7 +32,16 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> updateResumeUserInDatabase(resumeDAO);
+        return runner -> updateResumeContactMethodInDatabase(resumeDAO);
+    }
+
+    private void updateResumeContactMethodInDatabase(ResumeDAO resumeDAO) {
+        Integer resumeId = 7;
+        List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
+        ContactMethod contactMethod = contactInformation.stream().filter(e -> e.getType() == ContactType.Email).findFirst().get();
+        contactMethod.setValue("muhammadmahdifarrokhy@gmail.com");
+        resumeDAO.updateContactMethod(contactMethod);
+        System.out.println("Contact method updated");
     }
 
     private void updateResumeUserInDatabase(ResumeDAO resumeDAO) {
@@ -355,7 +365,7 @@ public class ResumeBuilderApplication {
         jobExperience.setCompanyName("Negar Andishgan Co. Ltd.");
         jobExperience.setDescription("Developing and refactoring NrSign.EMG medical test software");
         jobExperience.setStartDate(LocalDate.of(2023, 1, 7));
-        jobExperience.setStatus(JobStatus.OCCUPIED);
+        jobExperience.setStatus(JobStatus.Occupied);
         jobExperience.setLocation(createLocation());
         jobExperience.setResume(resume);
         return jobExperience;
@@ -370,7 +380,7 @@ public class ResumeBuilderApplication {
         jobExperience.setDescription("Developing automotive software Diag and Remap");
         jobExperience.setStartDate(LocalDate.of(2022, 4, 17));
         jobExperience.setEndDate(LocalDate.of(2022, 12, 21));
-        jobExperience.setStatus(JobStatus.FINISHED);
+        jobExperience.setStatus(JobStatus.Finished);
         jobExperience.setLocation(createLocation());
         jobExperience.setResume(resume);
         return jobExperience;
