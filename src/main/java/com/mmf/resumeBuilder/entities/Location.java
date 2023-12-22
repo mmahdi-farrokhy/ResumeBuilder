@@ -6,7 +6,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -23,4 +22,13 @@ public class Location {
 
     @Column(name = "country_id")
     private int countryId;
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id + "\n" +
+                ", cityName=" + cityName + "\n" +
+                ", countryId=" + countryId + "\n" +
+                '}';
+    }
 }

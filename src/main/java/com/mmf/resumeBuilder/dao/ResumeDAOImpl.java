@@ -1,9 +1,6 @@
 package com.mmf.resumeBuilder.dao;
 
-import com.mmf.resumeBuilder.entities.ContactMethod;
-import com.mmf.resumeBuilder.entities.Education;
-import com.mmf.resumeBuilder.entities.Resume;
-import com.mmf.resumeBuilder.entities.User;
+import com.mmf.resumeBuilder.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,32 +20,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public Resume findById(int resumeId) {
         return entityManager.find(Resume.class, resumeId);
-    }
-
-    public Resume eagerFindById(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.contactInformation " +
-                "LEFT JOIN FETCH r.educations " +
-                "LEFT JOIN FETCH r.teachingAssistance " +
-                "LEFT JOIN FETCH r.jobExperiences " +
-                "LEFT JOIN FETCH r.formerColleagues " +
-                "LEFT JOIN FETCH r.researches " +
-                "LEFT JOIN FETCH r.courses " +
-                "LEFT JOIN FETCH r.hardSkills " +
-                "LEFT JOIN FETCH r.softSkills " +
-                "LEFT JOIN FETCH r.languages " +
-                "LEFT JOIN FETCH r.projects " +
-                "LEFT JOIN FETCH r.patents " +
-                "LEFT JOIN FETCH r.presentations " +
-                "LEFT JOIN FETCH r.awards " +
-                "LEFT JOIN FETCH r.publications " +
-                "LEFT JOIN FETCH r.volunteerActivities " +
-                "LEFT JOIN FETCH r.memberships " +
-                "LEFT JOIN FETCH r.hobbies " +
-                "where r.id = :resumeId", Resume.class);
-
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult();
     }
 
     @Override
@@ -79,5 +50,165 @@ public class ResumeDAOImpl implements ResumeDAO {
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getEducations();
+    }
+
+    @Override
+    public List<TeachingAssistance> findTeachingAssistance(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.teachingAssistance " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getTeachingAssistance();
+    }
+
+    @Override
+    public List<JobExperience> findJobExperiences(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.jobExperiences " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getJobExperiences();
+    }
+
+    @Override
+    public List<FormerColleague> findFormerColleagues(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.formerColleagues " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getFormerColleagues();
+    }
+
+    @Override
+    public List<Research> findResearches(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.researches " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getResearches();
+    }
+
+    @Override
+    public List<Course> findCourses(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.courses " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getCourses();
+    }
+
+    @Override
+    public List<HardSkill> findHardSkills(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.hardSkills " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getHardSkills();
+    }
+
+    @Override
+    public List<SoftSkill> findSoftSkills(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.softSkills " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getSoftSkills();
+    }
+
+    @Override
+    public List<Language> findLanguages(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.languages " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getLanguages();
+    }
+
+    @Override
+    public List<Project> findProjects(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.projects " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getProjects();
+    }
+
+    @Override
+    public List<Patent> findPatents(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.patents " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getPatents();
+    }
+
+    @Override
+    public List<Presentation> findPresentations(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.presentations " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getPresentations();
+    }
+
+    @Override
+    public List<Award> findAwards(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.awards " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getAwards();
+    }
+
+    @Override
+    public List<Publication> findPublications(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.publications " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getPublications();
+    }
+
+    @Override
+    public List<VolunteerActivity> findVolunteerActivities(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.volunteerActivities " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getVolunteerActivities();
+    }
+
+    @Override
+    public List<Membership> findMemberships(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.memberships " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getMemberships();
+    }
+
+    @Override
+    public List<Hobby> findHobbies(Integer resumeId) {
+        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
+                "LEFT JOIN FETCH r.hobbies " +
+                "where r.id = :resumeId", Resume.class);
+
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getHobbies();
     }
 }

@@ -40,22 +40,22 @@ public class ResumeBuilderApplication {
         User user = resumeDAO.findUser(resumeId);
         List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
         List<Education> educations = resumeDAO.findEducations(resumeId);
-//        List<TeachingAssistance> teachingAssistance = resume.getTeachingAssistance();
-//        List<JobExperience> jobExperiences = resume.getJobExperiences();
-//        List<FormerColleague> formerColleagues = resume.getFormerColleagues();
-//        List<Research> researches = resume.getResearches();
-//        List<Course> courses = resume.getCourses();
-//        List<HardSkill> hardSkills = resume.getHardSkills();
-//        List<SoftSkill> softSkills = resume.getSoftSkills();
-//        List<Language> languages = resume.getLanguages();
-//        List<Project> projects = resume.getProjects();
-//        List<Patent> patents = resume.getPatents();
-//        List<Presentation> presentations = resume.getPresentations();
-//        List<Award> awards = resume.getAwards();
-//        List<Publication> publications = resume.getPublications();
-//        List<VolunteerActivity> volunteerActivities = resume.getVolunteerActivities();
-//        List<Membership> memberships = resume.getMemberships();
-//        List<Hobby> hobbies = resume.getHobbies();
+        List<TeachingAssistance> teachingAssistance = resumeDAO.findTeachingAssistance(resumeId);
+        List<JobExperience> jobExperiences = resumeDAO.findJobExperiences(resumeId);
+        List<FormerColleague> formerColleagues = resumeDAO.findFormerColleagues(resumeId);
+        List<Research> researches = resumeDAO.findResearches(resumeId);
+        List<Course> courses = resumeDAO.findCourses(resumeId);
+        List<HardSkill> hardSkills = resumeDAO.findHardSkills(resumeId);
+        List<SoftSkill> softSkills = resumeDAO.findSoftSkills(resumeId);
+        List<Language> languages = resumeDAO.findLanguages(resumeId);
+        List<Project> projects = resumeDAO.findProjects(resumeId);
+        List<Patent> patents = resumeDAO.findPatents(resumeId);
+        List<Presentation> presentations = resumeDAO.findPresentations(resumeId);
+        List<Award> awards = resumeDAO.findAwards(resumeId);
+        List<Publication> publications = resumeDAO.findPublications(resumeId);
+        List<VolunteerActivity> volunteerActivities = resumeDAO.findVolunteerActivities(resumeId);
+        List<Membership> memberships = resumeDAO.findMemberships(resumeId);
+        List<Hobby> hobbies = resumeDAO.findHobbies(resumeId);
 
         if (user != null)
             System.out.println("user:" + user + "\n_________________________________________");
@@ -71,86 +71,86 @@ public class ResumeBuilderApplication {
             System.out.println(educations + "\n_________________________________________");
         else
             System.out.println("educations is null" + "\n_________________________________________");
-//
-//        if (teachingAssistance != null)
-//            System.out.println("teachingAssistance:" + teachingAssistance + "\n_________________________________________");
-//        else
-//            System.out.println("teachingAssistance is null" + "\n_________________________________________");
-//
-//        if (jobExperiences != null)
-//            System.out.println("jobExperiences:" + jobExperiences + "\n_________________________________________");
-//        else
-//            System.out.println("jobExperiences is null" + "\n_________________________________________");
-//
-//        if (formerColleagues != null)
-//            System.out.println("formerColleagues:" + formerColleagues + "\n_________________________________________");
-//        else
-//            System.out.println("formerColleagues is null" + "\n_________________________________________");
-//
-//        if (researches != null)
-//            System.out.println("researches:" + researches + "\n_________________________________________");
-//        else
-//            System.out.println("researches is null" + "\n_________________________________________");
-//
-//        if (courses != null)
-//            System.out.println("courses:" + courses + "\n_________________________________________");
-//        else
-//            System.out.println("courses is null" + "\n_________________________________________");
-//
-//        if (hardSkills != null)
-//            System.out.println("hardSkills:" + hardSkills + "\n_________________________________________");
-//        else
-//            System.out.println("hardSkills is null" + "\n_________________________________________");
-//
-//        if (softSkills != null)
-//            System.out.println("softSkills:" + softSkills + "\n_________________________________________");
-//        else
-//            System.out.println("softSkills is null" + "\n_________________________________________");
-//
-//        if (languages != null)
-//            System.out.println("languages:" + languages + "\n_________________________________________");
-//        else
-//            System.out.println("languages is null" + "\n_________________________________________");
-//
-//        if (projects != null)
-//            System.out.println("projects:" + projects + "\n_________________________________________");
-//        else
-//            System.out.println("projects is null" + "\n_________________________________________");
-//
-//        if (patents != null)
-//            System.out.println("patents:" + patents + "\n_________________________________________");
-//        else
-//            System.out.println("patents is null" + "\n_________________________________________");
-//
-//        if (presentations != null)
-//            System.out.println("presentations:" + presentations + "\n_________________________________________");
-//        else
-//            System.out.println("presentations is null" + "\n_________________________________________");
-//
-//        if (awards != null)
-//            System.out.println("awards:" + awards + "\n_________________________________________");
-//        else
-//            System.out.println("awards is null" + "\n_________________________________________");
-//
-//        if (publications != null)
-//            System.out.println("publications:" + publications+ "\n_________________________________________");
-//        else
-//            System.out.println("publications is null"+ "\n_________________________________________");
-//
-//        if (volunteerActivities != null)
-//            System.out.println("volunteerActivities:" + volunteerActivities+ "\n_________________________________________");
-//        else
-//            System.out.println("volunteerActivities is null"+ "\n_________________________________________");
-//
-//        if (memberships != null)
-//            System.out.println("memberships:" + memberships+ "\n_________________________________________");
-//        else
-//            System.out.println("memberships is null"+ "\n_________________________________________");
-//
-//        if (hobbies != null)
-//            System.out.println("hobbies:" + hobbies+ "\n_________________________________________");
-//        else
-//            System.out.println("hobbies is null"+ "\n_________________________________________");
+
+        if (teachingAssistance != null)
+            System.out.println("teachingAssistance:" + teachingAssistance + "\n_________________________________________");
+        else
+            System.out.println("teachingAssistance is null" + "\n_________________________________________");
+
+        if (jobExperiences != null)
+            System.out.println("jobExperiences:" + jobExperiences + "\n_________________________________________");
+        else
+            System.out.println("jobExperiences is null" + "\n_________________________________________");
+
+        if (formerColleagues != null)
+            System.out.println("formerColleagues:" + formerColleagues + "\n_________________________________________");
+        else
+            System.out.println("formerColleagues is null" + "\n_________________________________________");
+
+        if (researches != null)
+            System.out.println("researches:" + researches + "\n_________________________________________");
+        else
+            System.out.println("researches is null" + "\n_________________________________________");
+
+        if (courses != null)
+            System.out.println("courses:" + courses + "\n_________________________________________");
+        else
+            System.out.println("courses is null" + "\n_________________________________________");
+
+        if (hardSkills != null)
+            System.out.println("hardSkills:" + hardSkills + "\n_________________________________________");
+        else
+            System.out.println("hardSkills is null" + "\n_________________________________________");
+
+        if (softSkills != null)
+            System.out.println("softSkills:" + softSkills + "\n_________________________________________");
+        else
+            System.out.println("softSkills is null" + "\n_________________________________________");
+
+        if (languages != null)
+            System.out.println("languages:" + languages + "\n_________________________________________");
+        else
+            System.out.println("languages is null" + "\n_________________________________________");
+
+        if (projects != null)
+            System.out.println("projects:" + projects + "\n_________________________________________");
+        else
+            System.out.println("projects is null" + "\n_________________________________________");
+
+        if (patents != null)
+            System.out.println("patents:" + patents + "\n_________________________________________");
+        else
+            System.out.println("patents is null" + "\n_________________________________________");
+
+        if (presentations != null)
+            System.out.println("presentations:" + presentations + "\n_________________________________________");
+        else
+            System.out.println("presentations is null" + "\n_________________________________________");
+
+        if (awards != null)
+            System.out.println("awards:" + awards + "\n_________________________________________");
+        else
+            System.out.println("awards is null" + "\n_________________________________________");
+
+        if (publications != null)
+            System.out.println("publications:" + publications+ "\n_________________________________________");
+        else
+            System.out.println("publications is null"+ "\n_________________________________________");
+
+        if (volunteerActivities != null)
+            System.out.println("volunteerActivities:" + volunteerActivities+ "\n_________________________________________");
+        else
+            System.out.println("volunteerActivities is null"+ "\n_________________________________________");
+
+        if (memberships != null)
+            System.out.println("memberships:" + memberships+ "\n_________________________________________");
+        else
+            System.out.println("memberships is null"+ "\n_________________________________________");
+
+        if (hobbies != null)
+            System.out.println("hobbies:" + hobbies+ "\n_________________________________________");
+        else
+            System.out.println("hobbies is null"+ "\n_________________________________________");
     }
 
     private void addResume(ResumeDAO resumeDAO) {

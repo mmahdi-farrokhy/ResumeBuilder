@@ -5,7 +5,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -28,4 +27,14 @@ public class Course {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id + "\n" +
+                ", name='" + name + "\n" +
+                ", institute='" + institute + "\n" +
+                ", credentialId='" + credentialId + "\n" +
+                '}';
+    }
 }

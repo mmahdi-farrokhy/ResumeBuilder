@@ -7,7 +7,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -28,4 +27,13 @@ public class HardSkill {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+    @Override
+    public String toString() {
+        return "HardSkill{" +
+                "id=" + id + "\n" +
+                ", type=" + type + "\n" +
+                ", level=" + level + "\n" +
+                '}';
+    }
 }

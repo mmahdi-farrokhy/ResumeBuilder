@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -36,4 +35,16 @@ public class Research {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+    @Override
+    public String toString() {
+        return "Research{" +
+                "id=" + id + "\n" +
+                ", title='" + title + "\n" +
+                ", publisher='" + publisher + "\n" +
+                ", referenceLink='" + referenceLink + "\n" +
+                ", date=" + date + "\n" +
+                ", description='" + description + "\n" +
+                '}';
+    }
 }

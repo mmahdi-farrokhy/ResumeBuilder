@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -36,4 +35,16 @@ public class Patent {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+    @Override
+    public String toString() {
+        return "Patent{" +
+                "id=" + id + "\n" +
+                ", title='" + title + "\n" +
+                ", registrationNumber='" + registrationNumber + "\n" +
+                ", registrationDate=" + registrationDate + "\n" +
+                ", referenceLink='" + referenceLink + "\n" +
+                ", description='" + description + "\n" +
+                '}';
+    }
 }

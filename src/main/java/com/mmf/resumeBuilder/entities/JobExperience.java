@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -55,4 +54,20 @@ public class JobExperience {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+    @Override
+    public String toString() {
+        return "JobExperience{" +
+                "id=" + id + "\n" +
+                ", title='" + title + "\n" +
+                ", category=" + category + "\n" +
+                ", seniorityLevel=" + seniorityLevel + "\n" +
+                ", companyName='" + companyName + "\n" +
+                ", description='" + description + "\n" +
+                ", startDate=" + startDate + "\n" +
+                ", endDate=" + endDate + "\n" +
+                ", status=" + status + "\n" +
+                ", location=" + location + "\n" +
+                '}';
+    }
 }

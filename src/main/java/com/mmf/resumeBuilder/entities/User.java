@@ -32,9 +32,9 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id + "\n" +
-                ", firstName='" + firstName +"\n" +
-                ", lastName='" + lastName  +"\n" +
-                ", phoneNumber='" + phoneNumber +"\n" +
+                ", firstName='" + firstName + "\n" +
+                ", lastName='" + lastName + "\n" +
+                ", phoneNumber='" + phoneNumber + "\n" +
                 ", userDetail=" + userDetail +
                 '}';
     }

@@ -5,7 +5,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -18,4 +17,12 @@ public class Summary {
 
     @Column(name = "text")
     private String text;
+
+    @Override
+    public String toString() {
+        return "Summary{" +
+                "id=" + id + "\n" +
+                ", text='" + text + "\n" +
+                '}';
+    }
 }

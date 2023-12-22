@@ -8,7 +8,6 @@ import java.util.List;
 
 @Getter
 @Setter
-//@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -300,7 +299,7 @@ public class Resume {
     @Override
     public String toString() {
         return "Resume{" +
-                "id=" + id +
+                "id=" + id + "\n" +
                 '}';
     }
 }

@@ -47,12 +47,12 @@ public class UserDetail {
     public String toString() {
         return "UserDetail{" +
                 "id=" + id + "\n" +
-                ", maritalStatus=" + maritalStatus +"\n" +
-                ", gender=" + gender +"\n" +
-                ", militaryServiceStatus=" + militaryServiceStatus +"\n" +
-                ", birthDate=" + birthDate +"\n" +
-                ", foreigner=" + foreigner +"\n" +
-                ", disabilityType=" + disabilityType +"\n" +
+                ", maritalStatus=" + maritalStatus + "\n" +
+                ", gender=" + gender + "\n" +
+                ", militaryServiceStatus=" + militaryServiceStatus + "\n" +
+                ", birthDate=" + birthDate + "\n" +
+                ", foreigner=" + foreigner + "\n" +
+                ", disabilityType=" + disabilityType + "\n" +
                 '}';
     }
 }

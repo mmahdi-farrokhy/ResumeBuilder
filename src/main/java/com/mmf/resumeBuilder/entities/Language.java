@@ -7,7 +7,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
@@ -45,4 +44,17 @@ public class Language {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+    @Override
+    public String toString() {
+        return "Language{" +
+                "id=" + id + "\n" +
+                ", name=" + name + "\n" +
+                ", speakingLevel=" + speakingLevel + "\n" +
+                ", writingLevel=" + writingLevel + "\n" +
+                ", readingLevel=" + readingLevel + "\n" +
+                ", listeningLevel=" + listeningLevel + "\n" +
+                ", researchingLevel=" + researchingLevel + "\n" +
+                '}';
+    }
 }
