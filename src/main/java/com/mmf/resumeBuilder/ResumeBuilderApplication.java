@@ -31,10 +31,18 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> readResumeFromDatabase(resumeDAO);
+        return runner -> updateResumeUserInDatabase(resumeDAO);
     }
 
-    private void readResumeFromDatabase(ResumeDAO resumeDAO) {
+    private void updateResumeUserInDatabase(ResumeDAO resumeDAO) {
+        Integer resumeId = 7;
+        User updatingUser = resumeDAO.findUser(resumeId);
+        updatingUser.setFirstName("Mohammadmahdi");
+        resumeDAO.updateUser(updatingUser);
+        System.out.println("User updated");
+    }
+
+    private void findResumeInDatabase(ResumeDAO resumeDAO) {
         int resumeId = 7;
         Resume resume = resumeDAO.findById(resumeId);
         User user = resumeDAO.findUser(resumeId);

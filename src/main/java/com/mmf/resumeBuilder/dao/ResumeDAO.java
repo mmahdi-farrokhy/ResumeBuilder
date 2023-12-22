@@ -8,6 +8,7 @@ public interface ResumeDAO {
     Resume findById(int resumeId);
     void save(Resume resume);
     User findUser(Integer resumeId);
+    void updateUser(User updatingUser);
 
     List<ContactMethod> findContactInformation(Integer resumeId);
 
