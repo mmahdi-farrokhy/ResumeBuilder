@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "patent")
-public class Patent {
+public class Patent extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

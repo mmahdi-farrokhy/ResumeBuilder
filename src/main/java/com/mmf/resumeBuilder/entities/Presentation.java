@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "presentation")
-public class Presentation {
+public class Presentation extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

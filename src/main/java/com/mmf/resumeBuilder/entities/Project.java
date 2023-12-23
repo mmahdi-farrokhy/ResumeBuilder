@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "project")
-public class Project {
+public class Project extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

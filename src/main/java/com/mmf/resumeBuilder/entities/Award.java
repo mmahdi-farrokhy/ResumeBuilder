@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "award")
-public class Award {
+public class Award extends ResumeSection{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

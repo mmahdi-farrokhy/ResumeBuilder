@@ -34,12 +34,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
-    @Transactional
-    public void updateUser(User updatingUser) {
-        entityManager.merge(updatingUser);
-    }
-
-    @Override
     public List<ContactMethod> findContactInformation(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
                 "LEFT JOIN FETCH r.contactInformation " +
@@ -47,12 +41,6 @@ public class ResumeDAOImpl implements ResumeDAO {
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getContactInformation();
-    }
-
-    @Override
-    @Transactional
-    public void updateContactMethod(ContactMethod updatingContactMethod) {
-        entityManager.merge(updatingContactMethod);
     }
 
     @Override
@@ -223,5 +211,11 @@ public class ResumeDAOImpl implements ResumeDAO {
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getHobbies();
+    }
+
+    @Override
+    @Transactional
+    public <T extends ResumeSection> void updateSection(T updatingSection) {
+        entityManager.merge(updatingSection);
     }
 }

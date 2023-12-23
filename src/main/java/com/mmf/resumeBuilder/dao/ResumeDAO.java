@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface ResumeDAO {
     Resume findById(int resumeId);
+
     void save(Resume resume);
+
     User findUser(Integer resumeId);
-    void updateUser(User updatingUser);
 
     List<ContactMethod> findContactInformation(Integer resumeId);
-    void updateContactMethod(ContactMethod updatingContactMethod);
 
     List<Education> findEducations(Integer resumeId);
 
@@ -46,4 +46,6 @@ public interface ResumeDAO {
     List<Membership> findMemberships(Integer resumeId);
 
     List<Hobby> findHobbies(Integer resumeId);
+
+    <T extends ResumeSection> void updateSection(T updatingSection);
 }

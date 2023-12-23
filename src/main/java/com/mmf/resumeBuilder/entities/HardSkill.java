@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "hard_skill")
-public class HardSkill {
+public class HardSkill extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

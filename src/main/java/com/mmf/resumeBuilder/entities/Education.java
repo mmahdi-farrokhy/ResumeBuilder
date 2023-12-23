@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "education")
-public class Education {
+public class Education extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

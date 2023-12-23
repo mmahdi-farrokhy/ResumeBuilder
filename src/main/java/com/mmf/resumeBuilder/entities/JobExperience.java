@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "job_experience")
-public class JobExperience {
+public class JobExperience extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

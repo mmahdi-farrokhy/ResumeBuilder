@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "contact_method")
-public class ContactMethod {
+public class ContactMethod extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

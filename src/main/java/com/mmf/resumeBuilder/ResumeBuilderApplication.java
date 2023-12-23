@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 public class ResumeBuilderApplication {
@@ -32,24 +31,71 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> updateResumeContactMethodInDatabase(resumeDAO);
+        return runner -> updateResumeSectionsInDatabase(resumeDAO);
     }
 
-    private void updateResumeContactMethodInDatabase(ResumeDAO resumeDAO) {
+    private void updateResumeSectionsInDatabase(ResumeDAO resumeDAO) {
         Integer resumeId = 7;
+        User user = resumeDAO.findUser(resumeId);
+        user.setFirstName("Mohammad Mahdi");
+        resumeDAO.updateSection(user);
+        System.out.println("User updated\n");
+
         List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
-        ContactMethod contactMethod = contactInformation.stream().filter(e -> e.getType() == ContactType.Email).findFirst().get();
-        contactMethod.setValue("muhammadmahdifarrokhy@gmail.com");
-        resumeDAO.updateContactMethod(contactMethod);
-        System.out.println("Contact method updated");
-    }
+        ContactMethod contactMethod = contactInformation.stream().filter(e1 -> e1.getType() == ContactType.Email).findFirst().get();
+        contactMethod.setValue("mmahdifarrokhy@gmail.com");
+        resumeDAO.updateSection(contactMethod);
+        System.out.println("Email updated\n");
 
-    private void updateResumeUserInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 7;
-        User updatingUser = resumeDAO.findUser(resumeId);
-        updatingUser.setFirstName("Mohammadmahdi");
-        resumeDAO.updateUser(updatingUser);
-        System.out.println("User updated");
+        Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
+        education.setGpa(16);
+        resumeDAO.updateSection(education);
+        System.out.println("Education updated\n");
+
+        TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
+        teachingAssistance.setTitle("Advanced Programming (Java)");
+        resumeDAO.updateSection(teachingAssistance);
+        System.out.println("Teaching assistance updated\n");
+
+        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
+        jobExperience.setTitle("Software developer and consultant");
+        resumeDAO.updateSection(jobExperience);
+        System.out.println("Job experience updated\n");
+
+        FormerColleague formerColleague = resumeDAO.findFormerColleagues(resumeId).stream().findFirst().get();
+        formerColleague.setPhoneNumber("09987654321");
+        resumeDAO.updateSection(formerColleague);
+        System.out.println("Former colleague updated\n");
+
+        Research research = resumeDAO.findResearches(resumeId).stream().findFirst().get();
+        research.setTitle("Summarizing Clean Code book (Robert C. Martin)");
+        resumeDAO.updateSection(research);
+        System.out.println("Research updated\n");
+
+        Course course = resumeDAO.findCourses(resumeId).stream().findFirst().get();
+        course.setInstitute("Se7en Learn");
+        resumeDAO.updateSection(course);
+        System.out.println("Course updated\n");
+
+        HardSkill hardSkill = resumeDAO.findHardSkills(resumeId).stream().findFirst().get();
+        hardSkill.setLevel(HardSkillLevel.Intermediate);
+        resumeDAO.updateSection(hardSkill);
+        System.out.println("Hard skill updated\n");
+
+        SoftSkill softSkill = resumeDAO.findSoftSkills(resumeId).stream().findFirst().get();
+        softSkill.setTitle("Instruction");
+        resumeDAO.updateSection(softSkill);
+        System.out.println("Soft skill updated\n");
+
+        Language language = resumeDAO.findLanguages(resumeId).stream().findFirst().get();
+        language.setSpeakingLevel(LanguageLevel.Basic);
+        resumeDAO.updateSection(language);
+        System.out.println("Language updated\n");
+
+        Project project = resumeDAO.findProjects(resumeId).stream().findFirst().get();
+        project.setName("Resume Builder Web Application");
+        resumeDAO.updateSection(project);
+        System.out.println("Project updated\n");
     }
 
     private void findResumeInDatabase(ResumeDAO resumeDAO) {
