@@ -13,15 +13,11 @@ public interface ResumeDAO {
 
     List<ContactMethod> findContactInformation(Integer resumeId);
 
-
     List<Education> findEducations(Integer resumeId);
-
 
     List<TeachingAssistance> findTeachingAssistance(Integer resumeId);
 
-
     List<JobExperience> findJobExperiences(Integer resumeId);
-
 
     List<FormerColleague> findFormerColleagues(Integer resumeId);
 
@@ -52,15 +48,7 @@ public interface ResumeDAO {
 
     List<Hobby> findHobbies(Integer resumeId);
 
-    <T extends ResumeSection> void updateSection(T updatingSection);
+    void updateSection(ResumeSection updatingSection);
 
-    void deleteContactMethod(Integer deletingContactMethodId);
-
-    void deleteEducation(Integer deletingEducationId);
-
-    void deleteTeachingAssistance(Integer deletingTeachingAssistanceId);
-
-    void deleteJobExperience(Integer deletingJobExperienceId);
-
-    void deleteCourse(Integer deletingCourseId);
+    void deleteSection(ResumeSection deletingSection);
 }

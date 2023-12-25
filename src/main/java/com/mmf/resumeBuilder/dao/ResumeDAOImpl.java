@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @Repository
@@ -66,7 +67,6 @@ public class ResumeDAOImpl implements ResumeDAO {
         return query.getSingleResult().getEducations();
     }
 
-
     @Override
     public List<TeachingAssistance> findTeachingAssistance(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(TEACHING_ASSISTANCE_QUERY, Resume.class);
@@ -74,14 +74,12 @@ public class ResumeDAOImpl implements ResumeDAO {
         return query.getSingleResult().getTeachingAssistance();
     }
 
-
     @Override
     public List<JobExperience> findJobExperiences(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(JOB_EXPERIENCES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getJobExperiences();
     }
-
 
     @Override
     public List<FormerColleague> findFormerColleagues(Integer resumeId) {
@@ -183,52 +181,26 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     @Transactional
-    public <T extends ResumeSection> void updateSection(T updatingSection) {
+    public void updateSection(ResumeSection updatingSection) {
         entityManager.merge(updatingSection);
     }
 
     @Override
     @Transactional
-    public void deleteContactMethod(Integer deletingContactMethodId) {
-        ContactMethod deletingContactMethod = entityManager.find(ContactMethod.class, deletingContactMethodId);
-        Resume resume = deletingContactMethod.getResume();
-        resume.removeSection(deletingContactMethod);
-        entityManager.remove(deletingContactMethod);
-    }
-
-    @Override
-    @Transactional
-    public void deleteEducation(Integer deletingEducationId) {
-        Education deletingEducation = entityManager.find(Education.class, deletingEducationId);
-        Resume resume = deletingEducation.getResume();
-        resume.removeSection(deletingEducation);
-        entityManager.remove(deletingEducation);
-    }
-
-    @Override
-    @Transactional
-    public void deleteTeachingAssistance(Integer deletingTeachingAssistanceId) {
-        TeachingAssistance deletingTeachingAssistance = entityManager.find(TeachingAssistance.class, deletingTeachingAssistanceId);
-        Resume resume = deletingTeachingAssistance.getResume();
-        resume.removeSection(deletingTeachingAssistance);
-        entityManager.remove(deletingTeachingAssistance);
-    }
-
-    @Override
-    @Transactional
-    public void deleteJobExperience(Integer deletingJobExperienceId) {
-        JobExperience deletingJobExperience = entityManager.find(JobExperience.class, deletingJobExperienceId);
-        Resume resume = deletingJobExperience.getResume();
-        resume.removeSection(deletingJobExperience);
-        entityManager.remove(deletingJobExperience);
-    }
-
-    @Override
-    @Transactional
-    public void deleteCourse(Integer deletingCourseId) {
-        Course deletingCourse = entityManager.find(Course.class, deletingCourseId);
-        Resume resume = deletingCourse.getResume();
-        resume.removeSection(deletingCourse);
-        entityManager.remove(deletingCourse);
+    public void deleteSection(ResumeSection deletingSection) {
+        try {
+            Class<? extends ResumeSection> sectionType = deletingSection.getClass();
+            Field idField = sectionType.getDeclaredField("id");
+            idField.setAccessible(true);
+            int sectionId = (int) idField.get(deletingSection);
+            ResumeSection deletingSectionInDb = entityManager.find(sectionType, sectionId);
+            Field resumeField = sectionType.getDeclaredField("resume");
+            resumeField.setAccessible(true);
+            Resume resume = (Resume) resumeField.get(deletingSectionInDb);
+            resume.removeSection(deletingSectionInDb);
+            entityManager.remove(deletingSectionInDb);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

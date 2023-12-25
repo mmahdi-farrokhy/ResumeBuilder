@@ -80,13 +80,6 @@ public class Resume {
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<Hobby> hobbies;
 
-    @Override
-    public String toString() {
-        return "Resume{" +
-                "id=" + id + "\n" +
-                '}';
-    }
-
     public <T extends ResumeSection> void addSection(T section) {
         if (section instanceof ContactMethod) {
             if (contactInformation == null)
@@ -229,5 +222,12 @@ public class Resume {
             if (this.hobbies != null && this.hobbies.contains(section))
                 hobbies.remove(section);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Resume{" +
+                "id=" + id + "\n" +
+                '}';
     }
 }

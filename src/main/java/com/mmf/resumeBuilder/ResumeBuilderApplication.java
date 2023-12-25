@@ -31,93 +31,86 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> addResume(resumeDAO);
+        return runner -> deleteResumeFormerColleague(resumeDAO);
     }
 
-    private void testMethod(ResumeDAO resumeDAO) {
-        Resume resume = new Resume();
-        resume.setUser(CreateUser());
-
-        addContactMethods(resume);
-        addSummary(resume);
-        addEducation(resume);
-        addTeachingAssistance(resume);
-        addJobExperience(resume);
-        addFormerColleague(resume);
-        addResearch(resume);
-        addCourse(resume);
-        addHardSkills(resume);
-        addSoftSkills(resume);
-        addLanguages(resume);
-        addProjects(resume);
-
-        var items = resume.getProjects();
-        var newItem = new Project();
-        resume.addSection(newItem);
-        items = resume.getProjects();
-    }
-
-    private void deleteResumeJobExperienceInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 8;
-        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
-        resumeDAO.deleteJobExperience(jobExperience.getId());
-        System.out.println("Job experience deleted\n");
-    }
-
-    private void deleteResumeTeachingAssistanceInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 8;
-        TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
-        resumeDAO.deleteTeachingAssistance(teachingAssistance.getId());
-        System.out.println("Teaching assistance deleted\n");
-    }
-
-    private void deleteResumeEducationInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 8;
+    private void deleteResumeEducation(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
         Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
-        resumeDAO.deleteEducation(education.getId());
-        System.out.println("Education deleted\n");
+        resumeDAO.deleteSection(education);
+        System.out.println("Education " + education.getId() + " deleted\n");
     }
 
-    private void deleteResumeContactMethodInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 8;
+    private void deleteResumeJobExperience(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
+        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
+        resumeDAO.deleteSection(jobExperience);
+        System.out.println("Job experience " + jobExperience.getId() + " deleted\n");
+    }
+
+    private void deleteResumeTeachingAssistance(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
+        TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
+        resumeDAO.deleteSection(teachingAssistance);
+        System.out.println("Teaching assistance " + teachingAssistance.getId() + " deleted\n");
+    }
+
+    private void deleteResumeContactMethod(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
         List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
         ContactMethod contactMethod = contactInformation.stream().filter(cm -> cm.getType() == ContactType.Address).findFirst().get();
-        resumeDAO.deleteContactMethod(contactMethod.getId());
-        System.out.println("Contact method deleted\n");
+        resumeDAO.deleteSection(contactMethod);
+        System.out.println("Contact method " + contactMethod.getId() + " deleted\n");
     }
 
-    private void deleteResumeCourseInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 8;
+    private void deleteResumeCourse(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
         List<Course> courses = resumeDAO.findCourses(resumeId);
         Course course = courses.stream().findFirst().get();
-        resumeDAO.deleteCourse(course.getId());
-        System.out.println("Course deleted\n");
+        resumeDAO.deleteSection(course);
+        System.out.println("Course " + course.getId() + " deleted\n");
     }
 
-    private void deleteResumeSectionsInDatabase(ResumeDAO resumeDAO) {
-//        FormerColleague formerColleague = resumeDAO.findFormerColleagues(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(formerColleague);
-//        System.out.println("Former colleague deleted\n");
-//
-//        Research research = resumeDAO.findResearches(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(research);
-//        System.out.println("Research deleted\n");
+    private static void deleteResumeProject(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
+        Project project = resumeDAO.findProjects(resumeId).stream().findFirst().get();
+        resumeDAO.deleteSection(project);
+        System.out.println("Project " + project.getId() + " deleted\n");
+    }
 
-//        HardSkill hardSkill = resumeDAO.findHardSkills(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(hardSkill);
-//        System.out.println("Hard skill deleted\n");
-//
-//        SoftSkill softSkill = resumeDAO.findSoftSkills(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(softSkill);
-//        System.out.println("Soft skill deleted\n");
-//
-//        Language language = resumeDAO.findLanguages(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(language);
-//        System.out.println("Language deleted\n");
-//
-//        Project project = resumeDAO.findProjects(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(project);
-//        System.out.println("Project deleted\n");
+    private static void deleteResumeLanguage(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
+        Language language = resumeDAO.findLanguages(resumeId).stream().findFirst().get();
+        resumeDAO.deleteSection(language);
+        System.out.println("Language " + language.getId() + " deleted\n");
+    }
+
+    private static void deleteResumeSoftSkill(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
+        SoftSkill softSkill = resumeDAO.findSoftSkills(resumeId).stream().findFirst().get();
+        resumeDAO.deleteSection(softSkill);
+        System.out.println("Soft skill " + softSkill.getId() + " deleted\n");
+    }
+
+    private static void deleteResumeHardSkill(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
+        HardSkill hardSkill = resumeDAO.findHardSkills(resumeId).stream().findFirst().get();
+        resumeDAO.deleteSection(hardSkill);
+        System.out.println("Hard skill " + hardSkill.getId() + " deleted\n");
+    }
+
+    private static void deleteResumeResearch(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
+        Research research = resumeDAO.findResearches(resumeId).stream().findFirst().get();
+        resumeDAO.deleteSection(research);
+        System.out.println("Research " + research.getId() + " deleted\n");
+    }
+
+    private static void deleteResumeFormerColleague(ResumeDAO resumeDAO) {
+        Integer resumeId = 12;
+        FormerColleague formerColleague = resumeDAO.findFormerColleagues(resumeId).stream().findFirst().get();
+        resumeDAO.deleteSection(formerColleague);
+        System.out.println("Former colleague " + formerColleague.getId() + " deleted\n");
     }
 
     private void updateResumeSectionsInDatabase(ResumeDAO resumeDAO) {
