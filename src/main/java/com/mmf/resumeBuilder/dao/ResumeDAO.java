@@ -13,7 +13,11 @@ public interface ResumeDAO {
 
     List<ContactMethod> findContactInformation(Integer resumeId);
 
+    void deleteContactMethod(Integer deletingContactMethodId);
+
     List<Education> findEducations(Integer resumeId);
+
+    void deleteEducation(Integer deletingEducationId);
 
     List<TeachingAssistance> findTeachingAssistance(Integer resumeId);
 
@@ -24,6 +28,8 @@ public interface ResumeDAO {
     List<Research> findResearches(Integer resumeId);
 
     List<Course> findCourses(Integer resumeId);
+
+    void deleteCourse(Integer deletingCourseId);
 
     List<HardSkill> findHardSkills(Integer resumeId);
 

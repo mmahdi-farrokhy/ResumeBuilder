@@ -31,7 +31,64 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> updateResumeSectionsInDatabase(resumeDAO);
+        return runner -> deleteResumeContactMethodInDatabase(resumeDAO);
+    }
+
+    private void deleteResumeContactMethodInDatabase(ResumeDAO resumeDAO) {
+        Integer resumeId = 7;
+        List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
+        ContactMethod contactMethod = contactInformation.stream().filter(cm -> cm.getType() == ContactType.Email).findFirst().get();
+        resumeDAO.deleteContactMethod(contactMethod.getId());
+        System.out.println("Email deleted\n");
+    }
+
+    private void deleteResumeCourseInDatabase(ResumeDAO resumeDAO) {
+        Integer resumeId = 7;
+        List<Course> courses = resumeDAO.findCourses(resumeId);
+        Course course = courses.stream().findFirst().get();
+        resumeDAO.deleteCourse(course.getId());
+        System.out.println("Course deleted\n");
+    }
+
+    private void deleteResumeSectionsInDatabase(ResumeDAO resumeDAO) {
+        Integer resumeId = 7;
+
+
+//        Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(education);
+//        System.out.println("Education deleted\n");
+//
+//        TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(teachingAssistance);
+//        System.out.println("Teaching assistance deleted\n");
+//
+//        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(jobExperience);
+//        System.out.println("Job experience deleted\n");
+//
+//        FormerColleague formerColleague = resumeDAO.findFormerColleagues(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(formerColleague);
+//        System.out.println("Former colleague deleted\n");
+//
+//        Research research = resumeDAO.findResearches(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(research);
+//        System.out.println("Research deleted\n");
+
+//        HardSkill hardSkill = resumeDAO.findHardSkills(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(hardSkill);
+//        System.out.println("Hard skill deleted\n");
+//
+//        SoftSkill softSkill = resumeDAO.findSoftSkills(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(softSkill);
+//        System.out.println("Soft skill deleted\n");
+//
+//        Language language = resumeDAO.findLanguages(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(language);
+//        System.out.println("Language deleted\n");
+//
+//        Project project = resumeDAO.findProjects(resumeId).stream().findFirst().get();
+//        resumeDAO.deleteSection(project);
+//        System.out.println("Project deleted\n");
     }
 
     private void updateResumeSectionsInDatabase(ResumeDAO resumeDAO) {

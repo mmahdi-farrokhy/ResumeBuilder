@@ -3,6 +3,7 @@ package com.mmf.resumeBuilder.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Getter
 @Setter
 @EqualsAndHashCode

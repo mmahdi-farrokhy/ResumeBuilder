@@ -44,6 +44,19 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
+    @Transactional
+    public void deleteContactMethod(Integer deletingContactMethodId) {
+        ContactMethod deletingContactMethod = entityManager.find(ContactMethod.class, deletingContactMethodId);
+        List<ContactMethod> contactInformation = deletingContactMethod.getResume().getContactInformation();
+        for (ContactMethod contactMethod : contactInformation) {
+            if (contactMethod.getId() == deletingContactMethodId)
+                contactInformation.remove(contactMethod);
+        }
+
+        entityManager.remove(deletingContactMethod);
+    }
+
+    @Override
     public List<Education> findEducations(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
                 "LEFT JOIN FETCH r.educations " +
@@ -51,6 +64,11 @@ public class ResumeDAOImpl implements ResumeDAO {
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getEducations();
+    }
+
+    @Override
+    public void deleteEducation(Integer deletingEducationId) {
+
     }
 
     @Override
@@ -217,5 +235,20 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Transactional
     public <T extends ResumeSection> void updateSection(T updatingSection) {
         entityManager.merge(updatingSection);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCourse(Integer deletingCourseId) {
+        Course deletingCourse = entityManager.find(Course.class, deletingCourseId);
+        List<Course> resumeCourses = deletingCourse.getResume().getCourses();
+        for (Course course : resumeCourses) {
+            if (course.getId() == deletingCourseId) {
+                resumeCourses.remove(course);
+                break;
+            }
+        }
+
+        entityManager.remove(deletingCourse);
     }
 }
