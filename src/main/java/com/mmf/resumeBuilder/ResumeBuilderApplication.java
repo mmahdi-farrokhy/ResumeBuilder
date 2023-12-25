@@ -37,9 +37,9 @@ public class ResumeBuilderApplication {
     private void deleteResumeContactMethodInDatabase(ResumeDAO resumeDAO) {
         Integer resumeId = 7;
         List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
-        ContactMethod contactMethod = contactInformation.stream().filter(cm -> cm.getType() == ContactType.Email).findFirst().get();
+        ContactMethod contactMethod = contactInformation.stream().filter(cm -> cm.getType() == ContactType.Address).findFirst().get();
         resumeDAO.deleteContactMethod(contactMethod.getId());
-        System.out.println("Email deleted\n");
+        System.out.println("Contact method deleted\n");
     }
 
     private void deleteResumeCourseInDatabase(ResumeDAO resumeDAO) {
@@ -52,8 +52,6 @@ public class ResumeBuilderApplication {
 
     private void deleteResumeSectionsInDatabase(ResumeDAO resumeDAO) {
         Integer resumeId = 7;
-
-
 //        Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
 //        resumeDAO.deleteSection(education);
 //        System.out.println("Education deleted\n");

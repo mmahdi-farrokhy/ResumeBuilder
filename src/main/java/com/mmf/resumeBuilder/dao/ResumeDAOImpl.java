@@ -47,12 +47,8 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Transactional
     public void deleteContactMethod(Integer deletingContactMethodId) {
         ContactMethod deletingContactMethod = entityManager.find(ContactMethod.class, deletingContactMethodId);
-        List<ContactMethod> contactInformation = deletingContactMethod.getResume().getContactInformation();
-        for (ContactMethod contactMethod : contactInformation) {
-            if (contactMethod.getId() == deletingContactMethodId)
-                contactInformation.remove(contactMethod);
-        }
-
+        Resume resume = deletingContactMethod.getResume();
+        resume.removeContactMethod(deletingContactMethod);
         entityManager.remove(deletingContactMethod);
     }
 
@@ -241,14 +237,8 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Transactional
     public void deleteCourse(Integer deletingCourseId) {
         Course deletingCourse = entityManager.find(Course.class, deletingCourseId);
-        List<Course> resumeCourses = deletingCourse.getResume().getCourses();
-        for (Course course : resumeCourses) {
-            if (course.getId() == deletingCourseId) {
-                resumeCourses.remove(course);
-                break;
-            }
-        }
-
+        Resume resume = deletingCourse.getResume();
+        resume.removeCourse(deletingCourse);
         entityManager.remove(deletingCourse);
     }
 }
