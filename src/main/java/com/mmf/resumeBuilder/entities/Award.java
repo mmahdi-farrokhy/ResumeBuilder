@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "award")
-public class Award extends ResumeSection{
+public class Award extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -27,10 +27,6 @@ public class Award extends ResumeSection{
 
     @Override
     public String toString() {
-        return "Award{" +
-                "id=" + id + "\n" +
-                ", title='" + title + "\n" +
-                ", year=" + year + "\n" +
-                '}';
+        return "Award{" + "id=" + id + "\n" + ", title='" + title + "\n" + ", year=" + year + "\n" + '}';
     }
 }

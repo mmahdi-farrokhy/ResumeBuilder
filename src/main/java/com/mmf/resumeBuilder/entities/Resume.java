@@ -80,226 +80,154 @@ public class Resume {
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<Hobby> hobbies;
 
-    public void addContactMethod(ContactMethod contactMethod) {
-        if (contactInformation == null)
-            contactInformation = new LinkedList<>();
-
-        contactInformation.add(contactMethod);
-    }
-
-    public void removeContactMethod(ContactMethod contactMethod) {
-        if (contactInformation != null && contactInformation.contains(contactMethod))
-            contactInformation.remove(contactMethod);
-    }
-
-    public void addEducation(Education education) {
-        if (educations == null)
-            educations = new LinkedList<>();
-
-        educations.add(education);
-    }
-
-    public void removeEducation(Education education) {
-        if (educations != null && educations.contains(education))
-            educations.remove(education);
-    }
-
-    public void addTeachingAssistance(TeachingAssistance teachingAssistance) {
-        if (this.teachingAssistance == null)
-            this.teachingAssistance = new LinkedList<>();
-
-        this.teachingAssistance.add(teachingAssistance);
-    }
-
-    public void removeTeachingAssistance(TeachingAssistance teachingAssistance) {
-        if (this.teachingAssistance != null && educations.contains(teachingAssistance))
-            this.teachingAssistance.remove(teachingAssistance);
-    }
-
-    public void addJobExperience(JobExperience jobExperience) {
-        if (this.jobExperiences == null)
-            this.jobExperiences = new LinkedList<>();
-
-        this.jobExperiences.add(jobExperience);
-    }
-
-    public void removeJobExperience(JobExperience jobExperience) {
-        if (this.jobExperiences != null && this.jobExperiences.contains(jobExperience))
-            this.jobExperiences.remove(jobExperience);
-    }
-
-    public void addFormerColleague(FormerColleague formerColleague) {
-        if (this.formerColleagues == null)
-            this.formerColleagues = new LinkedList<>();
-
-        this.formerColleagues.add(formerColleague);
-    }
-
-    public void removeFormerColleague(FormerColleague formerColleague) {
-        if (this.formerColleagues != null && this.formerColleagues.contains(formerColleague))
-            this.formerColleagues.remove(formerColleague);
-    }
-
-    public void addResearch(Research research) {
-        if (this.researches == null)
-            this.researches = new LinkedList<>();
-
-        this.researches.add(research);
-    }
-
-    public void removeResearch(Research research) {
-        if (this.researches != null && this.researches.contains(research))
-            this.researches.remove(research);
-    }
-
-    public void addCourse(Course course) {
-        if (this.courses == null)
-            this.courses = new LinkedList<>();
-
-        this.courses.add(course);
-    }
-
-    public void removeCourse(Course course) {
-        if (this.courses != null && this.courses.contains(course))
-            this.courses.remove(course);
-    }
-
-    public void addHardSkill(HardSkill hardSkill) {
-        if (this.hardSkills == null)
-            this.hardSkills = new LinkedList<>();
-
-        this.hardSkills.add(hardSkill);
-    }
-
-    public void removeHardSkill(HardSkill hardSkill) {
-        if (this.hardSkills != null && this.hardSkills.contains(hardSkill))
-            this.hardSkills.remove(hardSkill);
-    }
-
-    public void addSoftSkill(SoftSkill softSkill) {
-        if (this.softSkills == null)
-            this.softSkills = new LinkedList<>();
-
-        this.softSkills.add(softSkill);
-    }
-
-    public void removeSoftSkill(SoftSkill softSkill) {
-        if (this.softSkills != null && this.softSkills.contains(softSkill))
-            this.softSkills.remove(softSkill);
-    }
-
-    public void addLanguage(Language softSkill) {
-        if (this.languages == null)
-            this.languages = new LinkedList<>();
-
-        this.languages.add(softSkill);
-    }
-
-    public void removeLanguage(Language language) {
-        if (this.languages != null && this.languages.contains(language))
-            this.languages.remove(language);
-    }
-
-    public void addProject(Project project) {
-        if (this.projects == null)
-            this.projects = new LinkedList<>();
-
-        this.projects.add(project);
-    }
-
-    public void removeProject(Project project) {
-        if (this.projects != null && this.projects.contains(project))
-            this.projects.remove(project);
-    }
-
-    public void addPatent(Patent patent) {
-        if (this.patents == null)
-            this.patents = new LinkedList<>();
-
-        this.patents.add(patent);
-    }
-
-    public void removePatent(Project project) {
-        if (this.patents != null && this.patents.contains(project))
-            this.patents.remove(project);
-    }
-
-    public void addPresentation(Presentation presentation) {
-        if (this.presentations == null)
-            this.presentations = new LinkedList<>();
-
-        this.presentations.add(presentation);
-    }
-
-    public void removePresentation(Presentation presentation) {
-        if (this.presentations != null && this.presentations.contains(presentation))
-            this.presentations.remove(presentation);
-    }
-
-    public void addAward(Award award) {
-        if (this.awards == null)
-            this.awards = new LinkedList<>();
-
-        this.awards.add(award);
-    }
-
-    public void removeAward(Award award) {
-        if (this.awards != null && this.awards.contains(award))
-            this.awards.remove(award);
-    }
-
-    public void addPublication(Publication publication) {
-        if (this.publications == null)
-            this.publications = new LinkedList<>();
-
-        this.publications.add(publication);
-    }
-
-    public void removePublication(Publication publication) {
-        if (this.publications != null && this.publications.contains(publication))
-            this.publications.remove(publication);
-    }
-
-    public void addVolunteerActivity(VolunteerActivity volunteerActivity) {
-        if (this.volunteerActivities == null)
-            this.volunteerActivities = new LinkedList<>();
-
-        this.volunteerActivities.add(volunteerActivity);
-    }
-
-    public void removeVolunteerActivity(VolunteerActivity volunteerActivity) {
-        if (this.volunteerActivities != null && this.volunteerActivities.contains(volunteerActivity))
-            this.volunteerActivities.remove(volunteerActivity);
-    }
-
-    public void addMembership(Membership membership) {
-        if (this.memberships == null)
-            this.memberships = new LinkedList<>();
-
-        this.memberships.add(membership);
-    }
-
-    public void removeMembership(Membership membership) {
-        if (this.memberships != null && this.memberships.contains(membership))
-            this.memberships.remove(membership);
-    }
-
-    public void addHobby(Hobby hobby) {
-        if (this.hobbies == null)
-            this.hobbies = new LinkedList<>();
-
-        this.hobbies.add(hobby);
-    }
-
-    public void removeHobby(Hobby hobby) {
-        if (this.hobbies != null && this.hobbies.contains(hobby))
-            this.hobbies.remove(hobby);
-    }
-
     @Override
     public String toString() {
         return "Resume{" +
                 "id=" + id + "\n" +
                 '}';
+    }
+
+    public <T extends ResumeSection> void addSection(T section) {
+        if (section instanceof ContactMethod) {
+            if (contactInformation == null)
+                contactInformation = new LinkedList<>();
+
+            contactInformation.add((ContactMethod) section);
+        } else if (section instanceof Education) {
+            if (educations == null)
+                educations = new LinkedList<>();
+
+            educations.add((Education) section);
+        } else if (section instanceof TeachingAssistance) {
+            if (teachingAssistance == null)
+                teachingAssistance = new LinkedList<>();
+
+            teachingAssistance.add((TeachingAssistance) section);
+        } else if (section instanceof JobExperience) {
+            if (jobExperiences == null)
+                jobExperiences = new LinkedList<>();
+
+            jobExperiences.add((JobExperience) section);
+        } else if (section instanceof FormerColleague) {
+            if (formerColleagues == null)
+                formerColleagues = new LinkedList<>();
+
+            formerColleagues.add((FormerColleague) section);
+        } else if (section instanceof Research) {
+            if (researches == null)
+                researches = new LinkedList<>();
+
+            researches.add((Research) section);
+        } else if (section instanceof Course) {
+            if (courses == null)
+                courses = new LinkedList<>();
+
+            courses.add((Course) section);
+        } else if (section instanceof HardSkill) {
+            if (hardSkills == null)
+                hardSkills = new LinkedList<>();
+
+            hardSkills.add((HardSkill) section);
+        } else if (section instanceof SoftSkill) {
+            if (softSkills == null)
+                softSkills = new LinkedList<>();
+
+            softSkills.add((SoftSkill) section);
+        } else if (section instanceof Language) {
+            if (languages == null)
+                languages = new LinkedList<>();
+
+            languages.add((Language) section);
+        } else if (section instanceof Project) {
+            if (projects == null)
+                projects = new LinkedList<>();
+
+            projects.add((Project) section);
+        } else if (section instanceof Patent) {
+            if (patents == null)
+                patents = new LinkedList<>();
+
+            patents.add((Patent) section);
+        } else if (section instanceof Presentation) {
+            if (presentations == null)
+                presentations = new LinkedList<>();
+
+            presentations.add((Presentation) section);
+        } else if (section instanceof Publication) {
+            if (publications == null)
+                publications = new LinkedList<>();
+
+            publications.add((Publication) section);
+        } else if (section instanceof VolunteerActivity) {
+            if (volunteerActivities == null)
+                volunteerActivities = new LinkedList<>();
+
+            volunteerActivities.add((VolunteerActivity) section);
+        } else if (section instanceof Membership) {
+            if (memberships == null)
+                memberships = new LinkedList<>();
+
+            memberships.add((Membership) section);
+        } else if (section instanceof Hobby) {
+            if (hobbies == null)
+                hobbies = new LinkedList<>();
+
+            hobbies.add((Hobby) section);
+        }
+    }
+
+    public <T extends ResumeSection> void removeSection(T section) {
+        if (section instanceof ContactMethod) {
+            if (this.contactInformation != null && this.contactInformation.contains(section))
+                contactInformation.remove(section);
+        } else if (section instanceof Education) {
+            if (this.educations != null && this.educations.contains(section))
+                educations.remove(section);
+        } else if (section instanceof TeachingAssistance) {
+            if (this.teachingAssistance != null && this.teachingAssistance.contains(section))
+                teachingAssistance.remove(section);
+        } else if (section instanceof JobExperience) {
+            if (this.jobExperiences != null && this.jobExperiences.contains(section))
+                jobExperiences.remove(section);
+        } else if (section instanceof FormerColleague) {
+            if (this.formerColleagues != null && this.formerColleagues.contains(section))
+                formerColleagues.remove(section);
+        } else if (section instanceof Research) {
+            if (this.researches != null && this.researches.contains(section))
+                researches.remove(section);
+        } else if (section instanceof Course) {
+            if (this.courses != null && this.courses.contains(section))
+                courses.remove(section);
+        } else if (section instanceof HardSkill) {
+            if (this.hardSkills != null && this.hardSkills.contains(section))
+                hardSkills.remove(section);
+        } else if (section instanceof SoftSkill) {
+            if (this.softSkills != null && this.softSkills.contains(section))
+                softSkills.remove(section);
+        } else if (section instanceof Language) {
+            if (this.languages != null && this.languages.contains(section))
+                languages.remove(section);
+        } else if (section instanceof Project) {
+            if (this.projects != null && this.projects.contains(section))
+                projects.remove(section);
+        } else if (section instanceof Patent) {
+            if (this.patents != null && this.patents.contains(section))
+                patents.remove(section);
+        } else if (section instanceof Presentation) {
+            if (this.presentations != null && this.presentations.contains(section))
+                presentations.remove(section);
+        } else if (section instanceof Publication) {
+            if (this.publications != null && this.publications.contains(section))
+                publications.remove(section);
+        } else if (section instanceof VolunteerActivity) {
+            if (this.volunteerActivities != null && this.volunteerActivities.contains(section))
+                volunteerActivities.remove(section);
+        } else if (section instanceof Membership) {
+            if (this.memberships != null && this.memberships.contains(section))
+                memberships.remove(section);
+        } else if (section instanceof Hobby) {
+            if (this.hobbies != null && this.hobbies.contains(section))
+                hobbies.remove(section);
+        }
     }
 }

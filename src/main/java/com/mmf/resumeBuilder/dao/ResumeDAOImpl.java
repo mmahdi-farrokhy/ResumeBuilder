@@ -42,6 +42,7 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
+    @Transactional
     public void save(Resume resume) {
         entityManager.persist(resume);
     }
@@ -54,75 +55,37 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<ContactMethod> findContactInformation(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(CONTACT_INFORMATION_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getContactInformation();
     }
 
     @Override
-    @Transactional
-    public void deleteContactMethod(Integer deletingContactMethodId) {
-        ContactMethod deletingContactMethod = entityManager.find(ContactMethod.class, deletingContactMethodId);
-        Resume resume = deletingContactMethod.getResume();
-        resume.removeContactMethod(deletingContactMethod);
-        entityManager.remove(deletingContactMethod);
-    }
-
-    @Override
     public List<Education> findEducations(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(EDUCATIONS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getEducations();
     }
 
-    @Override
-    @Transactional
-    public void deleteEducation(Integer deletingEducationId) {
-        Education deletingEducation = entityManager.find(Education.class, deletingEducationId);
-        Resume resume = deletingEducation.getResume();
-        resume.removeEducation(deletingEducation);
-        entityManager.remove(deletingEducation);
-    }
 
     @Override
     public List<TeachingAssistance> findTeachingAssistance(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(TEACHING_ASSISTANCE_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getTeachingAssistance();
     }
 
-    @Override
-    @Transactional
-    public void deleteTeachingAssistance(Integer deletingTeachingAssistanceId) {
-        TeachingAssistance deletingTeachingAssistance = entityManager.find(TeachingAssistance.class, deletingTeachingAssistanceId);
-        Resume resume = deletingTeachingAssistance.getResume();
-        resume.removeTeachingAssistance(deletingTeachingAssistance);
-        entityManager.remove(deletingTeachingAssistance);
-    }
 
     @Override
     public List<JobExperience> findJobExperiences(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(JOB_EXPERIENCES_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getJobExperiences();
     }
 
-    @Override
-    @Transactional
-    public void deleteJobExperience(Integer deletingJobExperienceId) {
-        JobExperience deletingJobExperience = entityManager.find(JobExperience.class, deletingJobExperienceId);
-        Resume resume = deletingJobExperience.getResume();
-        resume.removeJobExperience(deletingJobExperience);
-        entityManager.remove(deletingJobExperience);
-    }
 
     @Override
     public List<FormerColleague> findFormerColleagues(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(FORMER_COLLEAGUES_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getFormerColleagues();
     }
@@ -130,7 +93,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Research> findResearches(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(RESEARCHES_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getResearches();
     }
@@ -138,7 +100,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Course> findCourses(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(COURSES_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getCourses();
     }
@@ -146,7 +107,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<HardSkill> findHardSkills(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(HARD_SKILLS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getHardSkills();
     }
@@ -154,14 +114,12 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<SoftSkill> findSoftSkills(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(SOFT_SKILLS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getSoftSkills();
     }
 
     @Override
     public List<Language> findLanguages(Integer resumeId) {
-
         TypedQuery<Resume> query = entityManager.createQuery(LANGUAGES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getLanguages();
@@ -170,7 +128,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Project> findProjects(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(PROJECTS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getProjects();
     }
@@ -178,7 +135,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Patent> findPatents(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(PATENTS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPatents();
     }
@@ -186,7 +142,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Presentation> findPresentations(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(PRESENTATIONS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPresentations();
     }
@@ -194,7 +149,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Award> findAwards(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(AWARDS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getAwards();
     }
@@ -202,7 +156,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Publication> findPublications(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(PUBLICATIONS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPublications();
     }
@@ -210,7 +163,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<VolunteerActivity> findVolunteerActivities(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(VOLUNTEER_ACTIVITIES_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getVolunteerActivities();
     }
@@ -218,7 +170,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Membership> findMemberships(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(MEMBERSHIPS_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getMemberships();
     }
@@ -226,7 +177,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Override
     public List<Hobby> findHobbies(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(HOBBIES_QUERY, Resume.class);
-
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getHobbies();
     }
@@ -239,10 +189,46 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     @Transactional
+    public void deleteContactMethod(Integer deletingContactMethodId) {
+        ContactMethod deletingContactMethod = entityManager.find(ContactMethod.class, deletingContactMethodId);
+        Resume resume = deletingContactMethod.getResume();
+        resume.removeSection(deletingContactMethod);
+        entityManager.remove(deletingContactMethod);
+    }
+
+    @Override
+    @Transactional
+    public void deleteEducation(Integer deletingEducationId) {
+        Education deletingEducation = entityManager.find(Education.class, deletingEducationId);
+        Resume resume = deletingEducation.getResume();
+        resume.removeSection(deletingEducation);
+        entityManager.remove(deletingEducation);
+    }
+
+    @Override
+    @Transactional
+    public void deleteTeachingAssistance(Integer deletingTeachingAssistanceId) {
+        TeachingAssistance deletingTeachingAssistance = entityManager.find(TeachingAssistance.class, deletingTeachingAssistanceId);
+        Resume resume = deletingTeachingAssistance.getResume();
+        resume.removeSection(deletingTeachingAssistance);
+        entityManager.remove(deletingTeachingAssistance);
+    }
+
+    @Override
+    @Transactional
+    public void deleteJobExperience(Integer deletingJobExperienceId) {
+        JobExperience deletingJobExperience = entityManager.find(JobExperience.class, deletingJobExperienceId);
+        Resume resume = deletingJobExperience.getResume();
+        resume.removeSection(deletingJobExperience);
+        entityManager.remove(deletingJobExperience);
+    }
+
+    @Override
+    @Transactional
     public void deleteCourse(Integer deletingCourseId) {
         Course deletingCourse = entityManager.find(Course.class, deletingCourseId);
         Resume resume = deletingCourse.getResume();
-        resume.removeCourse(deletingCourse);
+        resume.removeSection(deletingCourse);
         entityManager.remove(deletingCourse);
     }
 }

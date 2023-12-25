@@ -31,32 +31,55 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> deleteResumeJobExperienceInDatabase(resumeDAO);
+        return runner -> addResume(resumeDAO);
+    }
+
+    private void testMethod(ResumeDAO resumeDAO) {
+        Resume resume = new Resume();
+        resume.setUser(CreateUser());
+
+        addContactMethods(resume);
+        addSummary(resume);
+        addEducation(resume);
+        addTeachingAssistance(resume);
+        addJobExperience(resume);
+        addFormerColleague(resume);
+        addResearch(resume);
+        addCourse(resume);
+        addHardSkills(resume);
+        addSoftSkills(resume);
+        addLanguages(resume);
+        addProjects(resume);
+
+        var items = resume.getProjects();
+        var newItem = new Project();
+        resume.addSection(newItem);
+        items = resume.getProjects();
     }
 
     private void deleteResumeJobExperienceInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 7;
+        Integer resumeId = 8;
         JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
         resumeDAO.deleteJobExperience(jobExperience.getId());
         System.out.println("Job experience deleted\n");
     }
 
     private void deleteResumeTeachingAssistanceInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 7;
+        Integer resumeId = 8;
         TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
         resumeDAO.deleteTeachingAssistance(teachingAssistance.getId());
         System.out.println("Teaching assistance deleted\n");
     }
 
     private void deleteResumeEducationInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 7;
+        Integer resumeId = 8;
         Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
         resumeDAO.deleteEducation(education.getId());
         System.out.println("Education deleted\n");
     }
 
     private void deleteResumeContactMethodInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 7;
+        Integer resumeId = 8;
         List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
         ContactMethod contactMethod = contactInformation.stream().filter(cm -> cm.getType() == ContactType.Address).findFirst().get();
         resumeDAO.deleteContactMethod(contactMethod.getId());
@@ -64,7 +87,7 @@ public class ResumeBuilderApplication {
     }
 
     private void deleteResumeCourseInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 7;
+        Integer resumeId = 8;
         List<Course> courses = resumeDAO.findCourses(resumeId);
         Course course = courses.stream().findFirst().get();
         resumeDAO.deleteCourse(course.getId());
@@ -305,66 +328,66 @@ public class ResumeBuilderApplication {
 
     private void addProjects(Resume resume) {
         Project project1 = createProject(resume);
-        resume.addProject(project1);
+        resume.addSection(project1);
     }
 
     private void addLanguages(Resume resume) {
         Language language1 = createLanguage(resume, LanguageName.German, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate);
         Language language2 = createLanguage(resume, LanguageName.English, LanguageLevel.Intermediate, LanguageLevel.Intermediate, LanguageLevel.Upper_Intermediate, LanguageLevel.Upper_Intermediate, LanguageLevel.Upper_Intermediate);
         Language language3 = createLanguage(resume, LanguageName.Persian, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native);
-        resume.addLanguage(language1);
-        resume.addLanguage(language2);
-        resume.addLanguage(language3);
+        resume.addSection(language1);
+        resume.addSection(language2);
+        resume.addSection(language3);
     }
 
     private void addSoftSkills(Resume resume) {
         SoftSkill softSkill1 = createSoftSkill(resume, "Teaching");
         SoftSkill softSkill2 = createSoftSkill(resume, "Presentation");
-        resume.addSoftSkill(softSkill1);
-        resume.addSoftSkill(softSkill2);
+        resume.addSection(softSkill1);
+        resume.addSection(softSkill2);
     }
 
     private void addHardSkills(Resume resume) {
         HardSkill hardSkill1 = createHardSkill(resume, HardSkillType.Spring_Boot, HardSkillLevel.Beginner);
         HardSkill hardSkill2 = createHardSkill(resume, HardSkillType.Java, HardSkillLevel.Intermediate);
-        resume.addHardSkill(hardSkill1);
-        resume.addHardSkill(hardSkill2);
+        resume.addSection(hardSkill1);
+        resume.addSection(hardSkill2);
     }
 
     private void addCourse(Resume resume) {
         Course course1 = createCourse(resume, "Java Expert", "7Learn", "https://7learn.com/crt?h=bdP9hiSTF4");
         Course course2 = createCourse(resume, "Spring Boot - Chad Darby", "Udemy", null);
-        resume.addCourse(course1);
-        resume.addCourse(course2);
+        resume.addSection(course1);
+        resume.addSection(course2);
     }
 
     private void addResearch(Resume resume) {
         Research research1 = createResearch(resume);
-        resume.addResearch(research1);
+        resume.addSection(research1);
     }
 
     private void addFormerColleague(Resume resume) {
         FormerColleague formerColleague1 = createFormerColleague1(resume);
         FormerColleague formerColleague2 = createFormerColleague2(resume);
-        resume.addFormerColleague(formerColleague1);
-        resume.addFormerColleague(formerColleague2);
+        resume.addSection(formerColleague1);
+        resume.addSection(formerColleague2);
     }
 
     private void addJobExperience(Resume resume) {
         JobExperience jobExperience1 = createJobExperience1(resume);
         JobExperience jobExperience2 = createJobExperience2(resume);
-        resume.addJobExperience(jobExperience1);
-        resume.addJobExperience(jobExperience2);
+        resume.addSection(jobExperience1);
+        resume.addSection(jobExperience2);
     }
 
     private void addTeachingAssistance(Resume resume) {
         TeachingAssistance teachingAssistance1 = createTeachingAssistance(resume);
-        resume.addTeachingAssistance(teachingAssistance1);
+        resume.addSection(teachingAssistance1);
     }
 
     private void addEducation(Resume resume) {
         Education education1 = CreateEducation(resume);
-        resume.addEducation(education1);
+        resume.addSection(education1);
     }
 
     private void addSummary(Resume resume) {
@@ -376,9 +399,9 @@ public class ResumeBuilderApplication {
         ContactMethod contactMethod1 = CreateContactMethod(resume, ContactType.Address, "Tehran, Pardis County");
         ContactMethod contactMethod2 = CreateContactMethod(resume, ContactType.Email, "mmahdifarrokhy@gmail.com");
         ContactMethod contactMethod3 = CreateContactMethod(resume, ContactType.LinkedIn, "https://www.linkedin.com/in/mmahdi-farrokhy/");
-        resume.addContactMethod(contactMethod1);
-        resume.addContactMethod(contactMethod2);
-        resume.addContactMethod(contactMethod3);
+        resume.addSection(contactMethod1);
+        resume.addSection(contactMethod2);
+        resume.addSection(contactMethod3);
     }
 
     private Project createProject(Resume resume) {
