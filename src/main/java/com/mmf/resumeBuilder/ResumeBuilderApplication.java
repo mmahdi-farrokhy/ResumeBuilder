@@ -31,7 +31,21 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> deleteResumeContactMethodInDatabase(resumeDAO);
+        return runner -> deleteResumeTeachingAssistanceInDatabase(resumeDAO);
+    }
+
+    private void deleteResumeTeachingAssistanceInDatabase(ResumeDAO resumeDAO) {
+        Integer resumeId = 7;
+        TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
+        resumeDAO.deleteTeachingAssistance(teachingAssistance.getId());
+        System.out.println("Teaching assistance deleted\n");
+    }
+
+    private void deleteResumeEducationInDatabase(ResumeDAO resumeDAO) {
+        Integer resumeId = 7;
+        Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
+        resumeDAO.deleteEducation(education.getId());
+        System.out.println("Education deleted\n");
     }
 
     private void deleteResumeContactMethodInDatabase(ResumeDAO resumeDAO) {
@@ -51,15 +65,6 @@ public class ResumeBuilderApplication {
     }
 
     private void deleteResumeSectionsInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 7;
-//        Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(education);
-//        System.out.println("Education deleted\n");
-//
-//        TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(teachingAssistance);
-//        System.out.println("Teaching assistance deleted\n");
-//
 //        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
 //        resumeDAO.deleteSection(jobExperience);
 //        System.out.println("Job experience deleted\n");

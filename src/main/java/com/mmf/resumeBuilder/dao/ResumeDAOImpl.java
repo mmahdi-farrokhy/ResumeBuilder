@@ -63,8 +63,12 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
+    @Transactional
     public void deleteEducation(Integer deletingEducationId) {
-
+        Education deletingEducation = entityManager.find(Education.class, deletingEducationId);
+        Resume resume = deletingEducation.getResume();
+        resume.removeEducation(deletingEducation);
+        entityManager.remove(deletingEducation);
     }
 
     @Override
@@ -75,6 +79,15 @@ public class ResumeDAOImpl implements ResumeDAO {
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getTeachingAssistance();
+    }
+
+    @Override
+    @Transactional
+    public void deleteTeachingAssistance(Integer deletingTeachingAssistanceId) {
+        TeachingAssistance deletingTeachingAssistance = entityManager.find(TeachingAssistance.class, deletingTeachingAssistanceId);
+        Resume resume = deletingTeachingAssistance.getResume();
+        resume.removeTeachingAssistance(deletingTeachingAssistance);
+        entityManager.remove(deletingTeachingAssistance);
     }
 
     @Override
