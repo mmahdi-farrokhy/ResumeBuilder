@@ -123,7 +123,7 @@ public class Resume {
         this.jobExperiences.add(jobExperience);
     }
 
-    public void removeTeachingAssistance(JobExperience jobExperience) {
+    public void removeJobExperience(JobExperience jobExperience) {
         if (this.jobExperiences != null && this.jobExperiences.contains(jobExperience))
             this.jobExperiences.remove(jobExperience);
     }

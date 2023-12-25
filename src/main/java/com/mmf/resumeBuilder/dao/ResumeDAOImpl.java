@@ -11,6 +11,24 @@ import java.util.List;
 
 @Repository
 public class ResumeDAOImpl implements ResumeDAO {
+    public static final String CONTACT_INFORMATION_QUERY = "select r from Resume r LEFT JOIN FETCH r.contactInformation where r.id = :resumeId";
+    public static final String EDUCATIONS_QUERY = "select r from Resume r LEFT JOIN FETCH r.educations where r.id = :resumeId";
+    public static final String TEACHING_ASSISTANCE_QUERY = "select r from Resume r LEFT JOIN FETCH r.teachingAssistance where r.id = :resumeId";
+    public static final String JOB_EXPERIENCES_QUERY = "select r from Resume r LEFT JOIN FETCH r.jobExperiences where r.id = :resumeId";
+    public static final String FORMER_COLLEAGUES_QUERY = "select r from Resume r LEFT JOIN FETCH r.formerColleagues where r.id = :resumeId";
+    public static final String RESEARCHES_QUERY = "select r from Resume r LEFT JOIN FETCH r.researches where r.id = :resumeId";
+    public static final String COURSES_QUERY = "select r from Resume r LEFT JOIN FETCH r.courses where r.id = :resumeId";
+    public static final String HARD_SKILLS_QUERY = "select r from Resume r LEFT JOIN FETCH r.hardSkills where r.id = :resumeId";
+    public static final String SOFT_SKILLS_QUERY = "select r from Resume r LEFT JOIN FETCH r.softSkills where r.id = :resumeId";
+    public static final String LANGUAGES_QUERY = "select r from Resume r LEFT JOIN FETCH r.languages where r.id = :resumeId";
+    public static final String PROJECTS_QUERY = "select r from Resume r LEFT JOIN FETCH r.projects where r.id = :resumeId";
+    public static final String PATENTS_QUERY = "select r from Resume r LEFT JOIN FETCH r.patents where r.id = :resumeId";
+    public static final String PRESENTATIONS_QUERY = "select r from Resume r LEFT JOIN FETCH r.presentations where r.id = :resumeId";
+    public static final String AWARDS_QUERY = "select r from Resume r LEFT JOIN FETCH r.awards where r.id = :resumeId";
+    public static final String PUBLICATIONS_QUERY = "select r from Resume r LEFT JOIN FETCH r.publications where r.id = :resumeId";
+    public static final String VOLUNTEER_ACTIVITIES_QUERY = "select r from Resume r LEFT JOIN FETCH r.volunteerActivities where r.id = :resumeId";
+    public static final String MEMBERSHIPS_QUERY = "select r from Resume r LEFT JOIN FETCH r.memberships where r.id = :resumeId";
+    public static final String HOBBIES_QUERY = "select r from Resume r LEFT JOIN FETCH r.hobbies where r.id = :resumeId";
     private final EntityManager entityManager;
 
     @Autowired
@@ -35,9 +53,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<ContactMethod> findContactInformation(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.contactInformation " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(CONTACT_INFORMATION_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getContactInformation();
@@ -54,9 +70,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Education> findEducations(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.educations " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(EDUCATIONS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getEducations();
@@ -73,9 +87,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<TeachingAssistance> findTeachingAssistance(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.teachingAssistance " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(TEACHING_ASSISTANCE_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getTeachingAssistance();
@@ -92,19 +104,24 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<JobExperience> findJobExperiences(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.jobExperiences " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(JOB_EXPERIENCES_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getJobExperiences();
     }
 
     @Override
+    @Transactional
+    public void deleteJobExperience(Integer deletingJobExperienceId) {
+        JobExperience deletingJobExperience = entityManager.find(JobExperience.class, deletingJobExperienceId);
+        Resume resume = deletingJobExperience.getResume();
+        resume.removeJobExperience(deletingJobExperience);
+        entityManager.remove(deletingJobExperience);
+    }
+
+    @Override
     public List<FormerColleague> findFormerColleagues(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.formerColleagues " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(FORMER_COLLEAGUES_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getFormerColleagues();
@@ -112,9 +129,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Research> findResearches(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.researches " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(RESEARCHES_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getResearches();
@@ -122,9 +137,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Course> findCourses(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.courses " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(COURSES_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getCourses();
@@ -132,9 +145,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<HardSkill> findHardSkills(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.hardSkills " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(HARD_SKILLS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getHardSkills();
@@ -142,9 +153,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<SoftSkill> findSoftSkills(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.softSkills " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(SOFT_SKILLS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getSoftSkills();
@@ -152,19 +161,15 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Language> findLanguages(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.languages " +
-                "where r.id = :resumeId", Resume.class);
 
+        TypedQuery<Resume> query = entityManager.createQuery(LANGUAGES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getLanguages();
     }
 
     @Override
     public List<Project> findProjects(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.projects " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(PROJECTS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getProjects();
@@ -172,9 +177,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Patent> findPatents(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.patents " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(PATENTS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPatents();
@@ -182,9 +185,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Presentation> findPresentations(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.presentations " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(PRESENTATIONS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPresentations();
@@ -192,9 +193,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Award> findAwards(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.awards " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(AWARDS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getAwards();
@@ -202,9 +201,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Publication> findPublications(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.publications " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(PUBLICATIONS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPublications();
@@ -212,9 +209,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<VolunteerActivity> findVolunteerActivities(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.volunteerActivities " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(VOLUNTEER_ACTIVITIES_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getVolunteerActivities();
@@ -222,9 +217,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Membership> findMemberships(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.memberships " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(MEMBERSHIPS_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getMemberships();
@@ -232,9 +225,7 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public List<Hobby> findHobbies(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery("select r from Resume r " +
-                "LEFT JOIN FETCH r.hobbies " +
-                "where r.id = :resumeId", Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(HOBBIES_QUERY, Resume.class);
 
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getHobbies();

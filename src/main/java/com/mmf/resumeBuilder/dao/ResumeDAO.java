@@ -23,6 +23,7 @@ public interface ResumeDAO {
     void deleteTeachingAssistance(Integer deletingTeachingAssistanceId);
 
     List<JobExperience> findJobExperiences(Integer resumeId);
+    void deleteJobExperience(Integer deletingJobExperienceId);
 
     List<FormerColleague> findFormerColleagues(Integer resumeId);
 

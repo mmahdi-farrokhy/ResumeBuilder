@@ -31,7 +31,14 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> deleteResumeTeachingAssistanceInDatabase(resumeDAO);
+        return runner -> deleteResumeJobExperienceInDatabase(resumeDAO);
+    }
+
+    private void deleteResumeJobExperienceInDatabase(ResumeDAO resumeDAO) {
+        Integer resumeId = 7;
+        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
+        resumeDAO.deleteJobExperience(jobExperience.getId());
+        System.out.println("Job experience deleted\n");
     }
 
     private void deleteResumeTeachingAssistanceInDatabase(ResumeDAO resumeDAO) {
@@ -65,10 +72,6 @@ public class ResumeBuilderApplication {
     }
 
     private void deleteResumeSectionsInDatabase(ResumeDAO resumeDAO) {
-//        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
-//        resumeDAO.deleteSection(jobExperience);
-//        System.out.println("Job experience deleted\n");
-//
 //        FormerColleague formerColleague = resumeDAO.findFormerColleagues(resumeId).stream().findFirst().get();
 //        resumeDAO.deleteSection(formerColleague);
 //        System.out.println("Former colleague deleted\n");
