@@ -9,44 +9,46 @@ public interface ResumeDAO {
 
     void save(Resume resume);
 
-    User findUser(Integer resumeId);
+    User fetchUser(Integer resumeId);
 
-    List<ContactMethod> findContactInformation(Integer resumeId);
+    <T extends ResumeSection> List<ContactMethod> fetchContactInformation(Integer resumeId, Class<T> sectionType);
 
-    List<Education> findEducations(Integer resumeId);
-
-    List<TeachingAssistance> findTeachingAssistance(Integer resumeId);
-
-    List<JobExperience> findJobExperiences(Integer resumeId);
-
-    List<FormerColleague> findFormerColleagues(Integer resumeId);
-
-    List<Research> findResearches(Integer resumeId);
-
-    List<Course> findCourses(Integer resumeId);
+    List<ContactMethod> fetchContactInformation(Integer resumeId);
 
 
-    List<HardSkill> findHardSkills(Integer resumeId);
+    List<Education> fetchEducations(Integer resumeId);
 
-    List<SoftSkill> findSoftSkills(Integer resumeId);
+    List<TeachingAssistance> fetchTeachingAssistance(Integer resumeId);
 
-    List<Language> findLanguages(Integer resumeId);
+    List<JobExperience> fetchJobExperiences(Integer resumeId);
 
-    List<Project> findProjects(Integer resumeId);
+    List<FormerColleague> fetchFormerColleagues(Integer resumeId);
 
-    List<Patent> findPatents(Integer resumeId);
+    List<Research> fetchResearches(Integer resumeId);
 
-    List<Presentation> findPresentations(Integer resumeId);
+    List<Course> fetchCourses(Integer resumeId);
 
-    List<Award> findAwards(Integer resumeId);
+    List<HardSkill> fetchHardSkills(Integer resumeId);
 
-    List<Publication> findPublications(Integer resumeId);
+    List<SoftSkill> fetchSoftSkills(Integer resumeId);
 
-    List<VolunteerActivity> findVolunteerActivities(Integer resumeId);
+    List<Language> fetchLanguages(Integer resumeId);
 
-    List<Membership> findMemberships(Integer resumeId);
+    List<Project> fetchProjects(Integer resumeId);
 
-    List<Hobby> findHobbies(Integer resumeId);
+    List<Patent> fetchPatents(Integer resumeId);
+
+    List<Presentation> fetchPresentations(Integer resumeId);
+
+    List<Award> fetchAwards(Integer resumeId);
+
+    List<Publication> fetchPublications(Integer resumeId);
+
+    List<VolunteerActivity> fetchVolunteerActivities(Integer resumeId);
+
+    List<Membership> fetchMemberships(Integer resumeId);
+
+    List<Hobby> fetchHobbies(Integer resumeId);
 
     void updateSection(ResumeSection updatingSection);
 

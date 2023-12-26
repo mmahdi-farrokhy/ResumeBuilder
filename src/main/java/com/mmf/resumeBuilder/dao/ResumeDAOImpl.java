@@ -3,6 +3,7 @@ package com.mmf.resumeBuilder.dao;
 import com.mmf.resumeBuilder.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,131 +50,141 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
-    public User findUser(Integer resumeId) {
+    public User fetchUser(Integer resumeId) {
         return findById(resumeId).getUser();
     }
 
     @Override
-    public List<ContactMethod> findContactInformation(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(CONTACT_INFORMATION_QUERY, Resume.class);
+    public <T extends ResumeSection> List<ContactMethod> fetchContactInformation(Integer resumeId, Class<T> sectionType) {
+//        String queryString = createQueryString(sectionType);
+        String queryString = CONTACT_INFORMATION_QUERY;
+        TypedQuery<Resume> query = entityManager.createQuery(queryString, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getContactInformation();
     }
 
     @Override
-    public List<Education> findEducations(Integer resumeId) {
+    public List<ContactMethod> fetchContactInformation(Integer resumeId) {
+        String CONTACT_INFORMATION_QUERY2 = CONTACT_INFORMATION_QUERY;
+        TypedQuery<Resume> query = entityManager.createQuery(CONTACT_INFORMATION_QUERY2, Resume.class);
+        query.setParameter("resumeId", resumeId);
+        return query.getSingleResult().getContactInformation();
+    }
+
+    @Override
+    public List<Education> fetchEducations(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(EDUCATIONS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getEducations();
     }
 
     @Override
-    public List<TeachingAssistance> findTeachingAssistance(Integer resumeId) {
+    public List<TeachingAssistance> fetchTeachingAssistance(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(TEACHING_ASSISTANCE_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getTeachingAssistance();
     }
 
     @Override
-    public List<JobExperience> findJobExperiences(Integer resumeId) {
+    public List<JobExperience> fetchJobExperiences(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(JOB_EXPERIENCES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getJobExperiences();
     }
 
     @Override
-    public List<FormerColleague> findFormerColleagues(Integer resumeId) {
+    public List<FormerColleague> fetchFormerColleagues(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(FORMER_COLLEAGUES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getFormerColleagues();
     }
 
     @Override
-    public List<Research> findResearches(Integer resumeId) {
+    public List<Research> fetchResearches(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(RESEARCHES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getResearches();
     }
 
     @Override
-    public List<Course> findCourses(Integer resumeId) {
+    public List<Course> fetchCourses(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(COURSES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getCourses();
     }
 
     @Override
-    public List<HardSkill> findHardSkills(Integer resumeId) {
+    public List<HardSkill> fetchHardSkills(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(HARD_SKILLS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getHardSkills();
     }
 
     @Override
-    public List<SoftSkill> findSoftSkills(Integer resumeId) {
+    public List<SoftSkill> fetchSoftSkills(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(SOFT_SKILLS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getSoftSkills();
     }
 
     @Override
-    public List<Language> findLanguages(Integer resumeId) {
+    public List<Language> fetchLanguages(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(LANGUAGES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getLanguages();
     }
 
     @Override
-    public List<Project> findProjects(Integer resumeId) {
+    public List<Project> fetchProjects(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(PROJECTS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getProjects();
     }
 
     @Override
-    public List<Patent> findPatents(Integer resumeId) {
+    public List<Patent> fetchPatents(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(PATENTS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPatents();
     }
 
     @Override
-    public List<Presentation> findPresentations(Integer resumeId) {
+    public List<Presentation> fetchPresentations(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(PRESENTATIONS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPresentations();
     }
 
     @Override
-    public List<Award> findAwards(Integer resumeId) {
+    public List<Award> fetchAwards(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(AWARDS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getAwards();
     }
 
     @Override
-    public List<Publication> findPublications(Integer resumeId) {
+    public List<Publication> fetchPublications(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(PUBLICATIONS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getPublications();
     }
 
     @Override
-    public List<VolunteerActivity> findVolunteerActivities(Integer resumeId) {
+    public List<VolunteerActivity> fetchVolunteerActivities(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(VOLUNTEER_ACTIVITIES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getVolunteerActivities();
     }
 
     @Override
-    public List<Membership> findMemberships(Integer resumeId) {
+    public List<Membership> fetchMemberships(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(MEMBERSHIPS_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getMemberships();
     }
 
     @Override
-    public List<Hobby> findHobbies(Integer resumeId) {
+    public List<Hobby> fetchHobbies(Integer resumeId) {
         TypedQuery<Resume> query = entityManager.createQuery(HOBBIES_QUERY, Resume.class);
         query.setParameter("resumeId", resumeId);
         return query.getSingleResult().getHobbies();
@@ -190,17 +201,54 @@ public class ResumeDAOImpl implements ResumeDAO {
     public void deleteSection(ResumeSection deletingSection) {
         try {
             Class<? extends ResumeSection> sectionType = deletingSection.getClass();
-            Field idField = sectionType.getDeclaredField("id");
-            idField.setAccessible(true);
-            int sectionId = (int) idField.get(deletingSection);
+            int sectionId = getSectionId(deletingSection, sectionType);
             ResumeSection deletingSectionInDb = entityManager.find(sectionType, sectionId);
-            Field resumeField = sectionType.getDeclaredField("resume");
-            resumeField.setAccessible(true);
-            Resume resume = (Resume) resumeField.get(deletingSectionInDb);
+            Resume resume = getResume(sectionType, deletingSectionInDb);
             resume.removeSection(deletingSectionInDb);
             entityManager.remove(deletingSectionInDb);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private static int getSectionId(ResumeSection deletingSection, Class<? extends ResumeSection> sectionType) throws NoSuchFieldException, IllegalAccessException {
+        Field idField = sectionType.getDeclaredField("id");
+        idField.setAccessible(true);
+        int sectionId = (int) idField.get(deletingSection);
+        return sectionId;
+    }
+
+    private static Resume getResume(Class<? extends ResumeSection> sectionType, ResumeSection deletingSectionInDb) throws NoSuchFieldException, IllegalAccessException {
+        Field resumeField = sectionType.getDeclaredField("resume");
+        resumeField.setAccessible(true);
+        Resume resume = (Resume) resumeField.get(deletingSectionInDb);
+        return resume;
+    }
+
+    private static <T extends ResumeSection> String createQueryString(Class<T> sectionType) {
+        String query = "";
+
+        switch (sectionType.getSimpleName()) {
+            case "ContactMethod" -> query = CONTACT_INFORMATION_QUERY;
+            case "Education" -> query = EDUCATIONS_QUERY;
+            case "TeachingAssistance" -> query = TEACHING_ASSISTANCE_QUERY;
+            case "JobExperience" -> query = JOB_EXPERIENCES_QUERY;
+            case "FormerColleague" -> query = FORMER_COLLEAGUES_QUERY;
+            case "Research" -> query = RESEARCHES_QUERY;
+            case "Course" -> query = COURSES_QUERY;
+            case "HardSkill" -> query = HARD_SKILLS_QUERY;
+            case "SoftSkill" -> query = SOFT_SKILLS_QUERY;
+            case "Language" -> query = LANGUAGES_QUERY;
+            case "Project" -> query = PROJECTS_QUERY;
+            case "Patent" -> query = PATENTS_QUERY;
+            case "Presentation" -> query = PRESENTATIONS_QUERY;
+            case "Award" -> query = AWARDS_QUERY;
+            case "Publication" -> query = PUBLICATIONS_QUERY;
+            case "VolunteerActivity" -> query = VOLUNTEER_ACTIVITIES_QUERY;
+            case "Membership" -> query = MEMBERSHIPS_QUERY;
+            case "Hobby" -> query = HOBBIES_QUERY;
+        }
+
+        return query;
     }
 }

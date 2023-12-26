@@ -31,33 +31,36 @@ public class ResumeBuilderApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
-        return runner -> deleteResumeFormerColleague(resumeDAO);
+        return runner -> {
+            var items = resumeDAO.fetchLanguages(12);
+            System.out.println(items);
+        };
     }
 
     private void deleteResumeEducation(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
+        Education education = resumeDAO.fetchEducations(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(education);
         System.out.println("Education " + education.getId() + " deleted\n");
     }
 
     private void deleteResumeJobExperience(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
+        JobExperience jobExperience = resumeDAO.fetchJobExperiences(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(jobExperience);
         System.out.println("Job experience " + jobExperience.getId() + " deleted\n");
     }
 
     private void deleteResumeTeachingAssistance(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
+        TeachingAssistance teachingAssistance = resumeDAO.fetchTeachingAssistance(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(teachingAssistance);
         System.out.println("Teaching assistance " + teachingAssistance.getId() + " deleted\n");
     }
 
     private void deleteResumeContactMethod(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
+        List<ContactMethod> contactInformation = resumeDAO.fetchContactInformation(resumeId, ContactMethod.class);
         ContactMethod contactMethod = contactInformation.stream().filter(cm -> cm.getType() == ContactType.Address).findFirst().get();
         resumeDAO.deleteSection(contactMethod);
         System.out.println("Contact method " + contactMethod.getId() + " deleted\n");
@@ -65,7 +68,7 @@ public class ResumeBuilderApplication {
 
     private void deleteResumeCourse(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        List<Course> courses = resumeDAO.findCourses(resumeId);
+        List<Course> courses = resumeDAO.fetchCourses(resumeId);
         Course course = courses.stream().findFirst().get();
         resumeDAO.deleteSection(course);
         System.out.println("Course " + course.getId() + " deleted\n");
@@ -73,105 +76,105 @@ public class ResumeBuilderApplication {
 
     private static void deleteResumeProject(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        Project project = resumeDAO.findProjects(resumeId).stream().findFirst().get();
+        Project project = resumeDAO.fetchProjects(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(project);
         System.out.println("Project " + project.getId() + " deleted\n");
     }
 
     private static void deleteResumeLanguage(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        Language language = resumeDAO.findLanguages(resumeId).stream().findFirst().get();
+        Language language = resumeDAO.fetchLanguages(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(language);
         System.out.println("Language " + language.getId() + " deleted\n");
     }
 
     private static void deleteResumeSoftSkill(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        SoftSkill softSkill = resumeDAO.findSoftSkills(resumeId).stream().findFirst().get();
+        SoftSkill softSkill = resumeDAO.fetchSoftSkills(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(softSkill);
         System.out.println("Soft skill " + softSkill.getId() + " deleted\n");
     }
 
     private static void deleteResumeHardSkill(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        HardSkill hardSkill = resumeDAO.findHardSkills(resumeId).stream().findFirst().get();
+        HardSkill hardSkill = resumeDAO.fetchHardSkills(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(hardSkill);
         System.out.println("Hard skill " + hardSkill.getId() + " deleted\n");
     }
 
     private static void deleteResumeResearch(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        Research research = resumeDAO.findResearches(resumeId).stream().findFirst().get();
+        Research research = resumeDAO.fetchResearches(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(research);
         System.out.println("Research " + research.getId() + " deleted\n");
     }
 
     private static void deleteResumeFormerColleague(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        FormerColleague formerColleague = resumeDAO.findFormerColleagues(resumeId).stream().findFirst().get();
+        FormerColleague formerColleague = resumeDAO.fetchFormerColleagues(resumeId).stream().findFirst().get();
         resumeDAO.deleteSection(formerColleague);
         System.out.println("Former colleague " + formerColleague.getId() + " deleted\n");
     }
 
     private void updateResumeSectionsInDatabase(ResumeDAO resumeDAO) {
         Integer resumeId = 7;
-        User user = resumeDAO.findUser(resumeId);
+        User user = resumeDAO.fetchUser(resumeId);
         user.setFirstName("Mohammad Mahdi");
         resumeDAO.updateSection(user);
         System.out.println("User updated\n");
 
-        List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
+        List<ContactMethod> contactInformation = resumeDAO.fetchContactInformation(resumeId, ContactMethod.class);
         ContactMethod contactMethod = contactInformation.stream().filter(e1 -> e1.getType() == ContactType.Email).findFirst().get();
         contactMethod.setValue("mmahdifarrokhy@gmail.com");
         resumeDAO.updateSection(contactMethod);
         System.out.println("Email updated\n");
 
-        Education education = resumeDAO.findEducations(resumeId).stream().findFirst().get();
+        Education education = resumeDAO.fetchEducations(resumeId).stream().findFirst().get();
         education.setGpa(16);
         resumeDAO.updateSection(education);
         System.out.println("Education updated\n");
 
-        TeachingAssistance teachingAssistance = resumeDAO.findTeachingAssistance(resumeId).stream().findFirst().get();
+        TeachingAssistance teachingAssistance = resumeDAO.fetchTeachingAssistance(resumeId).stream().findFirst().get();
         teachingAssistance.setTitle("Advanced Programming (Java)");
         resumeDAO.updateSection(teachingAssistance);
         System.out.println("Teaching assistance updated\n");
 
-        JobExperience jobExperience = resumeDAO.findJobExperiences(resumeId).stream().findFirst().get();
+        JobExperience jobExperience = resumeDAO.fetchJobExperiences(resumeId).stream().findFirst().get();
         jobExperience.setTitle("Software developer and consultant");
         resumeDAO.updateSection(jobExperience);
         System.out.println("Job experience updated\n");
 
-        FormerColleague formerColleague = resumeDAO.findFormerColleagues(resumeId).stream().findFirst().get();
+        FormerColleague formerColleague = resumeDAO.fetchFormerColleagues(resumeId).stream().findFirst().get();
         formerColleague.setPhoneNumber("09987654321");
         resumeDAO.updateSection(formerColleague);
         System.out.println("Former colleague updated\n");
 
-        Research research = resumeDAO.findResearches(resumeId).stream().findFirst().get();
+        Research research = resumeDAO.fetchResearches(resumeId).stream().findFirst().get();
         research.setTitle("Summarizing Clean Code book (Robert C. Martin)");
         resumeDAO.updateSection(research);
         System.out.println("Research updated\n");
 
-        Course course = resumeDAO.findCourses(resumeId).stream().findFirst().get();
+        Course course = resumeDAO.fetchCourses(resumeId).stream().findFirst().get();
         course.setInstitute("Se7en Learn");
         resumeDAO.updateSection(course);
         System.out.println("Course updated\n");
 
-        HardSkill hardSkill = resumeDAO.findHardSkills(resumeId).stream().findFirst().get();
+        HardSkill hardSkill = resumeDAO.fetchHardSkills(resumeId).stream().findFirst().get();
         hardSkill.setLevel(HardSkillLevel.Intermediate);
         resumeDAO.updateSection(hardSkill);
         System.out.println("Hard skill updated\n");
 
-        SoftSkill softSkill = resumeDAO.findSoftSkills(resumeId).stream().findFirst().get();
+        SoftSkill softSkill = resumeDAO.fetchSoftSkills(resumeId).stream().findFirst().get();
         softSkill.setTitle("Instruction");
         resumeDAO.updateSection(softSkill);
         System.out.println("Soft skill updated\n");
 
-        Language language = resumeDAO.findLanguages(resumeId).stream().findFirst().get();
+        Language language = resumeDAO.fetchLanguages(resumeId).stream().findFirst().get();
         language.setSpeakingLevel(LanguageLevel.Basic);
         resumeDAO.updateSection(language);
         System.out.println("Language updated\n");
 
-        Project project = resumeDAO.findProjects(resumeId).stream().findFirst().get();
+        Project project = resumeDAO.fetchProjects(resumeId).stream().findFirst().get();
         project.setName("Resume Builder Web Application");
         resumeDAO.updateSection(project);
         System.out.println("Project updated\n");
@@ -180,25 +183,25 @@ public class ResumeBuilderApplication {
     private void findResumeInDatabase(ResumeDAO resumeDAO) {
         int resumeId = 7;
         Resume resume = resumeDAO.findById(resumeId);
-        User user = resumeDAO.findUser(resumeId);
-        List<ContactMethod> contactInformation = resumeDAO.findContactInformation(resumeId);
-        List<Education> educations = resumeDAO.findEducations(resumeId);
-        List<TeachingAssistance> teachingAssistance = resumeDAO.findTeachingAssistance(resumeId);
-        List<JobExperience> jobExperiences = resumeDAO.findJobExperiences(resumeId);
-        List<FormerColleague> formerColleagues = resumeDAO.findFormerColleagues(resumeId);
-        List<Research> researches = resumeDAO.findResearches(resumeId);
-        List<Course> courses = resumeDAO.findCourses(resumeId);
-        List<HardSkill> hardSkills = resumeDAO.findHardSkills(resumeId);
-        List<SoftSkill> softSkills = resumeDAO.findSoftSkills(resumeId);
-        List<Language> languages = resumeDAO.findLanguages(resumeId);
-        List<Project> projects = resumeDAO.findProjects(resumeId);
-        List<Patent> patents = resumeDAO.findPatents(resumeId);
-        List<Presentation> presentations = resumeDAO.findPresentations(resumeId);
-        List<Award> awards = resumeDAO.findAwards(resumeId);
-        List<Publication> publications = resumeDAO.findPublications(resumeId);
-        List<VolunteerActivity> volunteerActivities = resumeDAO.findVolunteerActivities(resumeId);
-        List<Membership> memberships = resumeDAO.findMemberships(resumeId);
-        List<Hobby> hobbies = resumeDAO.findHobbies(resumeId);
+        User user = resumeDAO.fetchUser(resumeId);
+        List<ContactMethod> contactInformation = resumeDAO.fetchContactInformation(resumeId, ContactMethod.class);
+        List<Education> educations = resumeDAO.fetchEducations(resumeId);
+        List<TeachingAssistance> teachingAssistance = resumeDAO.fetchTeachingAssistance(resumeId);
+        List<JobExperience> jobExperiences = resumeDAO.fetchJobExperiences(resumeId);
+        List<FormerColleague> formerColleagues = resumeDAO.fetchFormerColleagues(resumeId);
+        List<Research> researches = resumeDAO.fetchResearches(resumeId);
+        List<Course> courses = resumeDAO.fetchCourses(resumeId);
+        List<HardSkill> hardSkills = resumeDAO.fetchHardSkills(resumeId);
+        List<SoftSkill> softSkills = resumeDAO.fetchSoftSkills(resumeId);
+        List<Language> languages = resumeDAO.fetchLanguages(resumeId);
+        List<Project> projects = resumeDAO.fetchProjects(resumeId);
+        List<Patent> patents = resumeDAO.fetchPatents(resumeId);
+        List<Presentation> presentations = resumeDAO.fetchPresentations(resumeId);
+        List<Award> awards = resumeDAO.fetchAwards(resumeId);
+        List<Publication> publications = resumeDAO.fetchPublications(resumeId);
+        List<VolunteerActivity> volunteerActivities = resumeDAO.fetchVolunteerActivities(resumeId);
+        List<Membership> memberships = resumeDAO.fetchMemberships(resumeId);
+        List<Hobby> hobbies = resumeDAO.fetchHobbies(resumeId);
 
         if (user != null)
             System.out.println("user:" + user + "\n_________________________________________");

@@ -1,5 +1,6 @@
 package com.mmf.resumeBuilder.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
