@@ -3,12 +3,12 @@ package com.mmf.resumeBuilder.dao;
 import com.mmf.resumeBuilder.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -55,139 +55,65 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
-    public <T extends ResumeSection> List<ContactMethod> fetchContactInformation(Integer resumeId, Class<T> sectionType) {
-//        String queryString = createQueryString(sectionType);
-        String queryString = CONTACT_INFORMATION_QUERY;
-        TypedQuery<Resume> query = entityManager.createQuery(queryString, Resume.class);
+    public <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType) {
+        TypedQuery<Resume> query = entityManager.createQuery(createQueryString(sectionType), Resume.class);
         query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getContactInformation();
+        return getResumeSections(query.getSingleResult(), sectionType);
     }
 
-    @Override
-    public List<ContactMethod> fetchContactInformation(Integer resumeId) {
-        String CONTACT_INFORMATION_QUERY2 = CONTACT_INFORMATION_QUERY;
-        TypedQuery<Resume> query = entityManager.createQuery(CONTACT_INFORMATION_QUERY2, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getContactInformation();
+    private static <RS extends ResumeSection> String createQueryString(Class<RS> sectionType) {
+        String query = "";
+
+        switch (sectionType.getSimpleName()) {
+            case "ContactMethod" -> query = CONTACT_INFORMATION_QUERY;
+            case "Education" -> query = EDUCATIONS_QUERY;
+            case "TeachingAssistance" -> query = TEACHING_ASSISTANCE_QUERY;
+            case "JobExperience" -> query = JOB_EXPERIENCES_QUERY;
+            case "FormerColleague" -> query = FORMER_COLLEAGUES_QUERY;
+            case "Research" -> query = RESEARCHES_QUERY;
+            case "Course" -> query = COURSES_QUERY;
+            case "HardSkill" -> query = HARD_SKILLS_QUERY;
+            case "SoftSkill" -> query = SOFT_SKILLS_QUERY;
+            case "Language" -> query = LANGUAGES_QUERY;
+            case "Project" -> query = PROJECTS_QUERY;
+            case "Patent" -> query = PATENTS_QUERY;
+            case "Presentation" -> query = PRESENTATIONS_QUERY;
+            case "Award" -> query = AWARDS_QUERY;
+            case "Publication" -> query = PUBLICATIONS_QUERY;
+            case "VolunteerActivity" -> query = VOLUNTEER_ACTIVITIES_QUERY;
+            case "Membership" -> query = MEMBERSHIPS_QUERY;
+            case "Hobby" -> query = HOBBIES_QUERY;
+        }
+
+        return query;
     }
 
-    @Override
-    public List<Education> fetchEducations(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(EDUCATIONS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getEducations();
-    }
+    private static <RS extends ResumeSection> List<RS> getResumeSections(Resume resume, Class<RS> sectionType) {
+        List<? extends ResumeSection> items;
 
-    @Override
-    public List<TeachingAssistance> fetchTeachingAssistance(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(TEACHING_ASSISTANCE_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getTeachingAssistance();
-    }
+        switch (sectionType.getSimpleName()) {
+            case "ContactMethod" -> items = resume.getContactInformation();
+            case "Education" -> items = resume.getEducations();
+            case "TeachingAssistance" -> items = resume.getTeachingAssistance();
+            case "JobExperience" -> items = resume.getJobExperiences();
+            case "FormerColleague" -> items = resume.getFormerColleagues();
+            case "Research" -> items = resume.getResearches();
+            case "Course" -> items = resume.getCourses();
+            case "HardSkill" -> items = resume.getHardSkills();
+            case "SoftSkill" -> items = resume.getSoftSkills();
+            case "Language" -> items = resume.getLanguages();
+            case "Project" -> items = resume.getProjects();
+            case "Patent" -> items = resume.getPatents();
+            case "Presentation" -> items = resume.getPresentations();
+            case "Award" -> items = resume.getAwards();
+            case "Publication" -> items = resume.getPublications();
+            case "VolunteerActivity" -> items = resume.getVolunteerActivities();
+            case "Membership" -> items = resume.getMemberships();
+            case "Hobby" -> items = resume.getHobbies();
+            default -> items = new ArrayList<>();
+        }
 
-    @Override
-    public List<JobExperience> fetchJobExperiences(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(JOB_EXPERIENCES_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getJobExperiences();
-    }
-
-    @Override
-    public List<FormerColleague> fetchFormerColleagues(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(FORMER_COLLEAGUES_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getFormerColleagues();
-    }
-
-    @Override
-    public List<Research> fetchResearches(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(RESEARCHES_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getResearches();
-    }
-
-    @Override
-    public List<Course> fetchCourses(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(COURSES_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getCourses();
-    }
-
-    @Override
-    public List<HardSkill> fetchHardSkills(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(HARD_SKILLS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getHardSkills();
-    }
-
-    @Override
-    public List<SoftSkill> fetchSoftSkills(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(SOFT_SKILLS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getSoftSkills();
-    }
-
-    @Override
-    public List<Language> fetchLanguages(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(LANGUAGES_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getLanguages();
-    }
-
-    @Override
-    public List<Project> fetchProjects(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(PROJECTS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getProjects();
-    }
-
-    @Override
-    public List<Patent> fetchPatents(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(PATENTS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getPatents();
-    }
-
-    @Override
-    public List<Presentation> fetchPresentations(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(PRESENTATIONS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getPresentations();
-    }
-
-    @Override
-    public List<Award> fetchAwards(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(AWARDS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getAwards();
-    }
-
-    @Override
-    public List<Publication> fetchPublications(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(PUBLICATIONS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getPublications();
-    }
-
-    @Override
-    public List<VolunteerActivity> fetchVolunteerActivities(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(VOLUNTEER_ACTIVITIES_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getVolunteerActivities();
-    }
-
-    @Override
-    public List<Membership> fetchMemberships(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(MEMBERSHIPS_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getMemberships();
-    }
-
-    @Override
-    public List<Hobby> fetchHobbies(Integer resumeId) {
-        TypedQuery<Resume> query = entityManager.createQuery(HOBBIES_QUERY, Resume.class);
-        query.setParameter("resumeId", resumeId);
-        return query.getSingleResult().getHobbies();
+        return (List<RS>) items;
     }
 
     @Override
@@ -223,32 +149,5 @@ public class ResumeDAOImpl implements ResumeDAO {
         resumeField.setAccessible(true);
         Resume resume = (Resume) resumeField.get(deletingSectionInDb);
         return resume;
-    }
-
-    private static <T extends ResumeSection> String createQueryString(Class<T> sectionType) {
-        String query = "";
-
-        switch (sectionType.getSimpleName()) {
-            case "ContactMethod" -> query = CONTACT_INFORMATION_QUERY;
-            case "Education" -> query = EDUCATIONS_QUERY;
-            case "TeachingAssistance" -> query = TEACHING_ASSISTANCE_QUERY;
-            case "JobExperience" -> query = JOB_EXPERIENCES_QUERY;
-            case "FormerColleague" -> query = FORMER_COLLEAGUES_QUERY;
-            case "Research" -> query = RESEARCHES_QUERY;
-            case "Course" -> query = COURSES_QUERY;
-            case "HardSkill" -> query = HARD_SKILLS_QUERY;
-            case "SoftSkill" -> query = SOFT_SKILLS_QUERY;
-            case "Language" -> query = LANGUAGES_QUERY;
-            case "Project" -> query = PROJECTS_QUERY;
-            case "Patent" -> query = PATENTS_QUERY;
-            case "Presentation" -> query = PRESENTATIONS_QUERY;
-            case "Award" -> query = AWARDS_QUERY;
-            case "Publication" -> query = PUBLICATIONS_QUERY;
-            case "VolunteerActivity" -> query = VOLUNTEER_ACTIVITIES_QUERY;
-            case "Membership" -> query = MEMBERSHIPS_QUERY;
-            case "Hobby" -> query = HOBBIES_QUERY;
-        }
-
-        return query;
     }
 }

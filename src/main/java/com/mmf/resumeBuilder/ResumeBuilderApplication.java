@@ -32,35 +32,325 @@ public class ResumeBuilderApplication {
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
         return runner -> {
-            var items = resumeDAO.fetchLanguages(12);
-            System.out.println(items);
+            findResumeAndItsSectionsInDatabase(resumeDAO);
         };
+    }
+
+    private void findResumeAndItsSectionsInDatabase(ResumeDAO resumeDAO) {
+        int resumeId = 13;
+        Resume resume = resumeDAO.findById(resumeId);
+        User user = resumeDAO.fetchUser(resumeId);
+        List<ContactMethod> contactInformation = resumeDAO.fetchSection(resumeId, ContactMethod.class);
+        List<Education> educations = resumeDAO.fetchSection(resumeId, Education.class);
+        List<TeachingAssistance> teachingAssistance = resumeDAO.fetchSection(resumeId, TeachingAssistance.class);
+        List<JobExperience> jobExperiences = resumeDAO.fetchSection(resumeId, JobExperience.class);
+        List<FormerColleague> formerColleagues = resumeDAO.fetchSection(resumeId, FormerColleague.class);
+        List<Research> researches = resumeDAO.fetchSection(resumeId, Research.class);
+        List<Course> courses = resumeDAO.fetchSection(resumeId, Course.class);
+        List<HardSkill> hardSkills = resumeDAO.fetchSection(resumeId, HardSkill.class);
+        List<SoftSkill> softSkills = resumeDAO.fetchSection(resumeId, SoftSkill.class);
+        List<Language> languages = resumeDAO.fetchSection(resumeId, Language.class);
+        List<Project> projects = resumeDAO.fetchSection(resumeId, Project.class);
+        List<Patent> patents = resumeDAO.fetchSection(resumeId, Patent.class);
+        List<Presentation> presentations = resumeDAO.fetchSection(resumeId, Presentation.class);
+        List<Award> awards = resumeDAO.fetchSection(resumeId, Award.class);
+        List<Publication> publications = resumeDAO.fetchSection(resumeId, Publication.class);
+        List<VolunteerActivity> volunteerActivities = resumeDAO.fetchSection(resumeId, VolunteerActivity.class);
+        List<Membership> memberships = resumeDAO.fetchSection(resumeId, Membership.class);
+        List<Hobby> hobbies = resumeDAO.fetchSection(resumeId, Hobby.class);
+
+        String expectedResult =
+                "user:User{id=13\n" +
+                        ", firstName='Mohammad Mahdi\n" +
+                        ", lastName='Farrokhy\n" +
+                        ", phoneNumber='09017743009\n" +
+                        ", userDetail=UserDetail{id=13\n" +
+                        ", maritalStatus=Single\n" +
+                        ", gender=Male\n" +
+                        ", militaryServiceStatus=Exempted\n" +
+                        ", birthDate=1999-07-29\n" +
+                        ", foreigner=false\n" +
+                        ", disabilityType=None\n" +
+                        "}}\n" +
+                        "_________________________________________\n" +
+                        "[ContactMethod{id=39\n" +
+                        ", type=Address\n" +
+                        ", value='Tehran, Pardis County\n" +
+                        "}, ContactMethod{id=40\n" +
+                        ", type=Email\n" +
+                        ", value='mmahdifarrokhy@gmail.com\n" +
+                        "}, ContactMethod{id=41\n" +
+                        ", type=LinkedIn\n" +
+                        ", value='https://www.linkedin.com/in/mmahdi-farrokhy/\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "[Education{id=13\n" +
+                        ", degreeLevel=Bachelor\n" +
+                        ", major=Computer Engineering\n" +
+                        ", university='Semnan University\n" +
+                        ", gpa=16.0\n" +
+                        ", startYear=2017\n" +
+                        ", endYear=2021\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "teachingAssistance:[TeachingAssistance{id=8\n" +
+                        ", title='Advanced Programming (Java)\n" +
+                        ", university='Semnan University\n" +
+                        ", startDate=2019-01-01\n" +
+                        ", endDate=2019-06-30\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "jobExperiences:[JobExperience{id=14\n" +
+                        ", title='Software Developer And Consultant\n" +
+                        ", category=Software Development\n" +
+                        ", seniorityLevel=Junior\n" +
+                        ", companyName='Negar Andishgan Co. Ltd.\n" +
+                        ", description='Developing and refactoring NrSign.EMG medical test software\n" +
+                        ", startDate=2023-01-07\n" +
+                        ", endDate=null\n" +
+                        ", status=Occupied\n" +
+                        ", location=Location{id=1\n" +
+                        ", cityName=Tehran\n" +
+                        ", countryId=16\n" +
+                        "}\n" +
+                        "}, JobExperience{id=15\n" +
+                        ", title='C# Developer\n" +
+                        ", category=Software Development\n" +
+                        ", seniorityLevel=Junior\n" +
+                        ", companyName='Zarvan Stun Khodro\n" +
+                        ", description='Developing automotive software Diag and Remap\n" +
+                        ", startDate=2022-04-17\n" +
+                        ", endDate=2022-12-21\n" +
+                        ", status=Finished\n" +
+                        ", location=Location{id=1\n" +
+                        ", cityName=Tehran\n" +
+                        ", countryId=16\n" +
+                        "}\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "formerColleagues:[FormerColleague{id=23\n" +
+                        ", fullName='Ehsan Arbabi\n" +
+                        ", position='Manager\n" +
+                        ", organizationName='Negar Andishgan Co. Ltd.\n" +
+                        ", phoneNumber='09123456789\n" +
+                        "}, FormerColleague{id=24\n" +
+                        ", fullName='Mohammad Hossein Ommi\n" +
+                        ", position='CEO\n" +
+                        ", organizationName='Zarvan Stun Khodro\n" +
+                        ", phoneNumber='09123456789\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "researches:[Research{id=7\n" +
+                        ", title='Researching about Clean Code\n" +
+                        ", publisher='Mohammad Mahdi Farrokhy\n" +
+                        ", referenceLink='https://github.com/mmahdi-farrokhy/CleanCodeBook\n" +
+                        ", date=2022-07-01\n" +
+                        ", description='In this repository you can read the simplified summary of Clean Code book by Robert C. Martin in separated chapters.\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "courses:[Course{id=26\n" +
+                        ", name='Java Expert\n" +
+                        ", institute='7Learn\n" +
+                        ", credentialId='https://7learn.com/crt?h=bdP9hiSTF4\n" +
+                        "}, Course{id=27\n" +
+                        ", name='Spring Boot - Chad Darby\n" +
+                        ", institute='Udemy\n" +
+                        ", credentialId='null\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "hardSkills:[HardSkill{id=23\n" +
+                        ", type=Spring Boot\n" +
+                        ", level=Beginner\n" +
+                        "}, HardSkill{id=24\n" +
+                        ", type=Java\n" +
+                        ", level=Intermediate\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "softSkills:[SoftSkill{id=13\n" +
+                        ", title='Teaching\n" +
+                        "}, SoftSkill{id=14\n" +
+                        ", title='Presentation\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "languages:[Language{id=19\n" +
+                        ", name=German\n" +
+                        ", speakingLevel=Pre Intermediate\n" +
+                        ", writingLevel=Pre Intermediate\n" +
+                        ", readingLevel=Pre Intermediate\n" +
+                        ", listeningLevel=Pre Intermediate\n" +
+                        ", researchingLevel=Pre Intermediate\n" +
+                        "}, Language{id=20\n" +
+                        ", name=English\n" +
+                        ", speakingLevel=Intermediate\n" +
+                        ", writingLevel=Intermediate\n" +
+                        ", readingLevel=Upper Intermediate\n" +
+                        ", listeningLevel=Upper Intermediate\n" +
+                        ", researchingLevel=Upper Intermediate\n" +
+                        "}, Language{id=21\n" +
+                        ", name=Persian\n" +
+                        ", speakingLevel=Native\n" +
+                        ", writingLevel=Native\n" +
+                        ", readingLevel=Native\n" +
+                        ", listeningLevel=Native\n" +
+                        ", researchingLevel=Native\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "projects:[Project{id=7\n" +
+                        ", name='Resume Builder\n" +
+                        ", description='I designed a resume builder web application using Spring Boot.\n" +
+                        "This app has the capabilities of creating a new resume, editing an existing resume and removing a resume from profile.\n" +
+                        "\n" +
+                        "Stack:\n" +
+                        "- Back-End: Java/Spring Boot\n" +
+                        "- UI: HTML/CSS/Bootstrap\n" +
+                        "- Database: MySQL\n" +
+                        ", startDate=2023-12-01\n" +
+                        ", endDate=null\n" +
+                        ", status=Active\n" +
+                        ", referenceLink='https://github.com/mmahdi-farrokhy/ResumeBuilder\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "patents:[]\n" +
+                        "_________________________________________\n" +
+                        "presentations:[]\n" +
+                        "_________________________________________\n" +
+                        "awards:[]\n" +
+                        "_________________________________________\n" +
+                        "publications:[]\n" +
+                        "_________________________________________\n" +
+                        "volunteerActivities:[]\n" +
+                        "_________________________________________\n" +
+                        "memberships:[]\n" +
+                        "_________________________________________\n" +
+                        "hobbies:[]\n" +
+                        "_________________________________________\n";
+
+        String actualResult = "";
+        if (user != null)
+            actualResult += "user:" + user + "\n_________________________________________\n";
+        else
+            actualResult += "user:[]\n_________________________________________\n";
+
+        if (contactInformation != null)
+            actualResult += contactInformation + "\n_________________________________________\n";
+        else
+            actualResult += "contactInformation:[]\n_________________________________________\n";
+
+        if (educations != null)
+            actualResult += educations + "\n_________________________________________\n";
+        else
+            actualResult += "educations:[]" + "\n_________________________________________\n";
+
+        if (teachingAssistance != null)
+            actualResult += "teachingAssistance:" + teachingAssistance + "\n_________________________________________\n";
+        else
+            actualResult += "teachingAssistance:[]" + "\n_________________________________________\n";
+
+        if (jobExperiences != null)
+            actualResult += "jobExperiences:" + jobExperiences + "\n_________________________________________\n";
+        else
+            actualResult += "jobExperiences:[]" + "\n_________________________________________\n";
+
+        if (formerColleagues != null)
+            actualResult += "formerColleagues:" + formerColleagues + "\n_________________________________________\n";
+        else
+            actualResult += "formerColleagues:[]" + "\n_________________________________________\n";
+
+        if (researches != null)
+            actualResult += "researches:" + researches + "\n_________________________________________\n";
+        else
+            actualResult += "researches:[]" + "\n_________________________________________\n";
+
+        if (courses != null)
+            actualResult += "courses:" + courses + "\n_________________________________________\n";
+        else
+            actualResult += "courses:[]" + "\n_________________________________________\n";
+
+        if (hardSkills != null)
+            actualResult += "hardSkills:" + hardSkills + "\n_________________________________________\n";
+        else
+            actualResult += "hardSkills:[]" + "\n_________________________________________\n";
+
+        if (softSkills != null)
+            actualResult += "softSkills:" + softSkills + "\n_________________________________________\n";
+        else
+            actualResult += "softSkills:[]" + "\n_________________________________________\n";
+
+        if (languages != null)
+            actualResult += "languages:" + languages + "\n_________________________________________\n";
+        else
+            actualResult += "languages:[]" + "\n_________________________________________\n";
+
+        if (projects != null)
+            actualResult += "projects:" + projects + "\n_________________________________________\n";
+        else
+            actualResult += "projects:[]" + "\n_________________________________________\n";
+
+        if (patents != null)
+            actualResult += "patents:" + patents + "\n_________________________________________\n";
+        else
+            actualResult += "patents:[]" + "\n_________________________________________\n";
+
+        if (presentations != null)
+            actualResult += "presentations:" + presentations + "\n_________________________________________\n";
+        else
+            actualResult += "presentations:[]" + "\n_________________________________________\n";
+
+        if (awards != null)
+            actualResult += "awards:" + awards + "\n_________________________________________\n";
+        else
+            actualResult += "awards:[]" + "\n_________________________________________\n";
+
+        if (publications != null)
+            actualResult += "publications:" + publications + "\n_________________________________________\n";
+        else
+            actualResult += "publications:[]" + "\n_________________________________________\n";
+
+        if (volunteerActivities != null)
+            actualResult += "volunteerActivities:" + volunteerActivities + "\n_________________________________________\n";
+        else
+            actualResult += "volunteerActivities:[]" + "\n_________________________________________\n";
+
+        if (memberships != null)
+            actualResult += "memberships:" + memberships + "\n_________________________________________\n";
+        else
+            actualResult += "memberships:[]" + "\n_________________________________________\n";
+
+        if (hobbies != null)
+            actualResult += "hobbies:" + hobbies + "\n_________________________________________\n";
+        else
+            actualResult += "hobbies:[]" + "\n_________________________________________\n";
+
+        if (actualResult.equals(expectedResult))
+            System.out.println("Passed");
+        else
+            System.out.println(actualResult);
     }
 
     private void deleteResumeEducation(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        Education education = resumeDAO.fetchEducations(resumeId).stream().findFirst().get();
+        Education education = resumeDAO.fetchSection(resumeId, Education.class).stream().findFirst().get();
         resumeDAO.deleteSection(education);
         System.out.println("Education " + education.getId() + " deleted\n");
     }
 
     private void deleteResumeJobExperience(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        JobExperience jobExperience = resumeDAO.fetchJobExperiences(resumeId).stream().findFirst().get();
+        JobExperience jobExperience = resumeDAO.fetchSection(resumeId, JobExperience.class).stream().findFirst().get();
         resumeDAO.deleteSection(jobExperience);
         System.out.println("Job experience " + jobExperience.getId() + " deleted\n");
     }
 
     private void deleteResumeTeachingAssistance(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        TeachingAssistance teachingAssistance = resumeDAO.fetchTeachingAssistance(resumeId).stream().findFirst().get();
+        TeachingAssistance teachingAssistance = resumeDAO.fetchSection(resumeId, TeachingAssistance.class).stream().findFirst().get();
         resumeDAO.deleteSection(teachingAssistance);
         System.out.println("Teaching assistance " + teachingAssistance.getId() + " deleted\n");
     }
 
     private void deleteResumeContactMethod(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        List<ContactMethod> contactInformation = resumeDAO.fetchContactInformation(resumeId, ContactMethod.class);
+        List<ContactMethod> contactInformation = resumeDAO.fetchSection(resumeId, ContactMethod.class);
         ContactMethod contactMethod = contactInformation.stream().filter(cm -> cm.getType() == ContactType.Address).findFirst().get();
         resumeDAO.deleteSection(contactMethod);
         System.out.println("Contact method " + contactMethod.getId() + " deleted\n");
@@ -68,7 +358,7 @@ public class ResumeBuilderApplication {
 
     private void deleteResumeCourse(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        List<Course> courses = resumeDAO.fetchCourses(resumeId);
+        List<Course> courses = resumeDAO.fetchSection(resumeId, Course.class);
         Course course = courses.stream().findFirst().get();
         resumeDAO.deleteSection(course);
         System.out.println("Course " + course.getId() + " deleted\n");
@@ -76,42 +366,42 @@ public class ResumeBuilderApplication {
 
     private static void deleteResumeProject(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        Project project = resumeDAO.fetchProjects(resumeId).stream().findFirst().get();
+        Project project = resumeDAO.fetchSection(resumeId, Project.class).stream().findFirst().get();
         resumeDAO.deleteSection(project);
         System.out.println("Project " + project.getId() + " deleted\n");
     }
 
     private static void deleteResumeLanguage(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        Language language = resumeDAO.fetchLanguages(resumeId).stream().findFirst().get();
+        Language language = resumeDAO.fetchSection(resumeId, Language.class).stream().findFirst().get();
         resumeDAO.deleteSection(language);
         System.out.println("Language " + language.getId() + " deleted\n");
     }
 
     private static void deleteResumeSoftSkill(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        SoftSkill softSkill = resumeDAO.fetchSoftSkills(resumeId).stream().findFirst().get();
+        SoftSkill softSkill = resumeDAO.fetchSection(resumeId, SoftSkill.class).stream().findFirst().get();
         resumeDAO.deleteSection(softSkill);
         System.out.println("Soft skill " + softSkill.getId() + " deleted\n");
     }
 
     private static void deleteResumeHardSkill(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        HardSkill hardSkill = resumeDAO.fetchHardSkills(resumeId).stream().findFirst().get();
+        HardSkill hardSkill = resumeDAO.fetchSection(resumeId, HardSkill.class).stream().findFirst().get();
         resumeDAO.deleteSection(hardSkill);
         System.out.println("Hard skill " + hardSkill.getId() + " deleted\n");
     }
 
     private static void deleteResumeResearch(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        Research research = resumeDAO.fetchResearches(resumeId).stream().findFirst().get();
+        Research research = resumeDAO.fetchSection(resumeId, Research.class).stream().findFirst().get();
         resumeDAO.deleteSection(research);
         System.out.println("Research " + research.getId() + " deleted\n");
     }
 
     private static void deleteResumeFormerColleague(ResumeDAO resumeDAO) {
         Integer resumeId = 12;
-        FormerColleague formerColleague = resumeDAO.fetchFormerColleagues(resumeId).stream().findFirst().get();
+        FormerColleague formerColleague = resumeDAO.fetchSection(resumeId, FormerColleague.class).stream().findFirst().get();
         resumeDAO.deleteSection(formerColleague);
         System.out.println("Former colleague " + formerColleague.getId() + " deleted\n");
     }
@@ -123,180 +413,352 @@ public class ResumeBuilderApplication {
         resumeDAO.updateSection(user);
         System.out.println("User updated\n");
 
-        List<ContactMethod> contactInformation = resumeDAO.fetchContactInformation(resumeId, ContactMethod.class);
+        List<ContactMethod> contactInformation = resumeDAO.fetchSection(resumeId, ContactMethod.class);
         ContactMethod contactMethod = contactInformation.stream().filter(e1 -> e1.getType() == ContactType.Email).findFirst().get();
         contactMethod.setValue("mmahdifarrokhy@gmail.com");
         resumeDAO.updateSection(contactMethod);
         System.out.println("Email updated\n");
 
-        Education education = resumeDAO.fetchEducations(resumeId).stream().findFirst().get();
+        Education education = resumeDAO.fetchSection(resumeId, Education.class).stream().findFirst().get();
         education.setGpa(16);
         resumeDAO.updateSection(education);
         System.out.println("Education updated\n");
 
-        TeachingAssistance teachingAssistance = resumeDAO.fetchTeachingAssistance(resumeId).stream().findFirst().get();
+        TeachingAssistance teachingAssistance = resumeDAO.fetchSection(resumeId, TeachingAssistance.class).stream().findFirst().get();
         teachingAssistance.setTitle("Advanced Programming (Java)");
         resumeDAO.updateSection(teachingAssistance);
         System.out.println("Teaching assistance updated\n");
 
-        JobExperience jobExperience = resumeDAO.fetchJobExperiences(resumeId).stream().findFirst().get();
+        JobExperience jobExperience = resumeDAO.fetchSection(resumeId, JobExperience.class).stream().findFirst().get();
         jobExperience.setTitle("Software developer and consultant");
         resumeDAO.updateSection(jobExperience);
         System.out.println("Job experience updated\n");
 
-        FormerColleague formerColleague = resumeDAO.fetchFormerColleagues(resumeId).stream().findFirst().get();
+        FormerColleague formerColleague = resumeDAO.fetchSection(resumeId, FormerColleague.class).stream().findFirst().get();
         formerColleague.setPhoneNumber("09987654321");
         resumeDAO.updateSection(formerColleague);
         System.out.println("Former colleague updated\n");
 
-        Research research = resumeDAO.fetchResearches(resumeId).stream().findFirst().get();
+        Research research = resumeDAO.fetchSection(resumeId, Research.class).stream().findFirst().get();
         research.setTitle("Summarizing Clean Code book (Robert C. Martin)");
         resumeDAO.updateSection(research);
         System.out.println("Research updated\n");
 
-        Course course = resumeDAO.fetchCourses(resumeId).stream().findFirst().get();
+        Course course = resumeDAO.fetchSection(resumeId, Course.class).stream().findFirst().get();
         course.setInstitute("Se7en Learn");
         resumeDAO.updateSection(course);
         System.out.println("Course updated\n");
 
-        HardSkill hardSkill = resumeDAO.fetchHardSkills(resumeId).stream().findFirst().get();
+        HardSkill hardSkill = resumeDAO.fetchSection(resumeId, HardSkill.class).stream().findFirst().get();
         hardSkill.setLevel(HardSkillLevel.Intermediate);
         resumeDAO.updateSection(hardSkill);
         System.out.println("Hard skill updated\n");
 
-        SoftSkill softSkill = resumeDAO.fetchSoftSkills(resumeId).stream().findFirst().get();
+        SoftSkill softSkill = resumeDAO.fetchSection(resumeId, SoftSkill.class).stream().findFirst().get();
         softSkill.setTitle("Instruction");
         resumeDAO.updateSection(softSkill);
         System.out.println("Soft skill updated\n");
 
-        Language language = resumeDAO.fetchLanguages(resumeId).stream().findFirst().get();
+        Language language = resumeDAO.fetchSection(resumeId, Language.class).stream().findFirst().get();
         language.setSpeakingLevel(LanguageLevel.Basic);
         resumeDAO.updateSection(language);
         System.out.println("Language updated\n");
 
-        Project project = resumeDAO.fetchProjects(resumeId).stream().findFirst().get();
+        Project project = resumeDAO.fetchSection(resumeId, Project.class).stream().findFirst().get();
         project.setName("Resume Builder Web Application");
         resumeDAO.updateSection(project);
         System.out.println("Project updated\n");
     }
 
     private void findResumeInDatabase(ResumeDAO resumeDAO) {
-        int resumeId = 7;
+        int resumeId = 13;
         Resume resume = resumeDAO.findById(resumeId);
         User user = resumeDAO.fetchUser(resumeId);
-        List<ContactMethod> contactInformation = resumeDAO.fetchContactInformation(resumeId, ContactMethod.class);
-        List<Education> educations = resumeDAO.fetchEducations(resumeId);
-        List<TeachingAssistance> teachingAssistance = resumeDAO.fetchTeachingAssistance(resumeId);
-        List<JobExperience> jobExperiences = resumeDAO.fetchJobExperiences(resumeId);
-        List<FormerColleague> formerColleagues = resumeDAO.fetchFormerColleagues(resumeId);
-        List<Research> researches = resumeDAO.fetchResearches(resumeId);
-        List<Course> courses = resumeDAO.fetchCourses(resumeId);
-        List<HardSkill> hardSkills = resumeDAO.fetchHardSkills(resumeId);
-        List<SoftSkill> softSkills = resumeDAO.fetchSoftSkills(resumeId);
-        List<Language> languages = resumeDAO.fetchLanguages(resumeId);
-        List<Project> projects = resumeDAO.fetchProjects(resumeId);
-        List<Patent> patents = resumeDAO.fetchPatents(resumeId);
-        List<Presentation> presentations = resumeDAO.fetchPresentations(resumeId);
-        List<Award> awards = resumeDAO.fetchAwards(resumeId);
-        List<Publication> publications = resumeDAO.fetchPublications(resumeId);
-        List<VolunteerActivity> volunteerActivities = resumeDAO.fetchVolunteerActivities(resumeId);
-        List<Membership> memberships = resumeDAO.fetchMemberships(resumeId);
-        List<Hobby> hobbies = resumeDAO.fetchHobbies(resumeId);
+        List<ContactMethod> contactInformation = resumeDAO.fetchSection(resumeId, ContactMethod.class);
+        List<Education> educations = resumeDAO.fetchSection(resumeId, Education.class);
+        List<TeachingAssistance> teachingAssistance = resumeDAO.fetchSection(resumeId, TeachingAssistance.class);
+        List<JobExperience> jobExperiences = resumeDAO.fetchSection(resumeId, JobExperience.class);
+        List<FormerColleague> formerColleagues = resumeDAO.fetchSection(resumeId, FormerColleague.class);
+        List<Research> researches = resumeDAO.fetchSection(resumeId, Research.class);
+        List<Course> courses = resumeDAO.fetchSection(resumeId, Course.class);
+        List<HardSkill> hardSkills = resumeDAO.fetchSection(resumeId, HardSkill.class);
+        List<SoftSkill> softSkills = resumeDAO.fetchSection(resumeId, SoftSkill.class);
+        List<Language> languages = resumeDAO.fetchSection(resumeId, Language.class);
+        List<Project> projects = resumeDAO.fetchSection(resumeId, Project.class);
+        List<Patent> patents = resumeDAO.fetchSection(resumeId, Patent.class);
+        List<Presentation> presentations = resumeDAO.fetchSection(resumeId, Presentation.class);
+        List<Award> awards = resumeDAO.fetchSection(resumeId, Award.class);
+        List<Publication> publications = resumeDAO.fetchSection(resumeId, Publication.class);
+        List<VolunteerActivity> volunteerActivities = resumeDAO.fetchSection(resumeId, VolunteerActivity.class);
+        List<Membership> memberships = resumeDAO.fetchSection(resumeId, Membership.class);
+        List<Hobby> hobbies = resumeDAO.fetchSection(resumeId, Hobby.class);
 
+        String expectedResult =
+                "user:User{id=13\n" +
+                        ", firstName='Mohammad Mahdi\n" +
+                        ", lastName='Farrokhy\n" +
+                        ", phoneNumber='09017743009\n" +
+                        ", userDetail=UserDetail{id=13\n" +
+                        ", maritalStatus=Single\n" +
+                        ", gender=Male\n" +
+                        ", militaryServiceStatus=Exempted\n" +
+                        ", birthDate=1999-07-29\n" +
+                        ", foreigner=false\n" +
+                        ", disabilityType=None\n" +
+                        "}}\n" +
+                        "_________________________________________\n" +
+                        "[ContactMethod{id=39\n" +
+                        ", type=Address\n" +
+                        ", value='Tehran, Pardis County\n" +
+                        "}, ContactMethod{id=40\n" +
+                        ", type=Email\n" +
+                        ", value='mmahdifarrokhy@gmail.com\n" +
+                        "}, ContactMethod{id=41\n" +
+                        ", type=LinkedIn\n" +
+                        ", value='https://www.linkedin.com/in/mmahdi-farrokhy/\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "[Education{id=13\n" +
+                        ", degreeLevel=Bachelor\n" +
+                        ", major=Computer Engineering\n" +
+                        ", university='Semnan University\n" +
+                        ", gpa=16.0\n" +
+                        ", startYear=2017\n" +
+                        ", endYear=2021\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "teachingAssistance:[TeachingAssistance{id=8\n" +
+                        ", title='Advanced Programming (Java)\n" +
+                        ", university='Semnan University\n" +
+                        ", startDate=2019-01-01\n" +
+                        ", endDate=2019-06-30\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "jobExperiences:[JobExperience{id=14\n" +
+                        ", title='Software Developer And Consultant\n" +
+                        ", category=Software Development\n" +
+                        ", seniorityLevel=Junior\n" +
+                        ", companyName='Negar Andishgan Co. Ltd.\n" +
+                        ", description='Developing and refactoring NrSign.EMG medical test software\n" +
+                        ", startDate=2023-01-07\n" +
+                        ", endDate=null\n" +
+                        ", status=Occupied\n" +
+                        ", location=Location{id=1\n" +
+                        ", cityName=Tehran\n" +
+                        ", countryId=16\n" +
+                        "}\n" +
+                        "}, JobExperience{id=15\n" +
+                        ", title='C# Developer\n" +
+                        ", category=Software Development\n" +
+                        ", seniorityLevel=Junior\n" +
+                        ", companyName='Zarvan Stun Khodro\n" +
+                        ", description='Developing automotive software Diag and Remap\n" +
+                        ", startDate=2022-04-17\n" +
+                        ", endDate=2022-12-21\n" +
+                        ", status=Finished\n" +
+                        ", location=Location{id=1\n" +
+                        ", cityName=Tehran\n" +
+                        ", countryId=16\n" +
+                        "}\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "formerColleagues:[FormerColleague{id=23\n" +
+                        ", fullName='Ehsan Arbabi\n" +
+                        ", position='Manager\n" +
+                        ", organizationName='Negar Andishgan Co. Ltd.\n" +
+                        ", phoneNumber='09123456789\n" +
+                        "}, FormerColleague{id=24\n" +
+                        ", fullName='Mohammad Hossein Ommi\n" +
+                        ", position='CEO\n" +
+                        ", organizationName='Zarvan Stun Khodro\n" +
+                        ", phoneNumber='09123456789\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "researches:[Research{id=7\n" +
+                        ", title='Researching about Clean Code\n" +
+                        ", publisher='Mohammad Mahdi Farrokhy\n" +
+                        ", referenceLink='https://github.com/mmahdi-farrokhy/CleanCodeBook\n" +
+                        ", date=2022-07-01\n" +
+                        ", description='In this repository you can read the simplified summary of Clean Code book by Robert C. Martin in separated chapters.\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "courses:[Course{id=26\n" +
+                        ", name='Java Expert\n" +
+                        ", institute='7Learn\n" +
+                        ", credentialId='https://7learn.com/crt?h=bdP9hiSTF4\n" +
+                        "}, Course{id=27\n" +
+                        ", name='Spring Boot - Chad Darby\n" +
+                        ", institute='Udemy\n" +
+                        ", credentialId='null\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "hardSkills:[HardSkill{id=23\n" +
+                        ", type=Spring Boot\n" +
+                        ", level=Beginner\n" +
+                        "}, HardSkill{id=24\n" +
+                        ", type=Java\n" +
+                        ", level=Intermediate\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "softSkills:[SoftSkill{id=13\n" +
+                        ", title='Teaching\n" +
+                        "}, SoftSkill{id=14\n" +
+                        ", title='Presentation\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "languages:[Language{id=19\n" +
+                        ", name=German\n" +
+                        ", speakingLevel=Pre Intermediate\n" +
+                        ", writingLevel=Pre Intermediate\n" +
+                        ", readingLevel=Pre Intermediate\n" +
+                        ", listeningLevel=Pre Intermediate\n" +
+                        ", researchingLevel=Pre Intermediate\n" +
+                        "}, Language{id=20\n" +
+                        ", name=English\n" +
+                        ", speakingLevel=Intermediate\n" +
+                        ", writingLevel=Intermediate\n" +
+                        ", readingLevel=Upper Intermediate\n" +
+                        ", listeningLevel=Upper Intermediate\n" +
+                        ", researchingLevel=Upper Intermediate\n" +
+                        "}, Language{id=21\n" +
+                        ", name=Persian\n" +
+                        ", speakingLevel=Native\n" +
+                        ", writingLevel=Native\n" +
+                        ", readingLevel=Native\n" +
+                        ", listeningLevel=Native\n" +
+                        ", researchingLevel=Native\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "projects:[Project{id=7\n" +
+                        ", name='Resume Builder\n" +
+                        ", description='I designed a resume builder web application using Spring Boot.\n" +
+                        "This app has the capabilities of creating a new resume, editing an existing resume and removing a resume from profile.\n" +
+                        "\n" +
+                        "Stack:\n" +
+                        "- Back-End: Java/Spring Boot\n" +
+                        "- UI: HTML/CSS/Bootstrap\n" +
+                        "- Database: MySQL\n" +
+                        ", startDate=2023-12-01\n" +
+                        ", endDate=null\n" +
+                        ", status=Active\n" +
+                        ", referenceLink='https://github.com/mmahdi-farrokhy/ResumeBuilder\n" +
+                        "}]\n" +
+                        "_________________________________________\n" +
+                        "patents:[]\n" +
+                        "_________________________________________\n" +
+                        "presentations:[]\n" +
+                        "_________________________________________\n" +
+                        "awards:[]\n" +
+                        "_________________________________________\n" +
+                        "publications:[]\n" +
+                        "_________________________________________\n" +
+                        "volunteerActivities:[]\n" +
+                        "_________________________________________\n" +
+                        "memberships:[]\n" +
+                        "_________________________________________\n" +
+                        "hobbies:[]\n" +
+                        "_________________________________________\n";
+
+        String actualResult = "";
         if (user != null)
-            System.out.println("user:" + user + "\n_________________________________________");
+            actualResult += "user:" + user + "\n_________________________________________\n";
         else
-            System.out.println("user is null\n_________________________________________");
+            actualResult += "user:[]\n_________________________________________\n";
 
         if (contactInformation != null)
-            System.out.println(contactInformation + "\n_________________________________________");
+            actualResult += contactInformation + "\n_________________________________________\n";
         else
-            System.out.println("contactInformation is null\n_________________________________________");
+            actualResult += "contactInformation:[]\n_________________________________________\n";
 
         if (educations != null)
-            System.out.println(educations + "\n_________________________________________");
+            actualResult += educations + "\n_________________________________________\n";
         else
-            System.out.println("educations is null" + "\n_________________________________________");
+            actualResult += "educations:[]" + "\n_________________________________________\n";
 
         if (teachingAssistance != null)
-            System.out.println("teachingAssistance:" + teachingAssistance + "\n_________________________________________");
+            actualResult += "teachingAssistance:" + teachingAssistance + "\n_________________________________________\n";
         else
-            System.out.println("teachingAssistance is null" + "\n_________________________________________");
+            actualResult += "teachingAssistance:[]" + "\n_________________________________________\n";
 
         if (jobExperiences != null)
-            System.out.println("jobExperiences:" + jobExperiences + "\n_________________________________________");
+            actualResult += "jobExperiences:" + jobExperiences + "\n_________________________________________\n";
         else
-            System.out.println("jobExperiences is null" + "\n_________________________________________");
+            actualResult += "jobExperiences:[]" + "\n_________________________________________\n";
 
         if (formerColleagues != null)
-            System.out.println("formerColleagues:" + formerColleagues + "\n_________________________________________");
+            actualResult += "formerColleagues:" + formerColleagues + "\n_________________________________________\n";
         else
-            System.out.println("formerColleagues is null" + "\n_________________________________________");
+            actualResult += "formerColleagues:[]" + "\n_________________________________________\n";
 
         if (researches != null)
-            System.out.println("researches:" + researches + "\n_________________________________________");
+            actualResult += "researches:" + researches + "\n_________________________________________\n";
         else
-            System.out.println("researches is null" + "\n_________________________________________");
+            actualResult += "researches:[]" + "\n_________________________________________\n";
 
         if (courses != null)
-            System.out.println("courses:" + courses + "\n_________________________________________");
+            actualResult += "courses:" + courses + "\n_________________________________________\n";
         else
-            System.out.println("courses is null" + "\n_________________________________________");
+            actualResult += "courses:[]" + "\n_________________________________________\n";
 
         if (hardSkills != null)
-            System.out.println("hardSkills:" + hardSkills + "\n_________________________________________");
+            actualResult += "hardSkills:" + hardSkills + "\n_________________________________________\n";
         else
-            System.out.println("hardSkills is null" + "\n_________________________________________");
+            actualResult += "hardSkills:[]" + "\n_________________________________________\n";
 
         if (softSkills != null)
-            System.out.println("softSkills:" + softSkills + "\n_________________________________________");
+            actualResult += "softSkills:" + softSkills + "\n_________________________________________\n";
         else
-            System.out.println("softSkills is null" + "\n_________________________________________");
+            actualResult += "softSkills:[]" + "\n_________________________________________\n";
 
         if (languages != null)
-            System.out.println("languages:" + languages + "\n_________________________________________");
+            actualResult += "languages:" + languages + "\n_________________________________________\n";
         else
-            System.out.println("languages is null" + "\n_________________________________________");
+            actualResult += "languages:[]" + "\n_________________________________________\n";
 
         if (projects != null)
-            System.out.println("projects:" + projects + "\n_________________________________________");
+            actualResult += "projects:" + projects + "\n_________________________________________\n";
         else
-            System.out.println("projects is null" + "\n_________________________________________");
+            actualResult += "projects:[]" + "\n_________________________________________\n";
 
         if (patents != null)
-            System.out.println("patents:" + patents + "\n_________________________________________");
+            actualResult += "patents:" + patents + "\n_________________________________________\n";
         else
-            System.out.println("patents is null" + "\n_________________________________________");
+            actualResult += "patents:[]" + "\n_________________________________________\n";
 
         if (presentations != null)
-            System.out.println("presentations:" + presentations + "\n_________________________________________");
+            actualResult += "presentations:" + presentations + "\n_________________________________________\n";
         else
-            System.out.println("presentations is null" + "\n_________________________________________");
+            actualResult += "presentations:[]" + "\n_________________________________________\n";
 
         if (awards != null)
-            System.out.println("awards:" + awards + "\n_________________________________________");
+            actualResult += "awards:" + awards + "\n_________________________________________\n";
         else
-            System.out.println("awards is null" + "\n_________________________________________");
+            actualResult += "awards:[]" + "\n_________________________________________\n";
 
         if (publications != null)
-            System.out.println("publications:" + publications + "\n_________________________________________");
+            actualResult += "publications:" + publications + "\n_________________________________________\n";
         else
-            System.out.println("publications is null" + "\n_________________________________________");
+            actualResult += "publications:[]" + "\n_________________________________________\n";
 
         if (volunteerActivities != null)
-            System.out.println("volunteerActivities:" + volunteerActivities + "\n_________________________________________");
+            actualResult += "volunteerActivities:" + volunteerActivities + "\n_________________________________________\n";
         else
-            System.out.println("volunteerActivities is null" + "\n_________________________________________");
+            actualResult += "volunteerActivities:[]" + "\n_________________________________________\n";
 
         if (memberships != null)
-            System.out.println("memberships:" + memberships + "\n_________________________________________");
+            actualResult += "memberships:" + memberships + "\n_________________________________________\n";
         else
-            System.out.println("memberships is null" + "\n_________________________________________");
+            actualResult += "memberships:[]" + "\n_________________________________________\n";
 
         if (hobbies != null)
-            System.out.println("hobbies:" + hobbies + "\n_________________________________________");
+            actualResult += "hobbies:" + hobbies + "\n_________________________________________\n";
         else
-            System.out.println("hobbies is null" + "\n_________________________________________");
+            actualResult += "hobbies:[]" + "\n_________________________________________\n";
+
+        if (actualResult.equals(expectedResult))
+            System.out.println("Passed");
+        else
+            System.out.println(actualResult);
     }
 
     private void addResume(ResumeDAO resumeDAO) {
