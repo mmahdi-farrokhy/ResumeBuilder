@@ -9,8 +9,6 @@ public interface ResumeDAO {
 
     void save(Resume resume);
 
-    User fetchUser(Integer resumeId);
-
     <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType);
 
     void updateSection(ResumeSection updatingSection);

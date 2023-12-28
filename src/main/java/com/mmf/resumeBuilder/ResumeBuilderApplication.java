@@ -39,7 +39,7 @@ public class ResumeBuilderApplication {
     private void findResumeAndItsSectionsInDatabase(ResumeDAO resumeDAO) {
         int resumeId = 13;
         Resume resume = resumeDAO.findById(resumeId);
-        User user = resumeDAO.fetchUser(resumeId);
+        User user = resume.getUser();
         List<ContactMethod> contactInformation = resumeDAO.fetchSection(resumeId, ContactMethod.class);
         List<Education> educations = resumeDAO.fetchSection(resumeId, Education.class);
         List<TeachingAssistance> teachingAssistance = resumeDAO.fetchSection(resumeId, TeachingAssistance.class);
@@ -325,6 +325,9 @@ public class ResumeBuilderApplication {
             System.out.println("Passed");
         else
             System.out.println(actualResult);
+
+        System.out.println(resume.getSummary());
+        System.out.println(resume.getUser());
     }
 
     private void deleteResumeEducation(ResumeDAO resumeDAO) {
@@ -408,7 +411,8 @@ public class ResumeBuilderApplication {
 
     private void updateResumeSectionsInDatabase(ResumeDAO resumeDAO) {
         Integer resumeId = 7;
-        User user = resumeDAO.fetchUser(resumeId);
+        Resume resume = resumeDAO.findById(resumeId);
+        User user = resume.getUser();
         user.setFirstName("Mohammad Mahdi");
         resumeDAO.updateSection(user);
         System.out.println("User updated\n");
@@ -473,7 +477,7 @@ public class ResumeBuilderApplication {
     private void findResumeInDatabase(ResumeDAO resumeDAO) {
         int resumeId = 13;
         Resume resume = resumeDAO.findById(resumeId);
-        User user = resumeDAO.fetchUser(resumeId);
+        User user = resume.getUser();
         List<ContactMethod> contactInformation = resumeDAO.fetchSection(resumeId, ContactMethod.class);
         List<Education> educations = resumeDAO.fetchSection(resumeId, Education.class);
         List<TeachingAssistance> teachingAssistance = resumeDAO.fetchSection(resumeId, TeachingAssistance.class);

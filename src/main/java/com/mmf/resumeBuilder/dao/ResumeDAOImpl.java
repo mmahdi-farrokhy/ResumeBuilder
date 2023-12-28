@@ -50,11 +50,6 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
-    public User fetchUser(Integer resumeId) {
-        return findById(resumeId).getUser();
-    }
-
-    @Override
     public <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType) {
         TypedQuery<Resume> query = entityManager.createQuery(createQueryString(sectionType), Resume.class);
         query.setParameter("resumeId", resumeId);
