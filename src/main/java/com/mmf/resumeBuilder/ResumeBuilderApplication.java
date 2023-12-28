@@ -32,8 +32,85 @@ public class ResumeBuilderApplication {
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
         return runner -> {
-            findResumeAndItsSectionsInDatabase(resumeDAO);
+            addResumeSections(resumeDAO);
         };
+    }
+
+    private void addResumeSections(ResumeDAO resumeDAO) {
+        System.out.println("Fetching resume");
+        int resumeId = 13;
+        Resume resume = resumeDAO.findById(resumeId);
+
+        List<ContactMethod> contactInformation = resumeDAO.fetchSection(resumeId, ContactMethod.class);
+        resume.setContactInformation(contactInformation);
+
+        ContactMethod newContactMethod = createContactMethod(resume, ContactType.Phone_Number, "09190763415");
+        resumeDAO.addSection(newContactMethod);
+        System.out.println("newContactMethod saved");
+
+        Course newCourse = createCourse(resume, "Git/GitHub", "Google", null);
+        resumeDAO.addSection(newCourse);
+        System.out.println("newCourse saved");
+
+        Education newEducation = createEducation(resume);
+        resumeDAO.addSection(newEducation);
+        System.out.println("newEducation saved");
+
+        FormerColleague newFormerColleague = createFormerColleague1(resume);
+        resumeDAO.addSection(newFormerColleague);
+        System.out.println("newFormerColleague saved");
+
+        HardSkill newHardSkill = createHardSkill(resume, HardSkillType.CSharp, HardSkillLevel.Advanced);
+        resumeDAO.addSection(newHardSkill);
+        System.out.println("newHardSkill saved");
+
+        SoftSkill newSoftSkill = createSoftSkill(resume, "Negotiation");
+        resumeDAO.addSection(newSoftSkill);
+        System.out.println("newSoftSkill saved");
+
+        Hobby newHobby = createHobby(resume, "Escape Room");
+        resumeDAO.addSection(newHobby);
+        System.out.println("newHobby saved");
+
+        JobExperience newJobExperience = createJobExperience3(resume);
+        resumeDAO.addSection(newJobExperience);
+        System.out.println("newJobExperience saved");
+
+        Language newLanguage = createLanguage(resume, LanguageName.Japanese, LanguageLevel.Intermediate, LanguageLevel.Intermediate, LanguageLevel.Intermediate, LanguageLevel.Intermediate, LanguageLevel.Intermediate);
+        resumeDAO.addSection(newLanguage);
+        System.out.println("newLanguage saved");
+
+        Membership newMembership = createMembership(resume, "Scientific Association of the Faculty of Computer Engineering", LocalDate.of(2019, 1, 1));
+        resumeDAO.addSection(newMembership);
+        System.out.println("newMembership saved");
+
+        Patent newPatent = createPatent(resume);
+        resumeDAO.addSection(newPatent);
+        System.out.println("newPatent saved");
+
+        Presentation newPresentation = createPresentation(resume);
+        resumeDAO.addSection(newPresentation);
+        System.out.println("newPresentation saved");
+
+        Project newProject = createProject2(resume);
+        resumeDAO.addSection(newProject);
+        System.out.println("newProject saved");
+
+        Publication newPublication = createPublication(resume);
+        resumeDAO.addSection(newPublication);
+        System.out.println("newPublication saved");
+
+        Research newResearch = createResearch2(resume);
+        resumeDAO.addSection(newResearch);
+        System.out.println("newResearch saved");
+
+        TeachingAssistance newTeachingAssistance = createTeachingAssistance2(resume);
+        resumeDAO.addSection(newTeachingAssistance);
+        System.out.println("newTeachingAssistance saved");
+
+        VolunteerActivity newVolunteerActivity = createVolunteerActivity(resume, "Scientific Association of the Faculty of Computer Engineering", 2019);
+        resumeDAO.addSection(newVolunteerActivity);
+        System.out.println("newVolunteerActivity saved");
     }
 
     private void findResumeAndItsSectionsInDatabase(ResumeDAO resumeDAO) {
@@ -410,10 +487,10 @@ public class ResumeBuilderApplication {
     }
 
     private void updateResumeSectionsInDatabase(ResumeDAO resumeDAO) {
-        Integer resumeId = 7;
+        Integer resumeId = 13;
         Resume resume = resumeDAO.findById(resumeId);
         User user = resume.getUser();
-        user.setFirstName("Mohammad Mahdi");
+        user.setFirstName("Mohammadmahdi");
         resumeDAO.updateSection(user);
         System.out.println("User updated\n");
 
@@ -768,7 +845,7 @@ public class ResumeBuilderApplication {
     private void addResume(ResumeDAO resumeDAO) {
         System.out.println("Creating resume");
         Resume resume = new Resume();
-        resume.setUser(CreateUser());
+        resume.setUser(createUser());
 
         addContactMethods(resume);
         addSummary(resume);
@@ -848,19 +925,19 @@ public class ResumeBuilderApplication {
     }
 
     private void addEducation(Resume resume) {
-        Education education1 = CreateEducation(resume);
+        Education education1 = createEducation(resume);
         resume.addSection(education1);
     }
 
     private void addSummary(Resume resume) {
-        Summary summary = CreateSummary();
+        Summary summary = createSummary();
         resume.setSummary(summary);
     }
 
     private void addContactMethods(Resume resume) {
-        ContactMethod contactMethod1 = CreateContactMethod(resume, ContactType.Address, "Tehran, Pardis County");
-        ContactMethod contactMethod2 = CreateContactMethod(resume, ContactType.Email, "mmahdifarrokhy@gmail.com");
-        ContactMethod contactMethod3 = CreateContactMethod(resume, ContactType.LinkedIn, "https://www.linkedin.com/in/mmahdi-farrokhy/");
+        ContactMethod contactMethod1 = createContactMethod(resume, ContactType.Address, "Tehran, Pardis County");
+        ContactMethod contactMethod2 = createContactMethod(resume, ContactType.Email, "mmahdifarrokhy@gmail.com");
+        ContactMethod contactMethod3 = createContactMethod(resume, ContactType.LinkedIn, "https://www.linkedin.com/in/mmahdi-farrokhy/");
         resume.addSection(contactMethod1);
         resume.addSection(contactMethod2);
         resume.addSection(contactMethod3);
@@ -880,6 +957,25 @@ public class ResumeBuilderApplication {
         project.setStartDate(LocalDate.of(2023, 12, 1));
         project.setStatus(ProjectStatus.Active);
         project.setReferenceLink("https://github.com/mmahdi-farrokhy/ResumeBuilder");
+        project.setResume(resume);
+        return project;
+    }
+
+    private Project createProject2(Resume resume) {
+        Project project = new Project();
+        project.setName("Travel Agency");
+        project.setDescription("I designed a windows application using Java 17 and JavaFX as UI framework.\n" +
+                "This app has the capabilities of booking flights, and seeing the history of the tickets bought by the user.\n" +
+                "\n" +
+                "Stack:\n" +
+                "- Back-End: Java 17\n" +
+                "- UI: JavaFX\n" +
+                "- Database: MySQL");
+
+        project.setStartDate(LocalDate.of(2023, 4, 17));
+        project.setEndDate(LocalDate.of(2023, 8, 9));
+        project.setStatus(ProjectStatus.Completed);
+        project.setReferenceLink("https://github.com/mmahdi-farrokhy/TravelAgency");
         project.setResume(resume);
         return project;
     }
@@ -927,6 +1023,17 @@ public class ResumeBuilderApplication {
         research.setReferenceLink("https://github.com/mmahdi-farrokhy/CleanCodeBook");
         research.setDate(LocalDate.of(2022, 7, 1));
         research.setDescription("In this repository you can read the simplified summary of Clean Code book by Robert C. Martin in separated chapters.");
+        research.setResume(resume);
+        return research;
+    }
+
+    private Research createResearch2(Resume resume) {
+        Research research = new Research();
+        research.setTitle("Convolutional Neural Networks");
+        research.setPublisher("Mohammad Mahdi Farrokhy");
+        research.setReferenceLink("https://github.com/mmahdi-farrokhy/Convolutional_Neural_Network");
+        research.setDate(LocalDate.of(2022, 11, 5));
+        research.setDescription("I researched about CNN which is a subject under Machine Learning. And also developed a 'hand written digit recognition system' using VHDL");
         research.setResume(resume);
         return research;
     }
@@ -980,6 +1087,20 @@ public class ResumeBuilderApplication {
         return jobExperience;
     }
 
+    private JobExperience createJobExperience3(Resume resume) {
+        JobExperience jobExperience = new JobExperience();
+        jobExperience.setTitle("Java/Spring Developer");
+        jobExperience.setCategory(JobCategory.Software_Development);
+        jobExperience.setSeniorityLevel(SeniorityLevel.Mid_Level);
+        jobExperience.setCompanyName("Blu Bank");
+        jobExperience.setDescription("Developing new sections in Blu environment");
+        jobExperience.setStartDate(LocalDate.of(2024, 4, 2));
+        jobExperience.setStatus(JobStatus.Occupied);
+        jobExperience.setLocation(createLocation());
+        jobExperience.setResume(resume);
+        return jobExperience;
+    }
+
     private Location createLocation() {
         Location location = new Location();
         location.setId(1);
@@ -998,7 +1119,17 @@ public class ResumeBuilderApplication {
         return teachingAssistance;
     }
 
-    private Education CreateEducation(Resume resume) {
+    private TeachingAssistance createTeachingAssistance2(Resume resume) {
+        TeachingAssistance teachingAssistance = new TeachingAssistance();
+        teachingAssistance.setTitle("Digital Electronic (MOSFET Transistors)");
+        teachingAssistance.setUniversity("Semnan University");
+        teachingAssistance.setStartDate(LocalDate.of(2019, 1, 1));
+        teachingAssistance.setEndDate(LocalDate.of(2019, 6, 30));
+        teachingAssistance.setResume(resume);
+        return teachingAssistance;
+    }
+
+    private Education createEducation(Resume resume) {
         Education education = new Education();
         education.setDegreeLevel(DegreeLevel.Bachelor);
         education.setMajor(Major.Computer_Engineering);
@@ -1010,7 +1141,7 @@ public class ResumeBuilderApplication {
         return education;
     }
 
-    private Summary CreateSummary() {
+    private Summary createSummary() {
         Summary summary = new Summary();
         summary.setText("As a junior software developer with 19 months of hands-on experience, I thrive on turning complex challenges into\n" +
                 "elegant solutions. My proficiency in C# .NET and Java allows me to create robust applications that seamlessly\n" +
@@ -1024,7 +1155,7 @@ public class ResumeBuilderApplication {
         return summary;
     }
 
-    private ContactMethod CreateContactMethod(Resume resume, ContactType type, String value) {
+    private ContactMethod createContactMethod(Resume resume, ContactType type, String value) {
         ContactMethod contactMethod = new ContactMethod();
         contactMethod.setType(type);
         contactMethod.setValue(value);
@@ -1032,16 +1163,16 @@ public class ResumeBuilderApplication {
         return contactMethod;
     }
 
-    private User CreateUser() {
+    private User createUser() {
         User user = new User();
         user.setFirstName("Mohammad Mahdi");
         user.setLastName("Farrokhy");
         user.setPhoneNumber("09017743009");
-        user.setUserDetail(CreateUserDetail());
+        user.setUserDetail(createUserDetail());
         return user;
     }
 
-    private UserDetail CreateUserDetail() {
+    private UserDetail createUserDetail() {
         UserDetail userDetail = new UserDetail();
         userDetail.setMaritalStatus(MaritalStatus.Single);
         userDetail.setGender(Gender.Male);
@@ -1050,5 +1181,60 @@ public class ResumeBuilderApplication {
         userDetail.setForeigner(false);
         userDetail.setDisabilityType(DisabilityType.None);
         return userDetail;
+    }
+
+    private Hobby createHobby(Resume resume, String title) {
+        Hobby hobby = new Hobby();
+        hobby.setTitle(title);
+        hobby.setResume(resume);
+        return hobby;
+    }
+
+    private Membership createMembership(Resume resume, String title, LocalDate date) {
+        Membership membership = new Membership();
+        membership.setTitle(title);
+        membership.setDate(date);
+        membership.setResume(resume);
+        return membership;
+    }
+
+    private Patent createPatent(Resume resume) {
+        Patent patent = new Patent();
+        patent.setTitle("Curtain Relay");
+        patent.setDescription("A simple product that opens and blinds the curtains");
+        patent.setRegistrationDate(LocalDate.of(2024, 3, 5));
+        patent.setRegistrationNumber("A1B2C3");
+        patent.setResume(resume);
+        return patent;
+    }
+
+    private Presentation createPresentation(Resume resume) {
+        Presentation presentation = new Presentation();
+        presentation.setTitle("Introduction of new product in company");
+        presentation.setDate(LocalDate.of(2024, 5, 19));
+        presentation.setReferenceLink(null);
+        presentation.setDescription("In this event, I introduced my new product in the annual celebration of my company");
+        presentation.setResume(resume);
+        return presentation;
+    }
+
+    private Publication createPublication(Resume resume) {
+        Publication publication = new Publication();
+        publication.setTitle("Clean code book summary chapter by chapter");
+        publication.setAuthor("Mohammadmahdi Farrokhy");
+        publication.setPublisher("Mohammadmahdi Farrokhy");
+        publication.setDate(LocalDate.of(2023, 9, 26));
+        publication.setReferenceLink("https://github.com/mmahdi-farrokhy/CleanCodeBook");
+        publication.setDescription("A summarized version of Clean Code book by Robert C. Martin in a simple language and practical code examples");
+        publication.setResume(resume);
+        return publication;
+    }
+
+    private VolunteerActivity createVolunteerActivity(Resume resume, String title, int year) {
+        VolunteerActivity volunteerActivity = new VolunteerActivity();
+        volunteerActivity.setTitle(title);
+        volunteerActivity.setYear(year);
+        volunteerActivity.setResume(resume);
+        return volunteerActivity;
     }
 }

@@ -26,7 +26,7 @@ public class ContactMethod extends ResumeSection {
     @Column(name = "value")
     private String value;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
 

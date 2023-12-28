@@ -13,24 +13,7 @@ import java.util.List;
 
 @Repository
 public class ResumeDAOImpl implements ResumeDAO {
-    public static final String CONTACT_INFORMATION_QUERY = "select r from Resume r LEFT JOIN FETCH r.contactInformation where r.id = :resumeId";
-    public static final String EDUCATIONS_QUERY = "select r from Resume r LEFT JOIN FETCH r.educations where r.id = :resumeId";
-    public static final String TEACHING_ASSISTANCE_QUERY = "select r from Resume r LEFT JOIN FETCH r.teachingAssistance where r.id = :resumeId";
-    public static final String JOB_EXPERIENCES_QUERY = "select r from Resume r LEFT JOIN FETCH r.jobExperiences where r.id = :resumeId";
-    public static final String FORMER_COLLEAGUES_QUERY = "select r from Resume r LEFT JOIN FETCH r.formerColleagues where r.id = :resumeId";
-    public static final String RESEARCHES_QUERY = "select r from Resume r LEFT JOIN FETCH r.researches where r.id = :resumeId";
-    public static final String COURSES_QUERY = "select r from Resume r LEFT JOIN FETCH r.courses where r.id = :resumeId";
-    public static final String HARD_SKILLS_QUERY = "select r from Resume r LEFT JOIN FETCH r.hardSkills where r.id = :resumeId";
-    public static final String SOFT_SKILLS_QUERY = "select r from Resume r LEFT JOIN FETCH r.softSkills where r.id = :resumeId";
-    public static final String LANGUAGES_QUERY = "select r from Resume r LEFT JOIN FETCH r.languages where r.id = :resumeId";
-    public static final String PROJECTS_QUERY = "select r from Resume r LEFT JOIN FETCH r.projects where r.id = :resumeId";
-    public static final String PATENTS_QUERY = "select r from Resume r LEFT JOIN FETCH r.patents where r.id = :resumeId";
-    public static final String PRESENTATIONS_QUERY = "select r from Resume r LEFT JOIN FETCH r.presentations where r.id = :resumeId";
-    public static final String AWARDS_QUERY = "select r from Resume r LEFT JOIN FETCH r.awards where r.id = :resumeId";
-    public static final String PUBLICATIONS_QUERY = "select r from Resume r LEFT JOIN FETCH r.publications where r.id = :resumeId";
-    public static final String VOLUNTEER_ACTIVITIES_QUERY = "select r from Resume r LEFT JOIN FETCH r.volunteerActivities where r.id = :resumeId";
-    public static final String MEMBERSHIPS_QUERY = "select r from Resume r LEFT JOIN FETCH r.memberships where r.id = :resumeId";
-    public static final String HOBBIES_QUERY = "select r from Resume r LEFT JOIN FETCH r.hobbies where r.id = :resumeId";
+    public static final String ROOT_QUERY = "select r from Resume r LEFT JOIN FETCH r.resumeSection where r.id = :resumeId";
     private final EntityManager entityManager;
 
     @Autowired
@@ -51,36 +34,35 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     public <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType) {
-        TypedQuery<Resume> query = entityManager.createQuery(createQueryString(sectionType), Resume.class);
+        TypedQuery<Resume> query = entityManager.createQuery(queryString(sectionType), Resume.class);
         query.setParameter("resumeId", resumeId);
         return getResumeSections(query.getSingleResult(), sectionType);
     }
 
-    private static <RS extends ResumeSection> String createQueryString(Class<RS> sectionType) {
-        String query = "";
-
+    private static <RS extends ResumeSection> String queryString(Class<RS> sectionType) {
+        String resumeSection = "";
         switch (sectionType.getSimpleName()) {
-            case "ContactMethod" -> query = CONTACT_INFORMATION_QUERY;
-            case "Education" -> query = EDUCATIONS_QUERY;
-            case "TeachingAssistance" -> query = TEACHING_ASSISTANCE_QUERY;
-            case "JobExperience" -> query = JOB_EXPERIENCES_QUERY;
-            case "FormerColleague" -> query = FORMER_COLLEAGUES_QUERY;
-            case "Research" -> query = RESEARCHES_QUERY;
-            case "Course" -> query = COURSES_QUERY;
-            case "HardSkill" -> query = HARD_SKILLS_QUERY;
-            case "SoftSkill" -> query = SOFT_SKILLS_QUERY;
-            case "Language" -> query = LANGUAGES_QUERY;
-            case "Project" -> query = PROJECTS_QUERY;
-            case "Patent" -> query = PATENTS_QUERY;
-            case "Presentation" -> query = PRESENTATIONS_QUERY;
-            case "Award" -> query = AWARDS_QUERY;
-            case "Publication" -> query = PUBLICATIONS_QUERY;
-            case "VolunteerActivity" -> query = VOLUNTEER_ACTIVITIES_QUERY;
-            case "Membership" -> query = MEMBERSHIPS_QUERY;
-            case "Hobby" -> query = HOBBIES_QUERY;
+            case "ContactMethod" -> resumeSection = "contactInformation";
+            case "Education" -> resumeSection = "educations";
+            case "TeachingAssistance" -> resumeSection = "teachingAssistance";
+            case "JobExperience" -> resumeSection = "jobExperiences";
+            case "FormerColleague" -> resumeSection = "formerColleagues";
+            case "Research" -> resumeSection = "researches";
+            case "Course" -> resumeSection = "courses";
+            case "HardSkill" -> resumeSection = "hardSkills";
+            case "SoftSkill" -> resumeSection = "softSkills";
+            case "Language" -> resumeSection = "languages";
+            case "Project" -> resumeSection = "projects";
+            case "Patent" -> resumeSection = "patents";
+            case "Presentation" -> resumeSection = "presentations";
+            case "Award" -> resumeSection = "awards";
+            case "Publication" -> resumeSection = "publications";
+            case "VolunteerActivity" -> resumeSection = "volunteerActivities";
+            case "Membership" -> resumeSection = "memberships";
+            case "Hobby" -> resumeSection = "hobbies";
         }
 
-        return query;
+        return ROOT_QUERY.replace("resumeSection", resumeSection);
     }
 
     private static <RS extends ResumeSection> List<RS> getResumeSections(Resume resume, Class<RS> sectionType) {
@@ -144,5 +126,11 @@ public class ResumeDAOImpl implements ResumeDAO {
         resumeField.setAccessible(true);
         Resume resume = (Resume) resumeField.get(deletingSectionInDb);
         return resume;
+    }
+
+    @Override
+    @Transactional
+    public <RS extends ResumeSection> void addSection(RS resumeSection) {
+        entityManager.persist(resumeSection);
     }
 }

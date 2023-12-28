@@ -23,7 +23,7 @@ public class Membership extends ResumeSection {
     @Column(name = "date")
     private LocalDate date;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
 

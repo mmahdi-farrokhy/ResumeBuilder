@@ -14,4 +14,6 @@ public interface ResumeDAO {
     void updateSection(ResumeSection updatingSection);
 
     void deleteSection(ResumeSection deletingSection);
+
+    <RS extends ResumeSection> void addSection(RS resumeSection);
 }

@@ -32,7 +32,7 @@ public class Patent extends ResumeSection {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
 

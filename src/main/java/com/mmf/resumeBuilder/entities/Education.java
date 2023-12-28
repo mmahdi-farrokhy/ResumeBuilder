@@ -37,7 +37,7 @@ public class Education extends ResumeSection {
     @Column(name = "end_year")
     private int endYear;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
 

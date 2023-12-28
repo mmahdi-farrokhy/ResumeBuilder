@@ -24,7 +24,7 @@ public class Course extends ResumeSection {
     @Column(name = "credential_id")
     private String credentialId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
