@@ -33,7 +33,7 @@ public class ResumeBuilderApplication {
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO) {
         return runner -> {
-            DatabaseTest.findResumeAndItsSectionsInDatabase(resumeDAO);
+
         };
     }
 }

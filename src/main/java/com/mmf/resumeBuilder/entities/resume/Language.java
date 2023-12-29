@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
 import com.mmf.resumeBuilder.enums.language.LanguageName;
 import com.mmf.resumeBuilder.enums.language.LanguageLevel;

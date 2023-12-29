@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
 import jakarta.persistence.*;
 import lombok.*;

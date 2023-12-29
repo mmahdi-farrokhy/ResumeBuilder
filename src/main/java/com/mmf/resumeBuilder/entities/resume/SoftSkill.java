@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,8 +8,8 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "award")
-public class Award extends ResumeSection {
+@Table(name = "soft_skill")
+public class SoftSkill extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,15 +18,15 @@ public class Award extends ResumeSection {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "year")
-    private int year;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
     @Override
     public String toString() {
-        return "Award{" + "id=" + id + "\n" + ", title='" + title + "\n" + ", year=" + year + "\n" + '}';
+        return "SoftSkill{" +
+                "id=" + id + "\n" +
+                ", title='" + title + "\n" +
+                '}';
     }
 }

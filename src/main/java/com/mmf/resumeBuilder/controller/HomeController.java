@@ -17,12 +17,12 @@ public class HomeController {
 
     @GetMapping("/login")
     public String showLoginPage() {
-        return "loginPage";
+        return "login-page";
     }
 
     @GetMapping("/signup")
     public String showSignupPage() {
-        return "signupPage";
+        return "gpt-signup-page";
     }
 
     @GetMapping("user-panel")

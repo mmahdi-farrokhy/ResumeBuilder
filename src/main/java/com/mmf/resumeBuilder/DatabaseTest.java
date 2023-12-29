@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder;
 
 import com.mmf.resumeBuilder.dao.ResumeDAO;
-import com.mmf.resumeBuilder.entities.*;
+import com.mmf.resumeBuilder.entities.resume.*;
 import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import com.mmf.resumeBuilder.enums.education.DegreeLevel;
 import com.mmf.resumeBuilder.enums.education.Major;

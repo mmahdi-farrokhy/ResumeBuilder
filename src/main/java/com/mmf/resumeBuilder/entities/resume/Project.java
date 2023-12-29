@@ -1,5 +1,6 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
+import com.mmf.resumeBuilder.enums.project.ProjectStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,18 +11,18 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "teaching_assistance")
-public class TeachingAssistance extends ResumeSection {
+@Table(name = "project")
+public class Project extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "university")
-    private String university;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -29,18 +30,26 @@ public class TeachingAssistance extends ResumeSection {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(name = "status")
+    private ProjectStatus status;
+
+    @Column(name = "reference_link")
+    private String referenceLink;
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
     @Override
     public String toString() {
-        return "TeachingAssistance{" +
+        return "Project{" +
                 "id=" + id + "\n" +
-                ", title='" + title + "\n" +
-                ", university='" + university + "\n" +
+                ", name='" + name + "\n" +
+                ", description='" + description + "\n" +
                 ", startDate=" + startDate + "\n" +
                 ", endDate=" + endDate + "\n" +
+                ", status=" + status + "\n" +
+                ", referenceLink='" + referenceLink + "\n" +
                 '}';
     }
 }

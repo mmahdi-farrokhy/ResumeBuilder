@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,8 +10,8 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "membership")
-public class Membership extends ResumeSection {
+@Table(name = "teaching_assistance")
+public class TeachingAssistance extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -20,8 +20,14 @@ public class Membership extends ResumeSection {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "university")
+    private String university;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
@@ -29,10 +35,12 @@ public class Membership extends ResumeSection {
 
     @Override
     public String toString() {
-        return "Membership{" +
+        return "TeachingAssistance{" +
                 "id=" + id + "\n" +
                 ", title='" + title + "\n" +
-                ", date=" + date + "\n" +
+                ", university='" + university + "\n" +
+                ", startDate=" + startDate + "\n" +
+                ", endDate=" + endDate + "\n" +
                 '}';
     }
 }

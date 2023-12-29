@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,8 +8,8 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "volunteer_activity")
-public class VolunteerActivity extends ResumeSection {
+@Table(name = "award")
+public class Award extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,16 +21,12 @@ public class VolunteerActivity extends ResumeSection {
     @Column(name = "year")
     private int year;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
     @Override
     public String toString() {
-        return "VolunteerActivity{" +
-                "id=" + id + "\n" +
-                ", title='" + title + "\n" +
-                ", year=" + year + "\n" +
-                '}';
+        return "Award{" + "id=" + id + "\n" + ", title='" + title + "\n" + ", year=" + year + "\n" + '}';
     }
 }

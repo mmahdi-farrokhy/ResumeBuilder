@@ -1,6 +1,5 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
-import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,19 +8,18 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "contact_method")
-public class ContactMethod extends ResumeSection {
+@Table(name = "volunteer_activity")
+public class VolunteerActivity extends ResumeSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "type")
-    @Enumerated(EnumType.STRING)
-    private ContactType type;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "value")
-    private String value;
+    @Column(name = "year")
+    private int year;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
@@ -29,10 +27,10 @@ public class ContactMethod extends ResumeSection {
 
     @Override
     public String toString() {
-        return "ContactMethod{" +
+        return "VolunteerActivity{" +
                 "id=" + id + "\n" +
-                ", type=" + type + "\n" +
-                ", value='" + value + "\n" +
+                ", title='" + title + "\n" +
+                ", year=" + year + "\n" +
                 '}';
     }
 }

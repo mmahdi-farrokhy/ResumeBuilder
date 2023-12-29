@@ -1,6 +1,7 @@
 package com.mmf.resumeBuilder.dao;
 
-import com.mmf.resumeBuilder.entities.*;
+import com.mmf.resumeBuilder.entities.resume.Resume;
+import com.mmf.resumeBuilder.entities.resume.ResumeSection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;

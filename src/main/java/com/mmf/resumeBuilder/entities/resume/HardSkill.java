@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
 import com.mmf.resumeBuilder.enums.hardskill.HardSkillLevel;
 import com.mmf.resumeBuilder.enums.hardskill.HardSkillType;

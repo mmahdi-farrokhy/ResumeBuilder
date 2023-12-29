@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.entities;
+package com.mmf.resumeBuilder.entities.resume;
 
 import com.mmf.resumeBuilder.enums.user.detail.DisabilityType;
 import com.mmf.resumeBuilder.enums.user.detail.Gender;

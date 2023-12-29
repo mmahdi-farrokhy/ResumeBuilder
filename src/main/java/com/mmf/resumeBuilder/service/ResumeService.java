@@ -1,11 +1,11 @@
-package com.mmf.resumeBuilder.dao;
+package com.mmf.resumeBuilder.service;
 
 import com.mmf.resumeBuilder.entities.resume.Resume;
 import com.mmf.resumeBuilder.entities.resume.ResumeSection;
 
 import java.util.List;
 
-public interface ResumeDAO {
+public interface ResumeService {
     Resume findById(int resumeId);
 
     void save(Resume resume);
