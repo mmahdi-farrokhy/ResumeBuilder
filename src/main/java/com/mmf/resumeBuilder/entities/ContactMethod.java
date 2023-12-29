@@ -1,11 +1,8 @@
 package com.mmf.resumeBuilder.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Objects;
 
 @Getter
 @Setter

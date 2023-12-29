@@ -1,6 +1,5 @@
 package com.mmf.resumeBuilder.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,8 +19,8 @@ public class Resume {
     private int id;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "personal_information_id", nullable = false)
+    private PersonalInformation personalInformation;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<ContactMethod> contactInformation;

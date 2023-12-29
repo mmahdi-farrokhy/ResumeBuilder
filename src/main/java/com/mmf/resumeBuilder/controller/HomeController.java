@@ -1,0 +1,32 @@
+package com.mmf.resumeBuilder.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Date;
+
+@Controller
+public class HomeController {
+
+    @GetMapping("/")
+    public String loadHomePage(Model model) {
+        model.addAttribute("date", new Date());
+        return "homePage";
+    }
+
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "loginPage";
+    }
+
+    @GetMapping("/signup")
+    public String showSignupPage() {
+        return "signupPage";
+    }
+
+    @GetMapping("user-panel")
+    public String showUserPanel() {
+        return "userPanel";
+    }
+}
