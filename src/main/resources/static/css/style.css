@@ -1,12 +1,13 @@
 body {
-    background-color: #f8f9fa; /* Set your desired background color */
+    background-color: #f8f9fa;
+    text-align: right;
 }
 
 .signup-form {
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #ffffff; /* Set your desired form background color */
+    background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -15,11 +16,16 @@ body {
     font-weight: bold;
 }
 
-.signup-form input[type="text"],
-.signup-form input[type="password"] {
+.text_input{
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.password_input {
+    width: 100%;
+    padding: 10px;
     border: 1px solid #ced4da;
     border-radius: 5px;
 }
@@ -27,13 +33,19 @@ body {
 .signup-form button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff; /* Set your desired button color */
-    color: #ffffff;
+    background-color: #007bff;
+    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .signup-form button:hover {
-    background-color: #0056b3; /* Set your desired button hover color */
+    background-color: #0056b3;
+}
+
+.error {
+    color: red;
+    padding= 0px;
+    margin = 0px;
 }

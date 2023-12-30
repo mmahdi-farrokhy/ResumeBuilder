@@ -1,32 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fa" xmlns:th="http://www.thymeleaf.org" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up Form</title>
+    <title>فرم ثبت نام</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
 <body>
 
 <div class="container">
-    <form class="signup-form">
+    <form class="signup-form" th:action="@{/signup/create-user}" th:object="${user}" method="post">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" class="form-control" id="email" placeholder="Email">
+            <label for="email">ایمیل:</label>
+            <input type="text" class="text_input" id="email" placeholder="ایمیل" th:field="*{email}">
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
         </div>
-
         <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
+            <label for="password">کلمه عبور:</label>
+            <input type="password" class="password_input" id="password" placeholder="کلمه عبور" th:field="*{password}">
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
         </div>
-
-        <div class="form-group">
-            <label for="confirmPassword">Confirm Password:</label>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <button type="submit" class="btn btn-primary">ثبت نام</button>
     </form>
 </div>
 
