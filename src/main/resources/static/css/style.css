@@ -49,3 +49,22 @@ body {
     padding= 0px;
     margin = 0px;
 }
+
+.message_body{
+    background-color: #f8f9fa;
+}
+
+.container {
+    margin-top: 50px;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.message_label {
+    font-size: 18px;
+    color: #28a745;
+    font-weight: bold;
+}

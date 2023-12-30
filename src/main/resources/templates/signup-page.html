@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
-<body>
+<body class="message_body">
 
 <div class="container">
     <form class="signup-form" th:action="@{/signup/create-user}" th:object="${user}" method="post">

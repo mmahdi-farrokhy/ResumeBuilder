@@ -4,10 +4,11 @@ import com.mmf.resumeBuilder.entities.User;
 import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.service.ResumeService;
 import jakarta.validation.Valid;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -30,12 +31,13 @@ public class SignupController {
     }
 
     @PostMapping("/signup/create-user")
-    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
+    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors())
             return "signup-page";
         else {
             user.setRole(UserRole.User);
             resumeService.saveUser(user);
+            model.addAttribute("user", user);
             return "signup-conformation-page";
         }
     }
