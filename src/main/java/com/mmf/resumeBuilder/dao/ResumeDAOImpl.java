@@ -1,5 +1,6 @@
 package com.mmf.resumeBuilder.dao;
 
+import com.mmf.resumeBuilder.entities.User;
 import com.mmf.resumeBuilder.entities.resume.Resume;
 import com.mmf.resumeBuilder.entities.resume.ResumeSection;
 import jakarta.persistence.EntityManager;
@@ -133,5 +134,11 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Transactional
     public <RS extends ResumeSection> void addSection(RS resumeSection) {
         entityManager.persist(resumeSection);
+    }
+
+    @Override
+    @Transactional
+    public void saveUser(User user) {
+        entityManager.persist(user);
     }
 }

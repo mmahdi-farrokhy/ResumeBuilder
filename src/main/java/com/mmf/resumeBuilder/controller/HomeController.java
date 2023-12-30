@@ -1,5 +1,6 @@
 package com.mmf.resumeBuilder.controller;
 
+import com.mmf.resumeBuilder.entities.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +22,9 @@ public class HomeController {
     }
 
     @GetMapping("/signup")
-    public String showSignupPage() {
-        return "gpt-signup-page";
+    public String showSignupPage(Model model) {
+        model.addAttribute("user", new User());
+        return "signup-page";
     }
 
     @GetMapping("user-panel")

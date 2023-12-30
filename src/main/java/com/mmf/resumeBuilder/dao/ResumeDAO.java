@@ -1,5 +1,6 @@
 package com.mmf.resumeBuilder.dao;
 
+import com.mmf.resumeBuilder.entities.User;
 import com.mmf.resumeBuilder.entities.resume.Resume;
 import com.mmf.resumeBuilder.entities.resume.ResumeSection;
 
@@ -17,4 +18,6 @@ public interface ResumeDAO {
     void deleteSection(ResumeSection deletingSection);
 
     <RS extends ResumeSection> void addSection(RS resumeSection);
+
+    void saveUser(User user);
 }

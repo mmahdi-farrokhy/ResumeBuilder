@@ -1,12 +1,15 @@
 package com.mmf.resumeBuilder.service;
 
 import com.mmf.resumeBuilder.dao.ResumeDAO;
+import com.mmf.resumeBuilder.entities.User;
 import com.mmf.resumeBuilder.entities.resume.Resume;
 import com.mmf.resumeBuilder.entities.resume.ResumeSection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ResumeServiceImpl implements ResumeService {
     private ResumeDAO resumeDAO;
 
@@ -43,5 +46,10 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public <RS extends ResumeSection> void addSection(RS resumeSection) {
         resumeDAO.addSection(resumeSection);
+    }
+
+    @Override
+    public void saveUser(User user) {
+        resumeDAO.saveUser(user);
     }
 }

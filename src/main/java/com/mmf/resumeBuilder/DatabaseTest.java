@@ -1,7 +1,9 @@
 package com.mmf.resumeBuilder;
 
 import com.mmf.resumeBuilder.dao.ResumeDAO;
+import com.mmf.resumeBuilder.entities.User;
 import com.mmf.resumeBuilder.entities.resume.*;
+import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import com.mmf.resumeBuilder.enums.education.DegreeLevel;
 import com.mmf.resumeBuilder.enums.education.Major;
@@ -1351,5 +1353,14 @@ public class DatabaseTest {
         volunteerActivity.setYear(year);
         volunteerActivity.setResume(resume);
         return volunteerActivity;
+    }
+
+    public static void addUserToDatabase(ResumeDAO resumeDAO) {
+        User user = new User();
+        user.setEmail("mmahdifarrokhy@gmail.com");
+        user.setPassword("12345679");
+        user.setRole(UserRole.User);
+        resumeDAO.saveUser(user);
+        System.out.println("User saved");
     }
 }
