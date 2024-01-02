@@ -38,6 +38,14 @@
             <input type="password" class="password_input" id="password" placeholder="کلمه عبور" th:field="*{password}">
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
         </div>
+
+        <!--Password Confirmation-->
+        <div class="form-group">
+            <label for="passwordConfirmation">تکرار کلمه عبور:</label>
+            <input type="password" class="password_input" id="passwordConfirmation" placeholder="تکرار کلمه عبور" th:field="*{passwordConfirmation}">
+            <span th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}" class="error"></span>
+        </div>
+
         <button type="submit" class="btn btn-primary">ثبت نام</button>
     </form>
 </div>

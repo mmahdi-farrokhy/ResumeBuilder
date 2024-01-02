@@ -1357,6 +1357,8 @@ public class DatabaseTest {
 
     public static void addUserToDatabase(ResumeDAO resumeDAO) {
         User user = new User();
+        user.setFirstName("Mohammadmahdi");
+        user.setLastName("Farrokhy");
         user.setEmail("mmahdifarrokhy@gmail.com");
         user.setPassword("12345679");
         user.setRole(UserRole.User);

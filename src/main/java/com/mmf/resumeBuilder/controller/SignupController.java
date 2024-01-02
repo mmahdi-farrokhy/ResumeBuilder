@@ -10,10 +10,12 @@ import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SignupController {
@@ -32,13 +34,18 @@ public class SignupController {
 
     @PostMapping("/signup/create-user")
     public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
             return "signup-page";
-        else {
-            user.setRole(UserRole.User);
-            resumeService.saveUser(user);
-            model.addAttribute("user", user);
-            return "signup-conformation-page";
+        } else {
+            if (user.getPassword().equals(user.getPasswordConfirmation())) {
+                user.setRole(UserRole.User);
+                resumeService.saveUser(user);
+                model.addAttribute("user", user);
+                return "signup-conformation-page";
+            } else {
+                bindingResult.addError(new FieldError("passwordConfirmation", user.getPasswordConfirmation(), "تکرار کلمه عبور تطابق ندارد"));
+                return "userPanel";
+            }
         }
     }
 }

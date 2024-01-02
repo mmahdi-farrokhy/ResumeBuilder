@@ -42,6 +42,11 @@ public class User {
     @Size(min = 1, message = "لطفا کلمه عبور را وارد کنید")
     private String password;
 
+    @Transient
+    @NotNull(message = "لطفا کلمه عبور را تکرار کنید")
+    @Size(min = 1, message = "لطفا کلمه عبور را تکرار کنید")
+    private String passwordConfirmation;
+
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -53,6 +58,7 @@ public class User {
                 ", lastName='" + lastName + '\n' +
                 ", email='" + email + '\n' +
                 ", password='" + password + '\n' +
+                ", passwordConfirmation='" + passwordConfirmation + '\n' +
                 ", role=" + role + '\n' +
                 '}';
     }
