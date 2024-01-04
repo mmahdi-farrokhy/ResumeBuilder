@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فرم ثبت نام</title>
+    <title>ورود به سیستم</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
@@ -28,7 +28,7 @@
         <!--Email-->
         <div class="form-group">
             <label for="email">ایمیل:</label>
-            <input type="email" class="text_input" id="email" placeholder="ایمیل" th:field="*{email}">
+            <input type="text" class="text_input" id="email" placeholder="ایمیل" th:field="*{email}">
             <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
         </div>
 

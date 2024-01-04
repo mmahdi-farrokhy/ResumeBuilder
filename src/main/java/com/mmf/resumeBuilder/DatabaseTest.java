@@ -1,8 +1,9 @@
 package com.mmf.resumeBuilder;
 
-import com.mmf.resumeBuilder.dao.ResumeDAO;
-import com.mmf.resumeBuilder.entities.User;
-import com.mmf.resumeBuilder.entities.resume.*;
+import com.mmf.resumeBuilder.data.dao.ResumeDAO;
+import com.mmf.resumeBuilder.data.dao.UserDAO;
+import com.mmf.resumeBuilder.model.User;
+import com.mmf.resumeBuilder.model.resume.*;
 import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import com.mmf.resumeBuilder.enums.education.DegreeLevel;
@@ -1355,14 +1356,32 @@ public class DatabaseTest {
         return volunteerActivity;
     }
 
-    public static void addUserToDatabase(ResumeDAO resumeDAO) {
+    public static void addUserToDatabase(UserDAO userDAO) {
         User user = new User();
         user.setFirstName("Mohammadmahdi");
         user.setLastName("Farrokhy");
         user.setEmail("mmahdifarrokhy@gmail.com");
         user.setPassword("12345679");
         user.setRole(UserRole.User);
-        resumeDAO.saveUser(user);
+        userDAO.save(user);
         System.out.println("User saved");
+    }
+
+    public static void findUserById(UserDAO userDAO) {
+        Integer userId = 17;
+        User user = userDAO.findById(userId).get();
+        if (user != null)
+            System.out.println(user);
+        else
+            System.out.println("User not fount");
+    }
+
+    public static void isEmailTaken(UserDAO userDAO) {
+        String email = "mmahdifarrokhy@gmail.com";
+        boolean emailAvailable = userDAO.existsByEmail(email);
+        if (emailAvailable)
+            System.out.println("Email is taken");
+        else
+            System.out.println("Email is not taken");
     }
 }
