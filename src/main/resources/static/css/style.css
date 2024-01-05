@@ -68,3 +68,9 @@ body {
     color: #28a745;
     font-weight: bold;
 }
+
+.error_label {
+    font-size: 18px;
+    color: #f52e20;
+    font-weight: bold;
+}

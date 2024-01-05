@@ -10,21 +10,7 @@
 <body class="message_body">
 
 <div class="container">
-    <form class="signup-form" th:action="@{/signup/create-user}" th:object="${user}" method="post">
-        <!--First Name-->
-        <div class="form-group">
-            <label for="firstName">نام:</label>
-            <input type="text" class="text_input" id="firstName" placeholder="نام" th:field="*{firstName}">
-            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></span>
-        </div>
-
-        <!--Last Name-->
-        <div class="form-group">
-            <label for="lastName">نام خانوادگی:</label>
-            <input type="text" class="text_input" id="lastName" placeholder="نام خانوادگی" th:field="*{lastName}">
-            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span>
-        </div>
-
+    <form class="signup-form" th:action="@{/login/successful}" th:object="${user}" method="get">
         <!--Email-->
         <div class="form-group">
             <label for="email">ایمیل:</label>
@@ -38,16 +24,6 @@
             <input type="password" class="password_input" id="password" placeholder="کلمه عبور" th:field="*{password}">
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
         </div>
-
-        <!--Password Confirmation-->
-        <div class="form-group">
-            <label for="passwordConfirmation">تکرار کلمه عبور:</label>
-            <input type="password" class="password_input" id="passwordConfirmation" placeholder="تکرار کلمه عبور"
-                   th:field="*{passwordConfirmation}">
-            <span th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}"
-                  class="error"></span>
-        </div>
-
         <button type="submit" class="btn btn-primary">ثبت نام</button>
     </form>
 </div>

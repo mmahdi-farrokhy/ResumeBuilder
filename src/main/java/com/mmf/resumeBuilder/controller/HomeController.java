@@ -13,22 +13,6 @@ public class HomeController {
     @GetMapping("/")
     public String loadHomePage(Model model) {
         model.addAttribute("date", new Date());
-        return "homePage";
-    }
-
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "login-page";
-    }
-
-    @GetMapping("/signup")
-    public String showSignupPage(Model model) {
-        model.addAttribute("user", new User());
-        return "signup-page";
-    }
-
-    @GetMapping("user-panel")
-    public String showUserPanel() {
-        return "userPanel";
+        return "home-page";
     }
 }

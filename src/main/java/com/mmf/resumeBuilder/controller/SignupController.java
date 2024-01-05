@@ -10,11 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/signup")
 public class SignupController {
     UserService userService;
 
@@ -29,7 +28,13 @@ public class SignupController {
         webDataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
 
-    @PostMapping("/signup/create-user")
+    @GetMapping("")
+    public String showSignupPage(Model model) {
+        model.addAttribute("user", new User());
+        return "signup-page";
+    }
+
+    @PostMapping("/create-user")
     public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "signup-page";

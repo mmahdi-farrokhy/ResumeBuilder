@@ -7,20 +7,30 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserDAO appDAO;
+    private UserDAO userDAO;
 
     @Autowired
     public UserServiceImpl(UserDAO appDAO) {
-        this.appDAO = appDAO;
+        this.userDAO = appDAO;
     }
 
     @Override
     public void saveUser(User user) {
-        appDAO.save(user);
+        userDAO.save(user);
     }
 
     @Override
     public User fetchUser(Integer userId) {
-        return appDAO.findById(userId).get();
+        return userDAO.findById(userId).get();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userDAO.existsByEmail(email);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userDAO.findByEmail(email);
     }
 }
