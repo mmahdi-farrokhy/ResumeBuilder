@@ -2,8 +2,6 @@ package com.mmf.resumeBuilder;
 
 import com.mmf.resumeBuilder.data.dao.ResumeDAO;
 import com.mmf.resumeBuilder.data.dao.UserDAO;
-import com.mmf.resumeBuilder.model.User;
-import com.mmf.resumeBuilder.model.resume.*;
 import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import com.mmf.resumeBuilder.enums.education.DegreeLevel;
@@ -17,6 +15,8 @@ import com.mmf.resumeBuilder.enums.language.LanguageName;
 import com.mmf.resumeBuilder.enums.location.City;
 import com.mmf.resumeBuilder.enums.project.ProjectStatus;
 import com.mmf.resumeBuilder.enums.user.detail.SeniorityLevel;
+import com.mmf.resumeBuilder.model.User;
+import com.mmf.resumeBuilder.model.resume.*;
 
 import java.time.LocalDate;
 import java.util.List;

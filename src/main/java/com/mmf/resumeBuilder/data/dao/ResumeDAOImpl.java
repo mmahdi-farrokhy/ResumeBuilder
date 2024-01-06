@@ -1,6 +1,5 @@
 package com.mmf.resumeBuilder.data.dao;
 
-import com.mmf.resumeBuilder.model.User;
 import com.mmf.resumeBuilder.model.resume.Resume;
 import com.mmf.resumeBuilder.model.resume.ResumeSection;
 import jakarta.persistence.EntityManager;
