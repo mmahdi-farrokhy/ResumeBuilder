@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder.service;
 
 import com.mmf.resumeBuilder.data.dao.UserDAO;
-import com.mmf.resumeBuilder.model.User;
+import com.mmf.resumeBuilder.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(AppUser user) {
         userDAO.save(user);
     }
 
     @Override
-    public User fetchUser(Integer userId) {
+    public AppUser fetchUser(Integer userId) {
         return userDAO.findById(userId).get();
     }
 
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public AppUser findByEmail(String email) {
         return userDAO.findByEmail(email);
     }
 }

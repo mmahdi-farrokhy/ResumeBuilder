@@ -1,10 +1,10 @@
 package com.mmf.resumeBuilder.data.dao;
 
-import com.mmf.resumeBuilder.model.User;
+import com.mmf.resumeBuilder.model.AppUser;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserDAO extends CrudRepository<User, Integer> {
+public interface UserDAO extends CrudRepository<AppUser, Integer> {
     boolean existsByEmail(String email);
 
-    User findByEmail(String email);
+    AppUser findByEmail(String email);
 }

@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.controller;
 
-import com.mmf.resumeBuilder.model.User;
+import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.service.UserService;
 import jakarta.validation.Valid;
@@ -30,12 +30,12 @@ public class SignupController {
 
     @GetMapping("")
     public String showSignupPage(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new AppUser());
         return "signup-page";
     }
 
     @PostMapping("/create-user")
-    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+    public String createUser(@Valid @ModelAttribute("user") AppUser user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "signup-page";
         } else {

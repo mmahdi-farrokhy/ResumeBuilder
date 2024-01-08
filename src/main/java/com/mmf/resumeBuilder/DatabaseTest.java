@@ -15,7 +15,7 @@ import com.mmf.resumeBuilder.enums.language.LanguageName;
 import com.mmf.resumeBuilder.enums.location.City;
 import com.mmf.resumeBuilder.enums.project.ProjectStatus;
 import com.mmf.resumeBuilder.enums.user.detail.SeniorityLevel;
-import com.mmf.resumeBuilder.model.User;
+import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.model.resume.*;
 
 import java.time.LocalDate;
@@ -1357,7 +1357,7 @@ public class DatabaseTest {
     }
 
     public static void addUserToDatabase(UserDAO userDAO) {
-        User user = new User();
+        AppUser user = new AppUser();
         user.setFirstName("Mohammadmahdi");
         user.setLastName("Farrokhy");
         user.setEmail("mmahdifarrokhy@gmail.com");
@@ -1369,7 +1369,7 @@ public class DatabaseTest {
 
     public static void findUserById(UserDAO userDAO) {
         Integer userId = 17;
-        User user = userDAO.findById(userId).get();
+        AppUser user = userDAO.findById(userId).get();
         if (user != null)
             System.out.println(user);
         else

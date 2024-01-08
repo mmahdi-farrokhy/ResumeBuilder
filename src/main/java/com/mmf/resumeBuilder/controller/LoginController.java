@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.controller;
 
-import com.mmf.resumeBuilder.model.User;
+import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,12 +21,12 @@ public class LoginController {
 
     @GetMapping("")
     public String showLoginPage(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new AppUser());
         return "login-page";
     }
 
     @GetMapping("/successful")
-    public String login(@ModelAttribute User user) {
+    public String login(@ModelAttribute AppUser user) {
         if (userService.existsByEmail(user.getEmail())) {
             if (userService.findByEmail(user.getEmail()).getPassword().equals(user.getPassword())) {
                 return "redirect:/";

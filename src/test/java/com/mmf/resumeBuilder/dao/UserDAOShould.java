@@ -1,15 +1,16 @@
 package com.mmf.resumeBuilder.dao;
 
 import com.mmf.resumeBuilder.ResumeBuilderApplication;
-import com.mmf.resumeBuilder.model.User;
 import com.mmf.resumeBuilder.data.dao.UserDAO;
 import com.mmf.resumeBuilder.enums.UserRole;
-import com.mmf.resumeBuilder.service.UserServiceImpl;
-import org.junit.jupiter.api.*;
+import com.mmf.resumeBuilder.model.AppUser;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,17 +18,12 @@ import static org.mockito.Mockito.*;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SpringBootTest(classes = ResumeBuilderApplication.class)
 public class UserDAOShould {
-    @Autowired
-    ApplicationContext context;
 
     @Autowired
-    User user;
+    AppUser user;
 
     @MockBean
     UserDAO userDAO;
-
-    @Autowired
-    private UserServiceImpl userServiceImpl;
 
     @BeforeEach
     public void init() {
@@ -39,7 +35,7 @@ public class UserDAOShould {
 
     @Test
     public void find_a_user_by_its_email() {
-        User userByEmail = new User();
+        AppUser userByEmail = new AppUser();
         userByEmail.setFirstName("Brad");
         userByEmail.setLastName("Pitt");
         userByEmail.setPassword("qwe123");
@@ -58,7 +54,7 @@ public class UserDAOShould {
 
     @Test
     public void return_null_for_an_invalid_email() {
-        User userByEmail = new User();
+        AppUser userByEmail = new AppUser();
         userByEmail.setFirstName("Brad");
         userByEmail.setLastName("Pitt");
         userByEmail.setPassword("qwe123");

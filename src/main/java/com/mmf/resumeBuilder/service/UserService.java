@@ -1,11 +1,11 @@
 package com.mmf.resumeBuilder.service;
 
-import com.mmf.resumeBuilder.model.User;
+import com.mmf.resumeBuilder.model.AppUser;
 
 public interface UserService {
-    void saveUser(User user);
+    void saveUser(AppUser user);
 
-    User fetchUser(Integer userId);
+    AppUser fetchUser(Integer userId);
     boolean existsByEmail(String email);
-    User findByEmail(String email);
+    AppUser findByEmail(String email);
 }

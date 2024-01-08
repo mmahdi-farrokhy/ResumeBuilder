@@ -17,9 +17,9 @@ import lombok.Setter;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "app_user")
 @PasswordMatch
-public class User {
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -48,8 +48,6 @@ public class User {
     private String password;
 
     @Transient
-    @NotNull(message = "لطفا کلمه عبور را تکرار کنید")
-    @Size(min = 8, message = "کلمه عبور باید حداقل 8 کاراکتر باشد")
     private String passwordConfirmation;
 
     @Column(name = "role")
