@@ -1,0 +1,144 @@
+package com.mmf.resumeBuilder.controller;
+
+import com.mmf.resumeBuilder.enums.UserRole;
+import com.mmf.resumeBuilder.model.AppUser;
+import com.mmf.resumeBuilder.service.UserService;
+import org.junit.jupiter.api.*;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.servlet.ModelAndView;
+
+import static org.springframework.test.web.ModelAndViewAssert.assertViewName;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@AutoConfigureMockMvc
+@TestPropertySource("/application.properties")
+@SpringBootTest
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class LoginControllerShould {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    private AppUser user;
+
+    @BeforeEach
+    public void init() {
+        jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('mmahdifarrokhy@gmail.com', 'Mohammadmahdi', 'Farrokhy', '12345679', 'User')");
+        jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('bradpitt@gmail.com', 'Brad', 'Pitt', '12345679', 'User')");
+        jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('davidbeckham78@gmail.com', 'David', 'Beckham', '12345679', 'User')");
+        jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('arashrahmani@gmail.com', 'آرش', 'رحمانی', '12345679', 'User')");
+        user = new AppUser();
+        user.setFirstName("Mohammadmahdi");
+        user.setLastName("Farrokhy");
+        user.setPassword("12345679");
+        user.setEmail("mmahdifarrokhy1@gmail.com");
+        user.setRole(UserRole.User);
+    }
+
+    @AfterEach
+    public void reset() {
+        jdbcTemplate.execute("DELETE FROM app_user");
+    }
+
+    @Test
+    @Order(0)
+    void open_login_page() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/login"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "login-page");
+    }
+
+    @Test
+    @Order(1)
+    void redirect_to_home_page_with_valid_email_and_valid_password() throws Exception {
+        user.setEmail("mmahdifarrokhy@gmail.com");
+        MvcResult mvcResult = mockMvc.perform(get("/login/success")
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
+                )
+                .andExpect(status().is(302))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "redirect:/");
+    }
+
+    @Test
+    @Order(2)
+    void redirect_to_login_error_page_with_invalid_email_and_valid_password() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/login/success")
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
+                )
+                .andExpect(status().is(302))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "redirect:/login/error");
+    }
+
+    @Test
+    @Order(3)
+    void redirect_to_login_error_page_with_valid_email_and_invalid_password() throws Exception {
+        user.setPassword("12345678");
+        MvcResult mvcResult = mockMvc.perform(get("/login/success")
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
+                )
+                .andExpect(status().is(302))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "redirect:/login/error");
+    }
+
+    @Test
+    @Order(4)
+    void redirect_to_login_error_page_with_invalid_email_and_invalid_password() throws Exception {
+        user.setEmail("mmahdifarrokhy1@gmail.com");
+        user.setPassword("12345678");
+        MvcResult mvcResult = mockMvc.perform(get("/login/success")
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
+                )
+                .andExpect(status().is(302))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "redirect:/login/error");
+    }
+
+    @Test
+    @Order(5)
+    void open_login_error_page_when_redirected_to_login_error_endpoint() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/login/error"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "login-error");
+    }
+}

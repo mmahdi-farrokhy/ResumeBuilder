@@ -25,7 +25,7 @@ public class LoginController {
         return "login-page";
     }
 
-    @GetMapping("/successful")
+    @GetMapping("/success")
     public String login(@ModelAttribute AppUser user) {
         if (userService.existsByEmail(user.getEmail())) {
             if (userService.findByEmail(user.getEmail()).getPassword().equals(user.getPassword())) {
@@ -37,7 +37,7 @@ public class LoginController {
     }
 
     @GetMapping("/error")
-    public String showErrorPage(){
+    public String showErrorPage() {
         return "login-error";
     }
 }

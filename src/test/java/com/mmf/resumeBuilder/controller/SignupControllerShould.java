@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.ModelAndViewAssert.assertViewName;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,6 +56,17 @@ public class SignupControllerShould {
     @AfterEach
     public void reset() {
         jdbcTemplate.execute("DELETE FROM app_user");
+    }
+
+    @Test
+    @Order(0)
+    void open_signup_page() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/signup"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "signup-page");
     }
 
     @Test
