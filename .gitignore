@@ -18,7 +18,4 @@ target/
 *.iws
 *.iml
 *.ipr
-/Data - Class Diagram.vsdx
-/SignupController - Sequence Diagram.vsdx
-/HomeController - Sequence Diagram.vsdx
-/LoginController - Sequence Diagram.vsdx
+*.vsdx
