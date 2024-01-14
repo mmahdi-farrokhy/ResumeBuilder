@@ -31,18 +31,18 @@ public class SignupController {
     @GetMapping("")
     public String showSignupPage(Model model) {
         model.addAttribute("user", new AppUser());
-        return "signup-page";
+        return "signup";
     }
 
-    @PostMapping("/create-user")
+    @PostMapping("/proceed")
     public String createUser(@Valid @ModelAttribute("user") AppUser user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "signup-page";
+            return "signup";
         } else {
             user.setRole(UserRole.User);
             userService.saveUser(user);
             model.addAttribute("user", user);
-            return "signup-conformation-page";
+            return "signup-success";
         }
     }
 }

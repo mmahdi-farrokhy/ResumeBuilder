@@ -22,18 +22,23 @@ public class LoginController {
     @GetMapping("")
     public String showLoginPage(Model model) {
         model.addAttribute("user", new AppUser());
-        return "login-page";
+        return "login";
     }
 
-    @GetMapping("/success")
+    @GetMapping("/proceed")
     public String login(@ModelAttribute AppUser user) {
         if (userService.existsByEmail(user.getEmail())) {
             if (userService.findByEmail(user.getEmail()).getPassword().equals(user.getPassword())) {
-                return "redirect:/";
+                return "redirect:/login/success";
             }
         }
 
         return "redirect:/login/error";
+    }
+
+    @GetMapping("/success")
+    public String showSuccessPage() {
+        return "login-success";
     }
 
     @GetMapping("/error")

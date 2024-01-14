@@ -9,9 +9,15 @@ import java.util.Date;
 @Controller
 public class HomeController {
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String loadHomePage(Model model) {
         model.addAttribute("date", new Date());
-        return "home-page";
+        return "home";
+    }
+
+    @GetMapping("/")
+    public String redirectToHomeEndpoint(Model model) {
+        model.addAttribute("date", new Date());
+        return "redirect:/home";
     }
 }

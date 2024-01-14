@@ -50,6 +50,7 @@ public class SignupControllerShould {
         user.setFirstName("Mohammadmahdi");
         user.setLastName("Farrokhy");
         user.setPassword("12345679");
+        user.setPasswordConfirmation("12345679");
         user.setRole(UserRole.User);
     }
 
@@ -60,23 +61,21 @@ public class SignupControllerShould {
 
     @Test
     @Order(0)
-    void open_signup_page() throws Exception {
+    void open_signup_html_on_request_to_endpoint_signup() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/signup"))
                 .andExpect(status().isOk())
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
     }
 
     @Test
     @Order(1)
-    void create_a_new_user_with_valid_email_using_post_request() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void open_signup_success_html_with_valid_information_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
-        user.setRole(UserRole.User);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -86,17 +85,15 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-conformation-page");
+        assertViewName(modelAndView, "signup-success");
     }
 
     @Test
     @Order(2)
-    void not_validate_a_new_user_with_duplicated_email() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void return_to_signup_html_with_duplicated_email_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy@gmail.com");
-        user.setRole(UserRole.User);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -108,18 +105,16 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(3)
-    void not_validate_a_new_user_with_empty_email() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void return_to_signup_html_with_empty_email_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("");
-        user.setRole(UserRole.User);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -131,18 +126,16 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(4)
-    void not_validate_a_new_user_with_null_email() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void return_to_signup_html_with_null_email_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail(null);
-        user.setRole(UserRole.User);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -154,18 +147,16 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(5)
-    void not_validate_a_new_user_with_email_with_a_wrong_format() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void return_to_signup_html_with_wrong_formatted_email_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy");
-        user.setRole(UserRole.User);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -177,18 +168,17 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(7)
-    void not_validate_a_new_user_with_empty_password() throws Exception {
+    void return_to_signup_html_with_empty_password_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
-        user.setRole(UserRole.User);
         user.setPassword("");
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -201,18 +191,17 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(8)
-    void not_validate_a_new_user_with_null_password() throws Exception {
+    void return_to_signup_html_with_null_password_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
-        user.setRole(UserRole.User);
         user.setPassword(null);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -225,18 +214,17 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(6)
-    void not_validate_a_new_user_with_wrong_password_confirmation() throws Exception {
+    void return_to_signup_html_with_unconfirmed_password_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setPasswordConfirmation("12345678");
         user.setEmail("mmahdifarrokhy2@gmail.com");
-        user.setRole(UserRole.User);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -248,19 +236,17 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(5)
-    void not_validate_a_new_user_with_empty_first_name() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void return_to_signup_html_with_empty_first_name_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
-        user.setRole(UserRole.User);
         user.setFirstName("");
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -273,19 +259,17 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(6)
-    void not_validate_a_new_user_with_null_first_name() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void return_to_signup_html_with_null_first_name_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
-        user.setRole(UserRole.User);
         user.setFirstName(null);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -298,19 +282,17 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(7)
-    void not_validate_a_new_user_with_empty_last_name() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void return_to_signup_html_with_empty_last_name_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
-        user.setRole(UserRole.User);
         user.setLastName("");
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -323,19 +305,17 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 
     @Test
     @Order(8)
-    void not_validate_a_new_user_with_null_last_name() throws Exception {
-        user.setPasswordConfirmation("12345679");
+    void return_to_signup_html_with_null_last_name_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
-        user.setRole(UserRole.User);
         user.setLastName(null);
 
-        MvcResult mvcResult = mockMvc.perform(post("/signup/create-user")
+        MvcResult mvcResult = mockMvc.perform(post("/signup/proceed")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("user", user))
                 .andExpect(status().isOk())
@@ -348,7 +328,7 @@ public class SignupControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "signup-page");
+        assertViewName(modelAndView, "signup");
         verify(userServiceMock, times(0)).saveUser(user);
     }
 }

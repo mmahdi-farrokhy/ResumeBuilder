@@ -51,20 +51,20 @@ public class LoginControllerShould {
 
     @Test
     @Order(0)
-    void open_login_page() throws Exception {
+    void open_login_html_on_request_to_endpoint_login() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "login-page");
+        assertViewName(modelAndView, "login");
     }
 
     @Test
     @Order(1)
-    void redirect_to_home_page_with_valid_email_and_valid_password() throws Exception {
+    void redirect_to_endpoint_login_success_with_valid_email_and_valid_password_on_request_to_endpoint_login_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy@gmail.com");
-        MvcResult mvcResult = mockMvc.perform(get("/login/success")
+        MvcResult mvcResult = mockMvc.perform(get("/login/proceed")
                         .param("firstName", user.getFirstName())
                         .param("lastName", user.getLastName())
                         .param("email", user.getEmail())
@@ -74,13 +74,29 @@ public class LoginControllerShould {
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "redirect:/");
+        assertViewName(modelAndView, "redirect:/login/success");
     }
 
     @Test
     @Order(2)
-    void redirect_to_login_error_page_with_invalid_email_and_valid_password() throws Exception {
+    void open_login_success_html_on_request_to_endpoint_login_success() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/login/success")
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "login-success");
+    }
+
+    @Test
+    @Order(2)
+    void redirect_to_endpoint_login_error_with_invalid_email_and_valid_password_on_request_to_endpoint_login_proceed() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/login/proceed")
                         .param("firstName", user.getFirstName())
                         .param("lastName", user.getLastName())
                         .param("email", user.getEmail())
@@ -95,9 +111,9 @@ public class LoginControllerShould {
 
     @Test
     @Order(3)
-    void redirect_to_login_error_page_with_valid_email_and_invalid_password() throws Exception {
+    void redirect_to_endpoint_login_error_with_valid_email_and_invalid_password_on_request_to_endpoint_login_proceed() throws Exception {
         user.setPassword("12345678");
-        MvcResult mvcResult = mockMvc.perform(get("/login/success")
+        MvcResult mvcResult = mockMvc.perform(get("/login/proceed")
                         .param("firstName", user.getFirstName())
                         .param("lastName", user.getLastName())
                         .param("email", user.getEmail())
@@ -112,10 +128,10 @@ public class LoginControllerShould {
 
     @Test
     @Order(4)
-    void redirect_to_login_error_page_with_invalid_email_and_invalid_password() throws Exception {
+    void redirect_to_endpoint_login_error_with_invalid_email_and_invalid_password_on_request_to_endpoint_login_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy1@gmail.com");
         user.setPassword("12345678");
-        MvcResult mvcResult = mockMvc.perform(get("/login/success")
+        MvcResult mvcResult = mockMvc.perform(get("/login/proceed")
                         .param("firstName", user.getFirstName())
                         .param("lastName", user.getLastName())
                         .param("email", user.getEmail())
@@ -130,7 +146,7 @@ public class LoginControllerShould {
 
     @Test
     @Order(5)
-    void open_login_error_page_when_redirected_to_login_error_endpoint() throws Exception {
+    void open_login_error_html_when_redirected_to_login_error_endpoint() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/login/error"))
                 .andExpect(status().isOk())
                 .andReturn();

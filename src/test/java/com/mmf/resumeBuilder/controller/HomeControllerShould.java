@@ -7,10 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.ModelAndViewAssert.assertViewName;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -25,10 +26,20 @@ public class HomeControllerShould {
     @Test
     @Order(0)
     void open_home_page() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/"))
+        MvcResult mvcResult = mockMvc.perform(get("/home"))
                 .andExpect(status().isOk())
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "home-page");
+        assertViewName(modelAndView, "home");
+    }
+
+    @Test
+    @Order(1)
+    void redirect_to_home_endpoint() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/"))
+                .andExpect(status().is(302))
+                .andReturn();
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "redirect:/home");
     }
 }
