@@ -60,7 +60,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(0)
+    @Order(1)
     void open_signup_html_on_request_to_endpoint_signup() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/signup"))
                 .andExpect(status().isOk())
@@ -71,7 +71,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(1)
+    @Order(2)
     void open_signup_success_html_with_valid_information_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
 
@@ -89,7 +89,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void return_to_signup_html_with_duplicated_email_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy@gmail.com");
 
@@ -110,7 +110,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     void return_to_signup_html_with_empty_email_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("");
 
@@ -131,7 +131,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void return_to_signup_html_with_null_email_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail(null);
 
@@ -152,7 +152,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     void return_to_signup_html_with_wrong_formatted_email_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy");
 
@@ -219,7 +219,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(6)
+    @Order(9)
     void return_to_signup_html_with_unconfirmed_password_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setPasswordConfirmation("12345678");
         user.setEmail("mmahdifarrokhy2@gmail.com");
@@ -241,7 +241,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(5)
+    @Order(10)
     void return_to_signup_html_with_empty_first_name_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
         user.setFirstName("");
@@ -264,7 +264,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(6)
+    @Order(11)
     void return_to_signup_html_with_null_first_name_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
         user.setFirstName(null);
@@ -287,7 +287,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(7)
+    @Order(12)
     void return_to_signup_html_with_empty_last_name_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
         user.setLastName("");
@@ -310,7 +310,7 @@ public class SignupControllerShould {
     }
 
     @Test
-    @Order(8)
+    @Order(13)
     void return_to_signup_html_with_null_last_name_on_request_to_endpoint_signup_proceed() throws Exception {
         user.setEmail("mmahdifarrokhy2@gmail.com");
         user.setLastName(null);

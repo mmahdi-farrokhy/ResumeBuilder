@@ -66,4 +66,9 @@ public class UserPanelController {
             return "profile-update-success";
         }
     }
+
+    @GetMapping("/logout")
+    public String logout(){
+        return "redirect:/home";
+    }
 }

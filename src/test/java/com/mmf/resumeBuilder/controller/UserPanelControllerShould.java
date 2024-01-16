@@ -5,7 +5,6 @@ import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.service.UserService;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -77,7 +76,7 @@ public class UserPanelControllerShould {
     }
 
     @Test
-    @Order(0)
+    @Order(1)
     void open_user_panel_html_on_request_to_endpoint_panel_id() throws Exception {
         when(userService.fetchUser(1)).thenReturn(expectedUser1);
         when(userService.fetchUser(2)).thenReturn(expectedUser2);
@@ -92,6 +91,7 @@ public class UserPanelControllerShould {
     }
 
     @Test
+    @Order(2)
     void redirect_to_endpoint_resume_delete_id_on_request_to_endpoint_panel_delete_resumeid() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/panel/delete/3"))
                 .andExpect(status().is(302))
@@ -102,6 +102,7 @@ public class UserPanelControllerShould {
     }
 
     @Test
+    @Order(3)
     void redirect_to_endpoint_resume_download_id_on_request_to_endpoint_panel_download_resumeid() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/panel/download/3"))
                 .andExpect(status().is(302))
@@ -112,6 +113,7 @@ public class UserPanelControllerShould {
     }
 
     @Test
+    @Order(4)
     void redirect_to_endpoint_resume_edit_id_on_request_to_endpoint_panel_edit_resumeid() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/panel/edit/3"))
                 .andExpect(status().is(302))
@@ -122,6 +124,7 @@ public class UserPanelControllerShould {
     }
 
     @Test
+    @Order(5)
     void redirect_to_endpoint_resume_share_id_on_request_to_endpoint_panel_share_resumeid() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/panel/share/3"))
                 .andExpect(status().is(302))
@@ -132,7 +135,7 @@ public class UserPanelControllerShould {
     }
 
     @Test
-    @Order(0)
+    @Order(6)
     void open_user_profile_html_on_request_to_endpoint_panel_id_profile() throws Exception {
         when(userService.fetchUser(1)).thenReturn(expectedUser1);
         when(userService.fetchUser(2)).thenReturn(expectedUser2);
@@ -147,8 +150,8 @@ public class UserPanelControllerShould {
     }
 
     @Test
-    @Order(1)
-    void redirect_to_endpoint_panel_profile_update_success_on_request_to_endpoint_panel_profile_update() throws Exception {
+    @Order(7)
+    void redirect_to_endpoint_panel_profile_update_success_on_request_to_endpoint_panel_profile_update_with_valid_data() throws Exception {
         AppUser updatedUser = new AppUser();
         updatedUser.setFirstName("Mohammad Mahdi");
         updatedUser.setLastName(expectedUser1.getLastName());
@@ -177,5 +180,231 @@ public class UserPanelControllerShould {
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "profile-update-success");
         verify(userService, times(1)).saveUser(updatedUser);
+    }
+
+    @Test
+    @Order(8)
+    void return_to_user_profile_html_with_empty_email_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setEmail("");
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrors("user", "email"))
+                .andExpect(model().attributeErrorCount("user", 1))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(9)
+    void return_to_user_profile_html_with_null_email_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setEmail(null);
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrors("user", "email"))
+                .andExpect(model().attributeErrorCount("user", 1))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(10)
+    void return_to_user_profile_html_with_wrong_formatted_email_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setEmail("mmahdifarrokhy");
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrors("user", "email"))
+                .andExpect(model().attributeErrorCount("user", 1))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(11)
+    void return_to_user_profile_html_with_empty_password_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setPassword("");
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrors("user", "password"))
+                .andExpect(model().attributeErrorCount("user", 2))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(12)
+    void return_to_user_profile_html_with_null_password_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setPassword(null);
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("user"))
+                .andExpect(model().attributeHasFieldErrors("user", "password"))
+                .andExpect(model().attributeErrorCount("user", 2))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(13)
+    void return_to_user_profile_html_with_unconfirmed_password_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setPasswordConfirmation("12345678");
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("user"))
+                .andExpect(model().attributeErrorCount("user", 1))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(14)
+    void return_to_user_profile_html_with_empty_first_name_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setFirstName("");
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("user"))
+                .andExpect(model().attributeHasFieldErrors("user", "firstName"))
+                .andExpect(model().attributeErrorCount("user", 1))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(15)
+    void return_to_user_profile_html_with_null_first_name_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setFirstName(null);
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("user"))
+                .andExpect(model().attributeHasFieldErrors("user", "firstName"))
+                .andExpect(model().attributeErrorCount("user", 1))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(16)
+    void return_to_user_profile_html_with_empty_last_name_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setLastName("");
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("user"))
+                .andExpect(model().attributeHasFieldErrors("user", "lastName"))
+                .andExpect(model().attributeErrorCount("user", 1))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(17)
+    void return_to_user_profile_html_with_null_last_name_on_request_to_endpoint_panel_profile_update() throws Exception {
+        expectedUser1.setLastName(null);
+
+        MvcResult mvcResult = mockMvc.perform(post("/panel/profile/update")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("user", expectedUser1))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", expectedUser1))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("user"))
+                .andExpect(model().attributeHasFieldErrors("user", "lastName"))
+                .andExpect(model().attributeErrorCount("user", 1))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "user-profile");
+        verify(userService, times(0)).saveUser(expectedUser1);
+    }
+
+    @Test
+    @Order(18)
+    void redirect_to_endpoint_home_on_request_to_endpoint_panel_logout() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/panel/logout"))
+                .andExpect(status().is(302))
+                .andReturn();
+
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "redirect:/home");
     }
 }

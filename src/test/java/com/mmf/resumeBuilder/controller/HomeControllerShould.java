@@ -24,7 +24,7 @@ public class HomeControllerShould {
     MockMvc mockMvc;
 
     @Test
-    @Order(0)
+    @Order(1)
     void open_home_page() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/home"))
                 .andExpect(status().isOk())
@@ -34,7 +34,7 @@ public class HomeControllerShould {
     }
 
     @Test
-    @Order(1)
+    @Order(2)
     void redirect_to_home_endpoint() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/"))
                 .andExpect(status().is(302))
