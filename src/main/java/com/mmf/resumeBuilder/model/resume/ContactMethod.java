@@ -20,8 +20,8 @@ public class ContactMethod extends ResumeSection {
     @Enumerated(EnumType.STRING)
     private ContactType type;
 
-    @Column(name = "value")
-    private String value;
+    @Column(name = "content")
+    private String content;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
@@ -32,7 +32,7 @@ public class ContactMethod extends ResumeSection {
         return "ContactMethod{" +
                 "id=" + id + "\n" +
                 ", type=" + type + "\n" +
-                ", value='" + value + "\n" +
+                ", value='" + content + "\n" +
                 '}';
     }
 }

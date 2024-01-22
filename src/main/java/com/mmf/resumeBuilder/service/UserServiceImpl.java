@@ -1,16 +1,16 @@
 package com.mmf.resumeBuilder.service;
 
-import com.mmf.resumeBuilder.data.dao.UserDAO;
+import com.mmf.resumeBuilder.data.dao.AppUserDAO;
 import com.mmf.resumeBuilder.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserDAO userDAO;
+    private AppUserDAO userDAO;
 
     @Autowired
-    public UserServiceImpl(UserDAO appDAO) {
+    public UserServiceImpl(AppUserDAO appDAO) {
         this.userDAO = appDAO;
     }
 

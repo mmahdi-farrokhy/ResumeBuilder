@@ -1,22 +1,15 @@
--- Create user_detail table
-CREATE TABLE resume_builder.user_detail (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    marital_status VARCHAR(20) NOT NULL,
-    gender VARCHAR(20) NOT NULL,
-    military_service_status VARCHAR(20) NOT NULL,
-    birth_date DATE NOT NULL,
-    foreigner BOOLEAN NOT NULL,
-    disability_type VARCHAR(20) NOT NULL
-);
-
 -- Create user table
-CREATE TABLE resume_builder.user (
+CREATE TABLE resume_builder.personal_information (
     id INT PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    user_detail_id INT,
-    FOREIGN KEY (user_detail_id) REFERENCES user_detail(id)
+    marital_status ENUM('Single', 'Married') NOT NULL,
+	gender VARCHAR(20) NOT NULL,
+	military_service_status ENUM('None', 'Completed', 'Exempted', 'Educational_Exemption', 'Ongoing', 'Not_Served_Yet') 
+	birth_date DATE NOT NULL,
+	foreigner TINYINT(1) NOT NULL,
+	disability_type VARCHAR(20) NOT NULL
 );
 
 -- Create summary table

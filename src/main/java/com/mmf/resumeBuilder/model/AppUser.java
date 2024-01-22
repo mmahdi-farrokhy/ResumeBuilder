@@ -1,6 +1,7 @@
 package com.mmf.resumeBuilder.model;
 
 import com.mmf.resumeBuilder.enums.UserRole;
+import com.mmf.resumeBuilder.model.resume.Resume;
 import com.mmf.resumeBuilder.validation.AvailableEmail;
 import com.mmf.resumeBuilder.validation.PasswordMatch;
 import jakarta.persistence.*;
@@ -12,13 +13,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@PasswordMatch
 @Entity
 @Table(name = "app_user")
-@PasswordMatch
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +57,17 @@ public class AppUser {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private List<Resume> resumes;
+
+    public void addResume(Resume newResume) {
+        if (resumes == null)
+            resumes = new LinkedList<>();
+
+        resumes.add(newResume);
+        newResume.setAppUser(this);
+    }
 
     @Override
     public String toString() {

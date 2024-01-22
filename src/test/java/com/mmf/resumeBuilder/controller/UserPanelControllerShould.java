@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.controller;
 
-import com.mmf.resumeBuilder.data.dao.UserDAO;
+import com.mmf.resumeBuilder.data.dao.AppUserDAO;
 import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.service.UserService;
@@ -41,7 +41,7 @@ public class UserPanelControllerShould {
     UserService userService;
 
     @MockBean
-    UserDAO userDAO;
+    AppUserDAO userDAO;
 
     private AppUser expectedUser1;
     private AppUser expectedUser2;

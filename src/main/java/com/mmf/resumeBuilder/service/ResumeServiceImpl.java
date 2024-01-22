@@ -28,6 +28,11 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
+    public void deleteResume(Integer resumeId) {
+        resumeDAO.delete(resumeId);
+    }
+
+    @Override
     public <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType) {
         return resumeDAO.fetchSection(resumeId, sectionType);
     }
@@ -45,5 +50,16 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public <RS extends ResumeSection> void addSection(RS resumeSection) {
         resumeDAO.addSection(resumeSection);
+    }
+
+    @Override
+    public void downloadResume(Integer resumeId) {
+
+    }
+
+    @Override
+    public List<Resume> findAllByUserId(Integer userId) {
+//        return resumeDAO.findAllByUserId(userId);
+        return null;
     }
 }

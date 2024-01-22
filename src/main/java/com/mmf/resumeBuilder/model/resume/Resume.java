@@ -1,5 +1,6 @@
 package com.mmf.resumeBuilder.model.resume;
 
+import com.mmf.resumeBuilder.model.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -80,92 +81,113 @@ public class Resume {
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<Hobby> hobbies;
 
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "app_user_id")
+    private AppUser appUser;
+
     public <T extends ResumeSection> void addSection(T section) {
         if (section instanceof ContactMethod) {
             if (contactInformation == null)
                 contactInformation = new LinkedList<>();
 
             contactInformation.add((ContactMethod) section);
+            ((ContactMethod) section).setResume(this);
         } else if (section instanceof Education) {
             if (educations == null)
                 educations = new LinkedList<>();
 
             educations.add((Education) section);
+            ((Education) section).setResume(this);
         } else if (section instanceof TeachingAssistance) {
             if (teachingAssistance == null)
                 teachingAssistance = new LinkedList<>();
 
             teachingAssistance.add((TeachingAssistance) section);
+            ((TeachingAssistance) section).setResume(this);
         } else if (section instanceof JobExperience) {
             if (jobExperiences == null)
                 jobExperiences = new LinkedList<>();
 
             jobExperiences.add((JobExperience) section);
+            ((JobExperience) section).setResume(this);
         } else if (section instanceof FormerColleague) {
             if (formerColleagues == null)
                 formerColleagues = new LinkedList<>();
 
             formerColleagues.add((FormerColleague) section);
+            ((FormerColleague) section).setResume(this);
         } else if (section instanceof Research) {
             if (researches == null)
                 researches = new LinkedList<>();
 
             researches.add((Research) section);
+            ((Research) section).setResume(this);
         } else if (section instanceof Course) {
             if (courses == null)
                 courses = new LinkedList<>();
 
             courses.add((Course) section);
+            ((Course) section).setResume(this);
         } else if (section instanceof HardSkill) {
             if (hardSkills == null)
                 hardSkills = new LinkedList<>();
 
             hardSkills.add((HardSkill) section);
+            ((HardSkill) section).setResume(this);
         } else if (section instanceof SoftSkill) {
             if (softSkills == null)
                 softSkills = new LinkedList<>();
 
             softSkills.add((SoftSkill) section);
+            ((SoftSkill) section).setResume(this);
         } else if (section instanceof Language) {
             if (languages == null)
                 languages = new LinkedList<>();
 
             languages.add((Language) section);
+            ((Language) section).setResume(this);
         } else if (section instanceof Project) {
             if (projects == null)
                 projects = new LinkedList<>();
 
             projects.add((Project) section);
+            ((Project) section).setResume(this);
         } else if (section instanceof Patent) {
             if (patents == null)
                 patents = new LinkedList<>();
 
             patents.add((Patent) section);
+            ((Patent) section).setResume(this);
         } else if (section instanceof Presentation) {
             if (presentations == null)
                 presentations = new LinkedList<>();
 
             presentations.add((Presentation) section);
+            ((Presentation) section).setResume(this);
         } else if (section instanceof Publication) {
             if (publications == null)
                 publications = new LinkedList<>();
 
             publications.add((Publication) section);
+            ((Publication) section).setResume(this);
         } else if (section instanceof VolunteerActivity) {
             if (volunteerActivities == null)
                 volunteerActivities = new LinkedList<>();
 
             volunteerActivities.add((VolunteerActivity) section);
+            ((VolunteerActivity) section).setResume(this);
         } else if (section instanceof Membership) {
             if (memberships == null)
                 memberships = new LinkedList<>();
 
             memberships.add((Membership) section);
+            ((Membership) section).setResume(this);
         } else if (section instanceof Hobby) {
             if (hobbies == null)
                 hobbies = new LinkedList<>();
 
             hobbies.add((Hobby) section);
+            ((Hobby) section).setResume(this);
         }
     }
 

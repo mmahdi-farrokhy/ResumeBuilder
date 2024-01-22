@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder.dao;
 
 import com.mmf.resumeBuilder.ResumeBuilderApplication;
-import com.mmf.resumeBuilder.data.dao.UserDAO;
+import com.mmf.resumeBuilder.data.dao.AppUserDAO;
 import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.model.AppUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ public class UserDAOShould {
     AppUser user;
 
     @MockBean
-    UserDAO userDAO;
+    AppUserDAO userDAO;
 
     @BeforeEach
     public void init() {

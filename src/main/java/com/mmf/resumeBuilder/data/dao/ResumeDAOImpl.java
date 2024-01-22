@@ -1,8 +1,10 @@
 package com.mmf.resumeBuilder.data.dao;
 
+import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.model.resume.Resume;
 import com.mmf.resumeBuilder.model.resume.ResumeSection;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Repository
@@ -27,6 +30,13 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
+    public List<Resume> findAll() {
+        String sql = "select * from Resume";
+        Query query = entityManager.createNativeQuery(sql, Resume.class);
+        return query.getResultList();
+    }
+
+    @Override
     public Resume findById(int resumeId) {
         return entityManager.find(Resume.class, resumeId);
     }
@@ -35,6 +45,11 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Transactional
     public void save(Resume resume) {
         entityManager.persist(resume);
+    }
+
+    @Override
+    public void delete(Integer resumeId) {
+        entityManager.remove(resumeId);
     }
 
     @Override
@@ -137,5 +152,12 @@ public class ResumeDAOImpl implements ResumeDAO {
     @Transactional
     public <RS extends ResumeSection> void addSection(RS resumeSection) {
         entityManager.persist(resumeSection);
+    }
+
+    @Override
+    public List<Resume> findAllByUserId(Integer userId) {
+        Query query = entityManager.createQuery("SELECT r FROM Resume r WHERE r.appUser.id = :userId");
+        query.setParameter("userId", userId);
+        return (List<Resume>) query.getResultList();
     }
 }
