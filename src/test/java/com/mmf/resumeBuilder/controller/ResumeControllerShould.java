@@ -1,8 +1,6 @@
 package com.mmf.resumeBuilder.controller;
 
 import com.mmf.resumeBuilder.DatabaseTest;
-import com.mmf.resumeBuilder.data.dao.ResumeDAO;
-import com.mmf.resumeBuilder.data.dao.AppUserDAO;
 import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import com.mmf.resumeBuilder.enums.hardskill.HardSkillLevel;
@@ -13,7 +11,6 @@ import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.model.resume.Resume;
 import com.mmf.resumeBuilder.model.resume.Summary;
 import com.mmf.resumeBuilder.service.ResumeService;
-import com.mmf.resumeBuilder.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,9 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.ModelAndViewAssert.assertModelAttributeValue;
 import static org.springframework.test.web.ModelAndViewAssert.assertViewName;
@@ -51,15 +46,6 @@ public class ResumeControllerShould {
     MockMvc mockMvc;
 
     @MockBean
-    UserService userService;
-
-    @MockBean
-    AppUserDAO userDAO;
-
-    @MockBean
-    ResumeDAO resumeDAO;
-
-    @MockBean
     ResumeService resumeService;
 
     AppUser user;
@@ -70,49 +56,7 @@ public class ResumeControllerShould {
 
     @BeforeEach
     public void init() throws CloneNotSupportedException {
-        jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('mmahdifarrokhy@gmail.com', 'Mohammadmahdi', 'Farrokhy', '12345679', 'User')");
-        jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('bradpitt@gmail.com', 'Brad', 'Pitt', '12345679', 'User')");
-        jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('davidbeckham78@gmail.com', 'David', 'Beckham', '12345679', 'User')");
-        jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('arashrahmani@gmail.com', 'آرش', 'رحمانی', '12345679', 'User')");
-
-        jdbcTemplate.execute("INSERT INTO summary (text) VALUES ('1: Some description about the person who is writing this resume')");
-        jdbcTemplate.execute("INSERT INTO personal_information (first_name, last_name, phone_number, marital_status, gender, military_service_status, birth_date, foreigner, disability_type) VALUES ('Mohammad Mahdi', 'Farrokhy', '09017743009', 'Single', 'Male', 'Exempted', '1999-07-29', 0, 'None')");
-        int i = countResumes();
-        jdbcTemplate.execute("INSERT INTO resume (personal_information_id, summary_id) VALUES (1, 1)");
-
-        jdbcTemplate.execute("INSERT INTO summary (text) VALUES ('2: Some description about the person who is writing this resume')");
-        jdbcTemplate.execute("INSERT INTO personal_information (first_name, last_name, phone_number, marital_status, gender, military_service_status, birth_date, foreigner, disability_type) VALUES ('Mohammad Mahdi', 'Farrokhy', '09017743009', 'Single', 'Male', 'Exempted', '1999-07-29', 0, 'None')");
-        jdbcTemplate.execute("INSERT INTO resume (personal_information_id, summary_id) VALUES (2,2)");
-
-        resume = new Resume();
-        resume.setId(1);
-        resume.setPersonalInformation(DatabaseTest.createPersonalInformation());
-        resume.addSection(DatabaseTest.createContactMethod(resume, ContactType.Email, "mmahdifarrokhy@gmail.com"));
-        resume.addSection(DatabaseTest.createContactMethod(resume, ContactType.Phone_Number, "09190763415"));
-
-        resume.setSummary(new Summary("1: Some description about the person who is writing this resume"));
-        resume.addSection(DatabaseTest.createEducation(resume));
-        resume.addSection(DatabaseTest.createTeachingAssistance(resume));
-        resume.addSection(DatabaseTest.createTeachingAssistance2(resume));
-        resume.addSection(DatabaseTest.createJobExperience1(resume));
-        resume.addSection(DatabaseTest.createJobExperience2(resume));
-        resume.addSection(DatabaseTest.createJobExperience3(resume));
-        resume.addSection(DatabaseTest.createFormerColleague1(resume));
-        resume.addSection(DatabaseTest.createFormerColleague2(resume));
-        resume.addSection(DatabaseTest.createResearch(resume));
-        resume.addSection(DatabaseTest.createResearch2(resume));
-        resume.addSection(DatabaseTest.createCourse(resume, "Java Expert", "7learn", "https://7learn.com/crt?h=bdP9hiSTF4"));
-        resume.addSection(DatabaseTest.createCourse(resume, "Spring Boot - Chad Darby", "Udemy", null));
-        resume.addSection(DatabaseTest.createHardSkill(resume, HardSkillType.Java, HardSkillLevel.Advanced));
-        resume.addSection(DatabaseTest.createHardSkill(resume, HardSkillType.Spring_Boot, HardSkillLevel.Intermediate));
-        resume.addSection(DatabaseTest.createSoftSkill(resume, "Instruction"));
-        resume.addSection(DatabaseTest.createLanguage(resume, LanguageName.Persian, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native, LanguageLevel.Native));
-        resume.addSection(DatabaseTest.createLanguage(resume, LanguageName.German, LanguageLevel.Basic, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate, LanguageLevel.Pre_Intermediate));
-        resume.addSection(DatabaseTest.createLanguage(resume, LanguageName.English, LanguageLevel.Intermediate, LanguageLevel.Intermediate, LanguageLevel.Upper_Intermediate, LanguageLevel.Upper_Intermediate, LanguageLevel.Upper_Intermediate));
-        resume.addSection(DatabaseTest.createProject(resume));
-        resume.addSection(DatabaseTest.createProject2(resume));
-        resume.addSection(DatabaseTest.createPresentation(resume));
-        resume.addSection(DatabaseTest.createMembership(resume, "Scientific Association of the Faculty of Computer Engineering", LocalDate.of(2019, 1, 1)));
+        resume = DatabaseTest.createResume();
         Resume tmpResume = (Resume) resume.clone();
         expectedResumes = new LinkedList<>();
         expectedResumes.add(resume);
@@ -252,7 +196,7 @@ public class ResumeControllerShould {
     @Test
     @Order(5)
     void redirect_to_endpoint_resume_edit_success_on_request_to_endpoint_resume_edit_id() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/resume/edit/1")
+        MvcResult mvcResult = mockMvc.perform(post("/resume/edit")
                         .flashAttr("resume", resume))
                 .andExpect(status().is(302))
                 .andReturn();

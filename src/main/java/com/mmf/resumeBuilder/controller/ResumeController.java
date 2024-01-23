@@ -5,12 +5,9 @@ import com.mmf.resumeBuilder.model.resume.Resume;
 import com.mmf.resumeBuilder.service.ResumeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller()
 @RequestMapping("/resume")
@@ -50,12 +47,9 @@ public class ResumeController {
         return "resume-download-success";
     }
 
-    @PostMapping("/edit/{id}")
-    public String editResume(@Valid @ModelAttribute("resume") Resume resume, @PathVariable int id, Model model) {
-        Resume byId = resumeService.findById(id);
-        byId = resume;
-        byId.setId(id);
-        resumeService.save(byId);
+    @PostMapping("/edit")
+    public String editResume(@Valid @ModelAttribute("resume") Resume resume, Model model) {
+        resumeService.save(resume);
         return "redirect:/resume/edit/success";
     }
 
