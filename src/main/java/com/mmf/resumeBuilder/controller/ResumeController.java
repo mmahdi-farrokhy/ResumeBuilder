@@ -23,12 +23,9 @@ public class ResumeController {
     }
 
     @GetMapping("")
-    public List<Resume> showResumePage(@ModelAttribute AppUser user, Model model) {
-        user.setId(1);
+    public String showResumePage(@ModelAttribute AppUser user, Model model) {
         model.addAttribute("resumes", resumeService.findAllByUserId(user.getId()));
-        List<Resume> allByUserId = resumeService.findAllByUserId(user.getId());
-        return allByUserId;
-//        return "resume";
+        return "resume";
     }
 
     @DeleteMapping("/delete/{id}")

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "resume")
-public class Resume {
+public class Resume implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -251,5 +251,9 @@ public class Resume {
         return "Resume{" +
                 "id=" + id + "\n" +
                 '}';
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

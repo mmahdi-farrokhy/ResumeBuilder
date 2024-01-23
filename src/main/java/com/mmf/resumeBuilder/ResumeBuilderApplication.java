@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.List;
 
@@ -26,16 +27,6 @@ public class ResumeBuilderApplication {
     @Bean
     public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO, AppUserDAO userDAO) {
         return runner -> {
-            AppUser appUser = userDAO.findByIdWithResumes(100).get();
-            List<Resume> resume = appUser.getResumes();
-            resume.forEach(System.out::println);
-
-            List<Resume> allByUserId = resumeDAO.findAllByUserId(100);
-            allByUserId.forEach(System.out::println);
         };
-    }
-
-    private Resume newResume() {
-        return DatabaseTest.createResume();
     }
 }

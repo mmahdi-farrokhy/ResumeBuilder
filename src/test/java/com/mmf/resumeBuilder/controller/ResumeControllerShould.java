@@ -3,11 +3,13 @@ package com.mmf.resumeBuilder.controller;
 import com.mmf.resumeBuilder.DatabaseTest;
 import com.mmf.resumeBuilder.data.dao.ResumeDAO;
 import com.mmf.resumeBuilder.data.dao.AppUserDAO;
+import com.mmf.resumeBuilder.enums.UserRole;
 import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
 import com.mmf.resumeBuilder.enums.hardskill.HardSkillLevel;
 import com.mmf.resumeBuilder.enums.hardskill.HardSkillType;
 import com.mmf.resumeBuilder.enums.language.LanguageLevel;
 import com.mmf.resumeBuilder.enums.language.LanguageName;
+import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.model.resume.Resume;
 import com.mmf.resumeBuilder.model.resume.Summary;
 import com.mmf.resumeBuilder.service.ResumeService;
@@ -24,17 +26,20 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.ModelAndViewAssert.assertModelAttributeValue;
 import static org.springframework.test.web.ModelAndViewAssert.assertViewName;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@TestPropertySource("/application.properties")
+@TestPropertySource("/application-test.properties")
 @SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -57,13 +62,14 @@ public class ResumeControllerShould {
     @MockBean
     ResumeService resumeService;
 
+    AppUser user;
     Resume resume;
-    Resume expectedResume;
     private List<Resume> expectedResumes;
-
+    private List<Resume> expectedResumes2;
+    private List<Resume> expectedResumes3;
 
     @BeforeEach
-    public void init() {
+    public void init() throws CloneNotSupportedException {
         jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('mmahdifarrokhy@gmail.com', 'Mohammadmahdi', 'Farrokhy', '12345679', 'User')");
         jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('bradpitt@gmail.com', 'Brad', 'Pitt', '12345679', 'User')");
         jdbcTemplate.execute("INSERT INTO app_user (email, first_name, last_name, password, role) VALUES ('davidbeckham78@gmail.com', 'David', 'Beckham', '12345679', 'User')");
@@ -107,6 +113,27 @@ public class ResumeControllerShould {
         resume.addSection(DatabaseTest.createProject2(resume));
         resume.addSection(DatabaseTest.createPresentation(resume));
         resume.addSection(DatabaseTest.createMembership(resume, "Scientific Association of the Faculty of Computer Engineering", LocalDate.of(2019, 1, 1)));
+        Resume tmpResume = (Resume) resume.clone();
+        expectedResumes = new LinkedList<>();
+        expectedResumes.add(resume);
+        expectedResumes.add(tmpResume);
+
+        expectedResumes2 = new LinkedList<>();
+        expectedResumes2.add(resume);
+
+        expectedResumes3 = new LinkedList<>();
+        expectedResumes3.add(tmpResume);
+
+        user = new AppUser();
+        user.setId(1);
+        user.setFirstName("Mohammad Mahdi");
+        user.setLastName("Farrokhy");
+        user.setEmail("mmahdifarrokhy@gmail.com");
+        user.setPassword("123456578");
+        user.setPasswordConfirmation("123456578");
+        user.setRole(UserRole.User);
+        user.addResume(resume);
+        user.addResume(tmpResume);
     }
 
     @AfterEach
@@ -122,12 +149,62 @@ public class ResumeControllerShould {
     @Test
     @Order(1)
     void open_resume_html_containing_all_resumes_on_request_to_endpoint_resume() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/resume"))
+        when(resumeService.findAllByUserId(1)).thenReturn(expectedResumes);
+        when(resumeService.findAllByUserId(2)).thenReturn(expectedResumes2);
+        when(resumeService.findAllByUserId(3)).thenReturn(expectedResumes3);
+
+        MvcResult mvcResult = mockMvc.perform(get("/resume")
+                        .flashAttr("user", user)
+                        .param("id", String.valueOf(user.getId()))
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
+                        .param("passwordConfirmation", user.getPasswordConfirmation())
+                        .param("role", user.getRole().toString()))
+                .andExpect(model().attribute("user", user))
                 .andExpect(status().isOk())
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "resume");
         assertModelAttributeValue(modelAndView, "resumes", expectedResumes);
+        verify(resumeService, times(1)).findAllByUserId(1);
+
+        user.setId(2);
+        mvcResult = mockMvc.perform(get("/resume")
+                        .flashAttr("user", user)
+                        .param("id", String.valueOf(user.getId()))
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
+                        .param("passwordConfirmation", user.getPasswordConfirmation())
+                        .param("role", user.getRole().toString()))
+                .andExpect(model().attribute("user", user))
+                .andExpect(status().isOk())
+                .andReturn();
+        modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "resume");
+        assertModelAttributeValue(modelAndView, "resumes", expectedResumes2);
+        verify(resumeService, times(1)).findAllByUserId(2);
+
+        user.setId(3);
+        mvcResult = mockMvc.perform(get("/resume")
+                        .flashAttr("user", user)
+                        .param("id", String.valueOf(user.getId()))
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
+                        .param("passwordConfirmation", user.getPasswordConfirmation())
+                        .param("role", user.getRole().toString()))
+                .andExpect(model().attribute("user", user))
+                .andExpect(status().isOk())
+                .andReturn();
+        modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "resume");
+        assertModelAttributeValue(modelAndView, "resumes", expectedResumes3);
+        verify(resumeService, times(1)).findAllByUserId(3);
     }
 
     @Test
