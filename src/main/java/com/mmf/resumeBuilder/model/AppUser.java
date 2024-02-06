@@ -58,6 +58,9 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     private List<Resume> resumes;
 

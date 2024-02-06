@@ -53,6 +53,11 @@ public class ResumeDAOImpl implements ResumeDAO {
     }
 
     @Override
+    public void delete(Resume resume) {
+        entityManager.remove(resume);
+    }
+
+    @Override
     public <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType) {
         TypedQuery<Resume> query = entityManager.createQuery(queryString(sectionType), Resume.class);
         query.setParameter("resumeId", resumeId);

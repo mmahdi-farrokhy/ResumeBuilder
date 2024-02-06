@@ -25,9 +25,9 @@ public class ResumeController {
         return "resume";
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteResume(@PathVariable int id) {
-        resumeService.deleteResume(id);
+    @DeleteMapping("/delete")
+    public String deleteResume(@ModelAttribute Resume resume) {
+        resumeService.delete(resume);
         return "redirect:/resume/delete/success";
     }
 
@@ -36,9 +36,9 @@ public class ResumeController {
         return "resume-delete-success";
     }
 
-    @GetMapping("/download/{id}")
-    public String downloadResume(@PathVariable int id) {
-        resumeService.downloadResume(id);
+    @GetMapping("/download")
+    public String downloadResume(@ModelAttribute Resume resume) {
+        resumeService.downloadResume(resume);
         return "redirect:/resume/download/success";
     }
 
@@ -48,7 +48,7 @@ public class ResumeController {
     }
 
     @PostMapping("/edit")
-    public String editResume(@Valid @ModelAttribute("resume") Resume resume, Model model) {
+    public String editResume(@Valid @ModelAttribute("resume") Resume resume) {
         resumeService.save(resume);
         return "redirect:/resume/edit/success";
     }
@@ -56,5 +56,16 @@ public class ResumeController {
     @GetMapping("/edit/success")
     public String showResumeEditSuccessPage() {
         return "resume-edit-success";
+    }
+
+    @GetMapping("/share")
+    public String shareResume(@Valid @ModelAttribute("resume") Resume resume) {
+        resumeService.share(resume);
+        return "redirect:/resume/share/success";
+    }
+
+    @GetMapping("/share/success")
+    public String showResumeShareSuccessPage() {
+        return "resume-share-success";
     }
 }

@@ -2,14 +2,8 @@ package com.mmf.resumeBuilder.controller;
 
 import com.mmf.resumeBuilder.DatabaseTest;
 import com.mmf.resumeBuilder.enums.UserRole;
-import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
-import com.mmf.resumeBuilder.enums.hardskill.HardSkillLevel;
-import com.mmf.resumeBuilder.enums.hardskill.HardSkillType;
-import com.mmf.resumeBuilder.enums.language.LanguageLevel;
-import com.mmf.resumeBuilder.enums.language.LanguageName;
 import com.mmf.resumeBuilder.model.AppUser;
 import com.mmf.resumeBuilder.model.resume.Resume;
-import com.mmf.resumeBuilder.model.resume.Summary;
 import com.mmf.resumeBuilder.service.ResumeService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -154,12 +147,13 @@ public class ResumeControllerShould {
     @Test
     @Order(2)
     void redirect_to_endpoint_resume_delete_success_on_request_to_endpoint_resume_delete_id() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(delete("/resume/delete/1"))
+        MvcResult mvcResult = mockMvc.perform(delete("/resume/delete")
+                        .flashAttr("resume", resume))
                 .andExpect(status().is(302))
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "redirect:/resume/delete/success");
-        verify(resumeService, times(1)).deleteResume(1);
+        verify(resumeService, times(1)).delete(resume);
     }
 
     @Test
@@ -175,12 +169,13 @@ public class ResumeControllerShould {
     @Test
     @Order(3)
     void redirect_to_endpoint_resume_download_success_on_request_to_endpoint_resume_download_id() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/resume/download/1"))
+        MvcResult mvcResult = mockMvc.perform(get("/resume/download")
+                        .flashAttr("resume", resume))
                 .andExpect(status().is(302))
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "redirect:/resume/download/success");
-        verify(resumeService, times(1)).downloadResume(1);
+        verify(resumeService, times(1)).downloadResume(resume);
     }
 
     @Test
@@ -213,5 +208,27 @@ public class ResumeControllerShould {
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "resume-edit-success");
+    }
+
+    @Test
+    @Order(5)
+    void redirect_to_endpoint_resume_share_success_on_request_to_endpoint_resume_share_id() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/resume/share")
+                        .flashAttr("resume", resume))
+                .andExpect(status().is(302))
+                .andReturn();
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "redirect:/resume/share/success");
+        verify(resumeService, times(1)).share(resume);
+    }
+
+    @Test
+    @Order(6)
+    void return_resume_share_success_html_on_request_to_endpoint_resume_share_success() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/resume/share/success"))
+                .andExpect(status().isOk())
+                .andReturn();
+        ModelAndView modelAndView = mvcResult.getModelAndView();
+        assertViewName(modelAndView, "resume-share-success");
     }
 }

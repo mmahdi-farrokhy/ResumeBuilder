@@ -2,7 +2,6 @@ package com.mmf.resumeBuilder.service;
 
 import com.mmf.resumeBuilder.model.resume.Resume;
 import com.mmf.resumeBuilder.model.resume.ResumeSection;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.List;
 
@@ -11,7 +10,9 @@ public interface ResumeService {
 
     void save(Resume resume);
 
-    void deleteResume(Integer resumeId);
+    void delete(Integer resumeId);
+
+    void delete(Resume resume);
 
     <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType);
 
@@ -21,7 +22,9 @@ public interface ResumeService {
 
     <RS extends ResumeSection> void addSection(RS resumeSection);
 
-    void downloadResume(Integer resumeId);
+    void downloadResume(Resume resume);
 
     List<Resume> findAllByUserId(Integer userId);
+
+    void share(Resume resume);
 }

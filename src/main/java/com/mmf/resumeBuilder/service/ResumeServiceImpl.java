@@ -28,8 +28,13 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public void deleteResume(Integer resumeId) {
+    public void delete(Integer resumeId) {
         resumeDAO.delete(resumeId);
+    }
+
+    @Override
+    public void delete(Resume resume) {
+        resumeDAO.delete(resume);
     }
 
     @Override
@@ -53,13 +58,17 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public void downloadResume(Integer resumeId) {
+    public void downloadResume(Resume resume) {
 
     }
 
     @Override
     public List<Resume> findAllByUserId(Integer userId) {
-//        return resumeDAO.findAllByUserId(userId);
-        return null;
+        return resumeDAO.findAllByUserId(userId);
+    }
+
+    @Override
+    public void share(Resume resume) {
+
     }
 }

@@ -15,6 +15,8 @@ public interface ResumeDAO {
 
     void delete(Integer resumeId);
 
+    void delete(Resume resume);
+
     <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType);
 
     void updateSection(ResumeSection updatingSection);
