@@ -153,7 +153,6 @@ public enum Major {
     French_Language,
     Russian_Language,
     Chinese_Language,
-    aas,
     German_Language;
 
     @Override
