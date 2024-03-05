@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.controller;
 
-import com.mmf.resumeBuilder.model.AppUser;
+import com.mmf.resumeBuilder.entity.AppUser;
 import com.mmf.resumeBuilder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

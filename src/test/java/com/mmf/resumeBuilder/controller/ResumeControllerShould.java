@@ -1,9 +1,9 @@
 package com.mmf.resumeBuilder.controller;
 
 import com.mmf.resumeBuilder.DatabaseTest;
-import com.mmf.resumeBuilder.enums.UserRole;
-import com.mmf.resumeBuilder.model.AppUser;
-import com.mmf.resumeBuilder.model.resume.Resume;
+import com.mmf.resumeBuilder.constants.UserRole;
+import com.mmf.resumeBuilder.entity.AppUser;
+import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.service.ResumeService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

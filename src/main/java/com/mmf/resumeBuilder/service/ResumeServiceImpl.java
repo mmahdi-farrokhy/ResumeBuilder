@@ -1,8 +1,8 @@
 package com.mmf.resumeBuilder.service;
 
-import com.mmf.resumeBuilder.data.dao.ResumeDAO;
-import com.mmf.resumeBuilder.model.resume.Resume;
-import com.mmf.resumeBuilder.model.resume.ResumeSection;
+import com.mmf.resumeBuilder.repository.ResumeDAO;
+import com.mmf.resumeBuilder.entity.resume.Resume;
+import com.mmf.resumeBuilder.entity.resume.ResumeSection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

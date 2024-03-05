@@ -1,20 +1,20 @@
 package com.mmf.resumeBuilder;
 
-import com.mmf.resumeBuilder.enums.UserRole;
-import com.mmf.resumeBuilder.enums.contactinformation.ContactType;
-import com.mmf.resumeBuilder.enums.education.DegreeLevel;
-import com.mmf.resumeBuilder.enums.education.Major;
-import com.mmf.resumeBuilder.enums.hardskill.HardSkillLevel;
-import com.mmf.resumeBuilder.enums.hardskill.HardSkillType;
-import com.mmf.resumeBuilder.enums.job.JobCategory;
-import com.mmf.resumeBuilder.enums.job.JobStatus;
-import com.mmf.resumeBuilder.enums.language.LanguageLevel;
-import com.mmf.resumeBuilder.enums.language.LanguageName;
-import com.mmf.resumeBuilder.enums.location.City;
-import com.mmf.resumeBuilder.enums.project.ProjectStatus;
-import com.mmf.resumeBuilder.enums.user.detail.*;
-import com.mmf.resumeBuilder.model.AppUser;
-import com.mmf.resumeBuilder.model.resume.*;
+import com.mmf.resumeBuilder.constants.UserRole;
+import com.mmf.resumeBuilder.constants.contactinformation.ContactType;
+import com.mmf.resumeBuilder.constants.education.DegreeLevel;
+import com.mmf.resumeBuilder.constants.education.Major;
+import com.mmf.resumeBuilder.constants.hardskill.HardSkillLevel;
+import com.mmf.resumeBuilder.constants.hardskill.HardSkillType;
+import com.mmf.resumeBuilder.constants.job.JobCategory;
+import com.mmf.resumeBuilder.constants.job.JobStatus;
+import com.mmf.resumeBuilder.constants.language.LanguageLevel;
+import com.mmf.resumeBuilder.constants.language.LanguageName;
+import com.mmf.resumeBuilder.constants.location.City;
+import com.mmf.resumeBuilder.constants.project.ProjectStatus;
+import com.mmf.resumeBuilder.constants.user.detail.*;
+import com.mmf.resumeBuilder.entity.AppUser;
+import com.mmf.resumeBuilder.entity.resume.*;
 
 import java.time.LocalDate;
 

@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.validation;
 
-import com.mmf.resumeBuilder.model.AppUser;
+import com.mmf.resumeBuilder.entity.AppUser;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

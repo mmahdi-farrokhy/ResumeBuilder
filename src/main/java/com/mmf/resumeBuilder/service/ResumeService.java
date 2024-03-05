@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder.service;
 
-import com.mmf.resumeBuilder.model.resume.Resume;
-import com.mmf.resumeBuilder.model.resume.ResumeSection;
+import com.mmf.resumeBuilder.entity.resume.Resume;
+import com.mmf.resumeBuilder.entity.resume.ResumeSection;
 
 import java.util.List;
 

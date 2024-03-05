@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder.service;
 
-import com.mmf.resumeBuilder.data.dao.AppUserDAO;
-import com.mmf.resumeBuilder.model.AppUser;
+import com.mmf.resumeBuilder.repository.AppUserDAO;
+import com.mmf.resumeBuilder.entity.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

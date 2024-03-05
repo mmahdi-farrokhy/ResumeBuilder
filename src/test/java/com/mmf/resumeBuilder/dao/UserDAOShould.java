@@ -1,9 +1,9 @@
 package com.mmf.resumeBuilder.dao;
 
 import com.mmf.resumeBuilder.ResumeBuilderApplication;
-import com.mmf.resumeBuilder.data.dao.AppUserDAO;
-import com.mmf.resumeBuilder.enums.UserRole;
-import com.mmf.resumeBuilder.model.AppUser;
+import com.mmf.resumeBuilder.repository.AppUserDAO;
+import com.mmf.resumeBuilder.constants.UserRole;
+import com.mmf.resumeBuilder.entity.AppUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

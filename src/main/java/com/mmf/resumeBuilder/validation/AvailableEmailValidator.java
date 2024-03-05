@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.validation;
 
-import com.mmf.resumeBuilder.data.dao.AppUserDAO;
+import com.mmf.resumeBuilder.repository.AppUserDAO;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;

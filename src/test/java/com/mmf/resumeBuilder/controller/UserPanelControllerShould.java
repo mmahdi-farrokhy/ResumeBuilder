@@ -1,8 +1,8 @@
 package com.mmf.resumeBuilder.controller;
 
-import com.mmf.resumeBuilder.data.dao.AppUserDAO;
-import com.mmf.resumeBuilder.enums.UserRole;
-import com.mmf.resumeBuilder.model.AppUser;
+import com.mmf.resumeBuilder.repository.AppUserDAO;
+import com.mmf.resumeBuilder.constants.UserRole;
+import com.mmf.resumeBuilder.entity.AppUser;
 import com.mmf.resumeBuilder.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
