@@ -1,13 +1,13 @@
 package com.mmf.resumeBuilder.service;
 
-import com.mmf.resumeBuilder.entity.AppUser;
+import com.mmf.resumeBuilder.entity.User;
 
 public interface UserService {
-    void saveUser(AppUser user);
-
-    AppUser fetchUser(Integer userId);
+    User saveUser(User user);
 
     boolean existsByEmail(String email);
 
-    AppUser findByEmail(String email);
+    User findByEmail(String email);
+
+    User updateUser(User user, String userEmail);
 }
