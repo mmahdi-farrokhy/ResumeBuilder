@@ -2,20 +2,15 @@ package com.mmf.resumeBuilder.service;
 
 import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.exception.DuplicatedEmailException;
-import com.mmf.resumeBuilder.exception.EmailNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public User saveUser(User user) {
@@ -23,7 +18,6 @@ public class UserServiceImpl implements UserService {
             throw new DuplicatedEmailException("Email already taken");
         }
 
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

@@ -3,7 +3,6 @@ package com.mmf.resumeBuilder.service;
 import com.mmf.resumeBuilder.constants.UserRole;
 import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.exception.DuplicatedEmailException;
-import com.mmf.resumeBuilder.exception.EmailNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.UserRepository;
 import org.junit.Before;
@@ -13,7 +12,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,9 +24,6 @@ public class UserServiceImplShould {
     @Mock
     UserRepository userRepository;
 
-    @Mock
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @InjectMocks
     UserServiceImpl userService;
 
@@ -39,7 +34,6 @@ public class UserServiceImplShould {
     public void setUp() throws Exception {
         email = "mmahdifarrokhy@gmail.com";
         user = new User(email, "12345678", UserRole.User, null);
-        when(bCryptPasswordEncoder.encode("12345678")).thenReturn("$2a$10$gnqamgTMs8NCFutulXDt1eDWfDUZEC.vNop6..hsg.DvyIMo6tqr6");
     }
 
     @Test
