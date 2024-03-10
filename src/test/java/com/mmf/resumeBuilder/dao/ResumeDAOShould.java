@@ -1,8 +1,8 @@
 package com.mmf.resumeBuilder.dao;
 
-import com.mmf.resumeBuilder.repository.AppUserDAO;
+import com.mmf.resumeBuilder.repository.UserRepository;
 import com.mmf.resumeBuilder.constants.UserRole;
-import com.mmf.resumeBuilder.entity.AppUser;
+import com.mmf.resumeBuilder.entity.User;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,15 +17,13 @@ import org.springframework.test.context.TestPropertySource;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ResumeDAOShould {
     @Autowired
-    AppUser user;
+    User user;
 
     @MockBean
-    AppUserDAO userDAO;
+    UserRepository userDAO;
 
     @BeforeEach
     public void init() {
-        user.setFirstName("Mohammad Mahdi");
-        user.setLastName("Farrokhy");
         user.setEmail("mmahdi.farrokhy@gmail.com");
         user.setRole(UserRole.User);
     }

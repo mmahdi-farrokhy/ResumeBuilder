@@ -13,19 +13,16 @@ import com.mmf.resumeBuilder.constants.language.LanguageName;
 import com.mmf.resumeBuilder.constants.location.City;
 import com.mmf.resumeBuilder.constants.project.ProjectStatus;
 import com.mmf.resumeBuilder.constants.user.detail.*;
-import com.mmf.resumeBuilder.entity.AppUser;
+import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.entity.resume.*;
 
 import java.time.LocalDate;
 
 public class DatabaseTest {
-    public static AppUser createAppUser(Resume resume) {
-        AppUser appUser = new AppUser();
-        appUser.setFirstName("Mohammadmahdi");
-        appUser.setLastName("Farrokhy");
+    public static User createAppUser(Resume resume) {
+        User appUser = new User();
         appUser.setEmail("mmahdifarrokhy12345678@gmail.com");
         appUser.setPassword("11111111");
-        appUser.setPasswordConfirmation("11111111");
         appUser.setRole(UserRole.User);
         appUser.addResume(resume);
         return appUser;

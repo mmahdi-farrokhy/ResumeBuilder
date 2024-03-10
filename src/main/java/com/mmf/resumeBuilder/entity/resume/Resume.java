@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.entity.resume;
 
-import com.mmf.resumeBuilder.entity.AppUser;
+import com.mmf.resumeBuilder.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -83,7 +83,7 @@ public class Resume implements Cloneable {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "app_user_id")
-    private AppUser appUser;
+    private User appUser;
 
     public <T extends ResumeSection> void addSection(T section) {
         if (section instanceof ContactMethod) {

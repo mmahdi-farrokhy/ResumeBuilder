@@ -5,7 +5,8 @@ import com.mmf.resumeBuilder.entity.resume.ResumeSection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,49 +15,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ResumeDAOImpl implements ResumeDAO {
+@RequiredArgsConstructor
+public class ResumeRepositoryImpl implements ResumeRepository {
     public static final String ROOT_QUERY = "select r from Resume r LEFT JOIN FETCH r.resumeSection where r.id = :resumeId";
+
+    @NonNull
     private final EntityManager entityManager;
 
-    @Autowired
-    public ResumeDAOImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    public ResumeDAOImpl() {
-        entityManager = null;
-    }
-
     @Override
-    public List<Resume> findAll() {
+    public List<Resume> findAllResumes() {
         String sql = "select * from Resume";
         Query query = entityManager.createNativeQuery(sql, Resume.class);
         return query.getResultList();
     }
 
     @Override
-    public Resume findById(int resumeId) {
+    public Resume findResumeById(int resumeId) {
         return entityManager.find(Resume.class, resumeId);
     }
 
     @Override
     @Transactional
-    public void save(Resume resume) {
+    public Resume saveResume(Resume resume) {
         entityManager.persist(resume);
+        return resume;
     }
 
     @Override
-    public void delete(Integer resumeId) {
+    public void deleteResume(Integer resumeId) {
         entityManager.remove(resumeId);
     }
 
     @Override
-    public void delete(Resume resume) {
+    public void deleteResume(Resume resume) {
         entityManager.remove(resume);
     }
 
     @Override
-    public <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType) {
+    public <RS extends ResumeSection> List<RS> findResumeSection(Integer resumeId, Class<RS> sectionType) {
         TypedQuery<Resume> query = entityManager.createQuery(queryString(sectionType), Resume.class);
         query.setParameter("resumeId", resumeId);
         return getResumeSections(query.getSingleResult(), sectionType);
@@ -118,13 +114,13 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     @Transactional
-    public void updateSection(ResumeSection updatingSection) {
+    public void updateResumeSection(ResumeSection updatingSection) {
         entityManager.merge(updatingSection);
     }
 
     @Override
     @Transactional
-    public void deleteSection(ResumeSection deletingSection) {
+    public void deleteResumeSection(ResumeSection deletingSection) {
         try {
             Class<? extends ResumeSection> sectionType = deletingSection.getClass();
             int sectionId = getSectionId(deletingSection, sectionType);
@@ -153,14 +149,14 @@ public class ResumeDAOImpl implements ResumeDAO {
 
     @Override
     @Transactional
-    public <RS extends ResumeSection> void addSection(RS resumeSection) {
+    public <RS extends ResumeSection> void addResumeSection(RS resumeSection) {
         entityManager.persist(resumeSection);
     }
 
     @Override
-    public List<Resume> findAllByUserId(Integer userId) {
-        Query query = entityManager.createQuery("SELECT r FROM Resume r WHERE r.appUser.id = :userId");
-        query.setParameter("userId", userId);
+    public List<Resume> findAllResumesByUserEmail(String userEmail) {
+        Query query = entityManager.createQuery("SELECT r FROM Resume r WHERE r.appUser.email = :userEmail");
+        query.setParameter("userEmail", userEmail);
         return (List<Resume>) query.getResultList();
     }
 }
