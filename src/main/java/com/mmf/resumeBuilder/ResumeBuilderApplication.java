@@ -1,8 +1,8 @@
 package com.mmf.resumeBuilder;
 
-import com.mmf.resumeBuilder.repository.AppUserDAO;
-import com.mmf.resumeBuilder.repository.ResumeDAO;
-import com.mmf.resumeBuilder.entity.AppUser;
+import com.mmf.resumeBuilder.repository.UserRepository;
+import com.mmf.resumeBuilder.repository.ResumeRepository;
+import com.mmf.resumeBuilder.entity.User;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,12 +16,12 @@ public class ResumeBuilderApplication {
     }
 
     @Bean
-    AppUser injectUser() {
-        return new AppUser();
+    User injectUser() {
+        return new User();
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(ResumeDAO resumeDAO, AppUserDAO userDAO) {
+    public CommandLineRunner commandLineRunner(ResumeRepository resumeDAO, UserRepository userDAO) {
         return runner -> {
         };
     }

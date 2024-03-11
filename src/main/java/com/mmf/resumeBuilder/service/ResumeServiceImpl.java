@@ -1,74 +1,124 @@
 package com.mmf.resumeBuilder.service;
 
-import com.mmf.resumeBuilder.repository.ResumeDAO;
 import com.mmf.resumeBuilder.entity.resume.Resume;
-import com.mmf.resumeBuilder.entity.resume.ResumeSection;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mmf.resumeBuilder.exception.InvalidResumeException;
+import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
+import com.mmf.resumeBuilder.exception.UserNotFoundException;
+import com.mmf.resumeBuilder.repository.ResumeJPARepository;
+import com.mmf.resumeBuilder.repository.ResumeRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
-    private ResumeDAO resumeDAO;
+    private final ResumeRepository resumeRepository;
+    private final ResumeJPARepository resumeJPARepository;
 
-    @Autowired
-    public ResumeServiceImpl(ResumeDAO resumeDAO) {
-        this.resumeDAO = resumeDAO;
+    @Override
+    public Resume findResumeById(int resumeId) {
+        Optional<Resume> resume = resumeJPARepository.findById(resumeId);
+        if (resume.isEmpty()) {
+            throw new ResumeNotFoundException(resumeId);
+        }
+
+        return resume.get();
+//        return resumeRepository.findResumeById(resumeId);
     }
 
     @Override
-    public Resume findById(int resumeId) {
-        return resumeDAO.findById(resumeId);
+    public Resume saveResume(Resume resume) {
+        if (resume.getUser() == null) {
+            throw new InvalidResumeException();
+        }
+
+        return resumeJPARepository.save(resume);
+//        return resumeRepository.saveResume(resume);
     }
 
     @Override
-    public void save(Resume resume) {
-        resumeDAO.save(resume);
+    public void deleteResume(Integer resumeId) {
+        Optional<Resume> resume = resumeJPARepository.findById(resumeId);
+        if (resume.isEmpty()) {
+            throw new ResumeNotFoundException(resumeId);
+        }
+
+        resumeJPARepository.delete(resume.get());
+//        resumeRepository.deleteResume(resumeId);
     }
 
     @Override
-    public void delete(Integer resumeId) {
-        resumeDAO.delete(resumeId);
+    public void deleteResume(Resume resume) {
+        if (!resumeJPARepository.existsById(resume.getId())) {
+            throw new ResumeNotFoundException(resume.getId());
+        }
+
+        resumeJPARepository.delete(resume);
+//        resumeRepository.deleteResume(resume);
     }
 
     @Override
-    public void delete(Resume resume) {
-        resumeDAO.delete(resume);
+    public Resume updateResume(Resume resume, Integer resumeId) {
+        if (!resumeJPARepository.existsById(resumeId)) {
+            throw new ResumeNotFoundException(resumeId);
+        }
+
+        Resume unwrappedResume = copyResume(resume);
+        return resumeJPARepository.save(unwrappedResume);
+    }
+
+    private Resume copyResume(Resume resume) {
+        Resume newResume = new Resume();
+        newResume.setId(resume.getId());
+        newResume.setPersonalInformation(resume.getPersonalInformation());
+        newResume.setContactInformation(resume.getContactInformation());
+        newResume.setSummary(resume.getSummary());
+        newResume.setEducations(resume.getEducations());
+        newResume.setTeachingAssistance(resume.getTeachingAssistance());
+        newResume.setJobExperiences(resume.getJobExperiences());
+        newResume.setFormerColleagues(resume.getFormerColleagues());
+        newResume.setResearches(resume.getResearches());
+        newResume.setCourses(resume.getCourses());
+        newResume.setHardSkills(resume.getHardSkills());
+        newResume.setSoftSkills(resume.getSoftSkills());
+        newResume.setLanguages(resume.getLanguages());
+        newResume.setProjects(resume.getProjects());
+        newResume.setPatents(resume.getPatents());
+        newResume.setPresentations(resume.getPresentations());
+        newResume.setAwards(resume.getAwards());
+        newResume.setPresentations(resume.getPresentations());
+        newResume.setVolunteerActivities(resume.getVolunteerActivities());
+        newResume.setMemberships(resume.getMemberships());
+        newResume.setHobbies(resume.getHobbies());
+        newResume.setUser(resume.getUser());
+        return newResume;
     }
 
     @Override
-    public <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType) {
-        return resumeDAO.fetchSection(resumeId, sectionType);
+    public Resume downloadResume(Integer resumeId) {
+        Optional<Resume> resume = resumeJPARepository.findById(resumeId);
+        if (resume.isEmpty()) {
+            throw new ResumeNotFoundException(resumeId);
+        }
+
+        String userDefPath = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop";
+        String filePath = userDefPath + "\\My Resume.docx";
+        DocumentGenerator.generateResumeDocument(resume.get(), filePath);
+        return resume.get();
+        //        return resumeRepository.findResumeById(resumeId);
     }
 
     @Override
-    public void updateSection(ResumeSection updatingSection) {
-        resumeDAO.updateSection(updatingSection);
-    }
+    public List<Resume> findAllResumesByUserEmail(String userEmail) {
+        Optional<List<Resume>> allResumes = resumeJPARepository.findAllResumesByUserEmail(userEmail);
+        if (allResumes.isEmpty()) {
+            throw new UserNotFoundException(userEmail);
+        }
 
-    @Override
-    public void deleteSection(ResumeSection deletingSection) {
-        resumeDAO.deleteSection(deletingSection);
-    }
-
-    @Override
-    public <RS extends ResumeSection> void addSection(RS resumeSection) {
-        resumeDAO.addSection(resumeSection);
-    }
-
-    @Override
-    public void downloadResume(Resume resume) {
-
-    }
-
-    @Override
-    public List<Resume> findAllByUserId(Integer userId) {
-        return resumeDAO.findAllByUserId(userId);
-    }
-
-    @Override
-    public void share(Resume resume) {
-
+        return allResumes.get();
+//        return resumeRepository.findAllResumesByUserEmail(userEmail);
     }
 }

@@ -3,6 +3,7 @@ package com.mmf.resumeBuilder.service;
 import com.mmf.resumeBuilder.constants.UserRole;
 import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.exception.DuplicatedEmailException;
+import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.UserRepository;
 import org.junit.Before;
@@ -13,8 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -48,11 +48,11 @@ public class UserServiceImplShould {
         assertTrue(userService.existsByEmail(email));
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userArgumentCaptor.capture());
-        User capturedUSer = userArgumentCaptor.getValue();
-        assertThat(capturedUSer.getEmail()).isEqualTo(user.getEmail());
-        assertThat(capturedUSer.getPassword()).isEqualTo(user.getPassword());
-        assertThat(capturedUSer.getRole()).isEqualTo(user.getRole());
-        assertThat(capturedUSer.getResumes()).isNull();
+        User capturedUser = userArgumentCaptor.getValue();
+        assertThat(capturedUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(capturedUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(capturedUser.getRole()).isEqualTo(user.getRole());
+        assertThat(capturedUser.getResumes()).isNull();
     }
 
     @Test
@@ -60,9 +60,10 @@ public class UserServiceImplShould {
         when(userRepository.existsByEmail(email)).thenReturn(true);
         assertTrue(userService.existsByEmail(email));
 
-        assertThatThrownBy(() -> userService.saveUser(user))
-                .isInstanceOf(DuplicatedEmailException.class)
-                .hasMessage("Email already taken");
+        assertThatExceptionOfType(DuplicatedEmailException.class)
+                .isThrownBy(() -> userService.saveUser(user))
+                .withMessage("Email already taken");
+
         verify(userRepository, never()).save(any());
     }
 
@@ -75,9 +76,10 @@ public class UserServiceImplShould {
     @Test
     public void find_a_user_by_its_email_and_throw_exception_if_the_email_does_not_exist() {
         when(userRepository.findByEmail(email)).thenReturn(null);
-        assertThatThrownBy(() -> userService.findByEmail(email))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("User with email " + email + " not found");
+
+        assertThatExceptionOfType(UserNotFoundException.class)
+                .isThrownBy(() -> userService.findByEmail(email))
+                .withMessage("User with email " + email + " not found");
     }
 
     @Test

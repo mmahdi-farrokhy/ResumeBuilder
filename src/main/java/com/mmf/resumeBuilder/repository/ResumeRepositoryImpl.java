@@ -5,8 +5,8 @@ import com.mmf.resumeBuilder.entity.resume.ResumeSection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ResumeRepositoryImpl implements ResumeRepository {
-    public static final String ROOT_QUERY = "select r from Resume r LEFT JOIN FETCH r.resumeSection where r.id = :resumeId";
 
-    @NonNull
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public List<Resume> findAllResumes() {
@@ -59,6 +57,7 @@ public class ResumeRepositoryImpl implements ResumeRepository {
     }
 
     private static <RS extends ResumeSection> String queryString(Class<RS> sectionType) {
+        final String ROOT_QUERY = "select r from Resume r LEFT JOIN FETCH r.resumeSection where r.id = :resumeId";
         String resumeSection = "";
         switch (sectionType.getSimpleName()) {
             case "ContactMethod" -> resumeSection = "contactInformation";

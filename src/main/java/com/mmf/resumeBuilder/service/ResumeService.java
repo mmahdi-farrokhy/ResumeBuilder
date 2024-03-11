@@ -6,25 +6,17 @@ import com.mmf.resumeBuilder.entity.resume.ResumeSection;
 import java.util.List;
 
 public interface ResumeService {
-    Resume findById(int resumeId);
+    Resume findResumeById(int resumeId);
 
-    void save(Resume resume);
+    Resume saveResume(Resume resume);
 
-    void delete(Integer resumeId);
+    void deleteResume(Integer resumeId);
 
-    void delete(Resume resume);
+    void deleteResume(Resume resume);
 
-    <RS extends ResumeSection> List<RS> fetchSection(Integer resumeId, Class<RS> sectionType);
+    Resume updateResume(Resume resume, Integer resumeId);
 
-    void updateSection(ResumeSection updatingSection);
+    Resume downloadResume(Integer resumeId);
 
-    void deleteSection(ResumeSection deletingSection);
-
-    <RS extends ResumeSection> void addSection(RS resumeSection);
-
-    void downloadResume(Resume resume);
-
-    List<Resume> findAllByUserId(Integer userId);
-
-    void share(Resume resume);
+    List<Resume> findAllResumesByUserEmail(String userEmail);
 }
