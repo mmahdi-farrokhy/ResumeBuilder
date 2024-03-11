@@ -2,7 +2,11 @@ package com.mmf.resumeBuilder.entity.resume;
 
 import com.mmf.resumeBuilder.entity.User;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -83,7 +87,8 @@ public class Resume implements Cloneable {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "app_user_id")
-    private User appUser;
+    @NotNull
+    private User user;
 
     public <T extends ResumeSection> void addSection(T section) {
         if (section instanceof ContactMethod) {

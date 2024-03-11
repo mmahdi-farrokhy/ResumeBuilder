@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "hard_skill")
 public class HardSkill extends ResumeSection {
@@ -18,14 +19,17 @@ public class HardSkill extends ResumeSection {
     private int id;
 
     @Column(name = "hard_skill_type")
+    @NonNull
     private HardSkillType type;
 
     @Column(name = "hard_skill_level")
     @Enumerated(EnumType.STRING)
+    @NonNull
     private HardSkillLevel level;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
+    @NonNull
     private Resume resume;
 
     @Override

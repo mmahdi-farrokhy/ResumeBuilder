@@ -37,7 +37,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Resume> resumes;
 
     public void addResume(Resume newResume) {
@@ -45,7 +45,7 @@ public class User {
             resumes = new LinkedList<>();
 
         resumes.add(newResume);
-        newResume.setAppUser(this);
+        newResume.setUser(this);
     }
 
     @Override
