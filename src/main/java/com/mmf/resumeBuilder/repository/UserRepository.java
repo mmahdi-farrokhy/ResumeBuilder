@@ -12,6 +12,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     User findByEmail(String email);
 
-    @Query("SELECT DISTINCT au FROM User au LEFT JOIN FETCH au.resumes WHERE au.email = :userEmail")
+    @Query("SELECT resumes FROM User WHERE email = :userEmail")
     Optional<User> findByEmailWithResumes(@Param("userEmail") Integer userEmail);
 }

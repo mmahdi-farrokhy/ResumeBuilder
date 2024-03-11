@@ -17,6 +17,7 @@ import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.entity.resume.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class DatabaseTest {
     public static User createAppUser(Resume resume) {
@@ -30,6 +31,7 @@ public class DatabaseTest {
 
     public static Resume createResume() {
         Resume resume = new Resume();
+        resume.setUser(new User("mmahdifarrokhy@gmail.com", "12345678", UserRole.User, List.of(resume)));
         resume.setPersonalInformation(createPersonalInformation());
         resume.addSection(createContactMethod(resume, ContactType.Email, "mmahdifarrokhy@gmail.com"));
         resume.addSection(DatabaseTest.createContactMethod(resume, ContactType.Phone_Number, "09190763415"));

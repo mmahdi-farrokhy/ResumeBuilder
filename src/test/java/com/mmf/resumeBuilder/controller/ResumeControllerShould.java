@@ -2,7 +2,7 @@ package com.mmf.resumeBuilder.controller;
 
 import com.mmf.resumeBuilder.DatabaseTest;
 import com.mmf.resumeBuilder.constants.UserRole;
-import com.mmf.resumeBuilder.entity.AppUser;
+import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.service.ResumeService;
 import org.junit.jupiter.api.*;
@@ -41,7 +41,7 @@ public class ResumeControllerShould {
     @MockBean
     ResumeService resumeService;
 
-    AppUser user;
+    User user;
     Resume resume;
     private List<Resume> expectedResumes;
     private List<Resume> expectedResumes2;
@@ -61,13 +61,9 @@ public class ResumeControllerShould {
         expectedResumes3 = new LinkedList<>();
         expectedResumes3.add(tmpResume);
 
-        user = new AppUser();
-        user.setId(1);
-        user.setFirstName("Mohammad Mahdi");
-        user.setLastName("Farrokhy");
+        user = new User();
         user.setEmail("mmahdifarrokhy@gmail.com");
         user.setPassword("123456578");
-        user.setPasswordConfirmation("123456578");
         user.setRole(UserRole.User);
         user.addResume(resume);
         user.addResume(tmpResume);
@@ -86,18 +82,14 @@ public class ResumeControllerShould {
     @Test
     @Order(1)
     void open_resume_html_containing_all_resumes_on_request_to_endpoint_resume() throws Exception {
-        when(resumeService.findAllByUserId(1)).thenReturn(expectedResumes);
-        when(resumeService.findAllByUserId(2)).thenReturn(expectedResumes2);
-        when(resumeService.findAllByUserId(3)).thenReturn(expectedResumes3);
+        when(resumeService.findAllResumesByUserEmail("mmahdifarrokhy@gmail.com")).thenReturn(expectedResumes);
+        when(resumeService.findAllResumesByUserEmail("mmahdifarrokhy@gmail.com")).thenReturn(expectedResumes2);
+        when(resumeService.findAllResumesByUserEmail("mmahdifarrokhy@gmail.com")).thenReturn(expectedResumes3);
 
         MvcResult mvcResult = mockMvc.perform(get("/resume")
                         .flashAttr("user", user)
-                        .param("id", String.valueOf(user.getId()))
-                        .param("firstName", user.getFirstName())
-                        .param("lastName", user.getLastName())
                         .param("email", user.getEmail())
                         .param("password", user.getPassword())
-                        .param("passwordConfirmation", user.getPasswordConfirmation())
                         .param("role", user.getRole().toString()))
                 .andExpect(model().attribute("user", user))
                 .andExpect(status().isOk())
@@ -105,17 +97,13 @@ public class ResumeControllerShould {
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "resume");
         assertModelAttributeValue(modelAndView, "resumes", expectedResumes);
-        verify(resumeService, times(1)).findAllByUserId(1);
+        verify(resumeService, times(1)).findAllResumesByUserEmail("mmahdifarrokhy@gmail.com");
 
-        user.setId(2);
+        user.setEmail("mmahdifarrokhy@gmail.com");
         mvcResult = mockMvc.perform(get("/resume")
                         .flashAttr("user", user)
-                        .param("id", String.valueOf(user.getId()))
-                        .param("firstName", user.getFirstName())
-                        .param("lastName", user.getLastName())
                         .param("email", user.getEmail())
                         .param("password", user.getPassword())
-                        .param("passwordConfirmation", user.getPasswordConfirmation())
                         .param("role", user.getRole().toString()))
                 .andExpect(model().attribute("user", user))
                 .andExpect(status().isOk())
@@ -123,17 +111,13 @@ public class ResumeControllerShould {
         modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "resume");
         assertModelAttributeValue(modelAndView, "resumes", expectedResumes2);
-        verify(resumeService, times(1)).findAllByUserId(2);
+        verify(resumeService, times(1)).findAllResumesByUserEmail("mmahdifarrokhy@gmail.com");
 
-        user.setId(3);
+        user.setEmail("mmahdifarrokhy@gmail.com");
         mvcResult = mockMvc.perform(get("/resume")
                         .flashAttr("user", user)
-                        .param("id", String.valueOf(user.getId()))
-                        .param("firstName", user.getFirstName())
-                        .param("lastName", user.getLastName())
                         .param("email", user.getEmail())
                         .param("password", user.getPassword())
-                        .param("passwordConfirmation", user.getPasswordConfirmation())
                         .param("role", user.getRole().toString()))
                 .andExpect(model().attribute("user", user))
                 .andExpect(status().isOk())
@@ -141,7 +125,7 @@ public class ResumeControllerShould {
         modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "resume");
         assertModelAttributeValue(modelAndView, "resumes", expectedResumes3);
-        verify(resumeService, times(1)).findAllByUserId(3);
+        verify(resumeService, times(1)).findAllResumesByUserEmail("mmahdifarrokhy@gmail.com");
     }
 
     @Test
@@ -153,7 +137,7 @@ public class ResumeControllerShould {
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "redirect:/resume/delete/success");
-        verify(resumeService, times(1)).delete(resume);
+        verify(resumeService, times(1)).deleteResume(resume);
     }
 
     @Test
@@ -175,7 +159,7 @@ public class ResumeControllerShould {
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "redirect:/resume/download/success");
-        verify(resumeService, times(1)).downloadResume(resume);
+        verify(resumeService, times(1)).downloadResume(resume.getId());
     }
 
     @Test
@@ -197,7 +181,7 @@ public class ResumeControllerShould {
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "redirect:/resume/edit/success");
-        verify(resumeService, times(1)).save(resume);
+        verify(resumeService, times(1)).saveResume(resume);
     }
 
     @Test
@@ -208,18 +192,6 @@ public class ResumeControllerShould {
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "resume-edit-success");
-    }
-
-    @Test
-    @Order(5)
-    void redirect_to_endpoint_resume_share_success_on_request_to_endpoint_resume_share_id() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/resume/share")
-                        .flashAttr("resume", resume))
-                .andExpect(status().is(302))
-                .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "redirect:/resume/share/success");
-        verify(resumeService, times(1)).share(resume);
     }
 
     @Test

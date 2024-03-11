@@ -1,16 +1,17 @@
 package com.mmf.resumeBuilder.controller;
 
-import com.mmf.resumeBuilder.entity.AppUser;
 import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.service.ResumeService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller()
-@RequestMapping("/resume")
+@RequestMapping("/api/v1/resume")
 public class ResumeController {
     ResumeService resumeService;
 
@@ -19,53 +20,29 @@ public class ResumeController {
         this.resumeService = resumeService;
     }
 
-    @GetMapping("")
-    public String showResumePage(@ModelAttribute AppUser user, Model model) {
-        model.addAttribute("resumes", resumeService.findAllByUserId(user.getId()));
-        return "resume";
+    @PostMapping("")
+    public ResponseEntity<Resume> createResume(@RequestBody Resume resume) {
+        return new ResponseEntity<>(resumeService.saveResume(resume), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete")
-    public String deleteResume(@ModelAttribute Resume resume) {
-        resumeService.delete(resume);
-        return "redirect:/resume/delete/success";
+    @DeleteMapping("{id}")
+    public ResponseEntity<HttpStatus> deleteResume(@PathVariable int id) {
+        resumeService.deleteResume(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/delete/success")
-    public String showResumeDeleteSuccessPage() {
-        return "resume-delete-success";
+    @GetMapping("{id}")
+    public ResponseEntity<Resume> downloadResume(@PathVariable int id) {
+        return new ResponseEntity<>(resumeService.downloadResume(id), HttpStatus.OK);
     }
 
-    @GetMapping("/download")
-    public String downloadResume(@ModelAttribute Resume resume) {
-        resumeService.downloadResume(resume);
-        return "redirect:/resume/download/success";
+    @GetMapping("/all/{email}")
+    public ResponseEntity<List<Resume>> findAllResumes(@PathVariable String email) {
+        return new ResponseEntity<>(resumeService.findAllResumesByUserEmail(email), HttpStatus.OK);
     }
 
-    @GetMapping("/download/success")
-    public String showResumeDownloadSuccessPage() {
-        return "resume-download-success";
-    }
-
-    @PostMapping("/edit")
-    public String editResume(@Valid @ModelAttribute("resume") Resume resume) {
-        resumeService.save(resume);
-        return "redirect:/resume/edit/success";
-    }
-
-    @GetMapping("/edit/success")
-    public String showResumeEditSuccessPage() {
-        return "resume-edit-success";
-    }
-
-    @GetMapping("/share")
-    public String shareResume(@Valid @ModelAttribute("resume") Resume resume) {
-        resumeService.share(resume);
-        return "redirect:/resume/share/success";
-    }
-
-    @GetMapping("/share/success")
-    public String showResumeShareSuccessPage() {
-        return "resume-share-success";
+    @PostMapping("/{id}")
+    public ResponseEntity<Resume> updateResume(@RequestBody Resume resume, @PathVariable int id) {
+        return new ResponseEntity<>(resumeService.updateResume(resume, id), HttpStatus.OK);
     }
 }
