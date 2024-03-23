@@ -34,7 +34,8 @@ public class DatabaseTest {
         resume.setUser(new User("mmahdifarrokhy@gmail.com", "12345678", UserRole.User, List.of(resume)));
         resume.setPersonalInformation(createPersonalInformation());
         resume.addSection(createContactMethod(resume, ContactType.Email, "mmahdifarrokhy@gmail.com"));
-        resume.addSection(DatabaseTest.createContactMethod(resume, ContactType.Phone_Number, "09190763415"));
+        resume.addSection(createContactMethod(resume, ContactType.Phone_Number, "09190763415"));
+        resume.addSection(createContactMethod(resume, ContactType.Address, "Tehran, Pardis County"));
         resume.setSummary(createSummary());
         resume.addSection(createEducation(resume));
         resume.addSection(createTeachingAssistance(resume));
