@@ -19,3 +19,5 @@ target/
 *.iml
 *.ipr
 *.vsdx
+
+/src/main/resumes
