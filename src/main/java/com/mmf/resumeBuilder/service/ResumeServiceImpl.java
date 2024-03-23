@@ -99,15 +99,15 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public Resume downloadResume(Integer resumeId) {
-        Optional<Resume> resume = resumeJPARepository.findById(resumeId);
-        if (resume.isEmpty()) {
+        Optional<Resume> optionalResume = resumeJPARepository.findById(resumeId);
+        if (optionalResume.isEmpty()) {
             throw new ResumeNotFoundException(resumeId);
         }
 
-        String userDefPath = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop";
-        String filePath = userDefPath + "\\My Resume.docx";
-        DocumentGenerator.generateResumeDocument(resume.get(), filePath);
-        return resume.get();
+        Resume resume = optionalResume.get();
+//        DocumentGenerator.generateResumeDocument(resume);
+        DocumentGenerator.generateDocument(resume);
+        return resume;
         //        return resumeRepository.findResumeById(resumeId);
     }
 
