@@ -67,4 +67,8 @@ public class PersonalInformation extends ResumeSection {
                 ", disabilityType=" + disabilityType + "\n" +
                 '}';
     }
+
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
 }
