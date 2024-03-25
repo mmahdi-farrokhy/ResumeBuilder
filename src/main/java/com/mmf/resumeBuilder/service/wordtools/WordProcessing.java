@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder.service.wordtools;
 
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
 
 public class WordProcessing {
     public static final String TITLE_COLOR = "262626";
@@ -35,6 +35,29 @@ public class WordProcessing {
         run.setBold(bold);
     }
 
+    public static void createHyperlinkRun(XWPFParagraph paragraph, String uri, String description) {
+        String rId = paragraph
+                .getDocument()
+                .getPackagePart()
+                .addExternalRelationship(uri, XWPFRelation.HYPERLINK.getRelation())
+                .getId();
+
+        CTHyperlink cthyperLink = paragraph.getCTP().addNewHyperlink();
+        cthyperLink.setId(rId);
+        cthyperLink.addNewR();
+
+        XWPFHyperlinkRun hyperlinkRun = new XWPFHyperlinkRun(
+                cthyperLink,
+                cthyperLink.getRArray(0),
+                paragraph);
+
+        hyperlinkRun.setText(description);
+        hyperlinkRun.setColor(BODY_COLOR);
+        hyperlinkRun.setFontSize(BODY_SIZE);
+        hyperlinkRun.setFontFamily(BODY_FONT_FAMILY);
+        hyperlinkRun.setUnderline(UnderlinePatterns.SINGLE);
+    }
+
     public static void createTitleRun(XWPFParagraph paragraph, String text, int fontSize) {
         paragraph.getCTP().getPPr().addNewShd().setFill("F6EAEE");
         XWPFRun run = paragraph.createRun();
@@ -42,5 +65,9 @@ public class WordProcessing {
         run.setColor(TITLE_COLOR);
         run.setFontFamily(TITLE_FONT_FAMILY);
         run.setText(text);
+    }
+
+    public static void insertNewLine(XWPFParagraph paragraph) {
+        paragraph.createRun().addCarriageReturn();
     }
 }

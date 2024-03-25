@@ -106,7 +106,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         Resume resume = optionalResume.get();
 //        DocumentGenerator.generateResumeDocument(resume);
-        DocumentGenerator.generateDocument(resume);
+        DocumentGenerator.createNewWordDocument(resume);
         return resume;
         //        return resumeRepository.findResumeById(resumeId);
     }
