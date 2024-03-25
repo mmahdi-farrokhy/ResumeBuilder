@@ -18,6 +18,6 @@ public class LearnXWPFDocumentAPI {
 
     @Test
     void create_a_new_word_document_and_write_inside_it() {
-        DocumentGenerator.createNewWordDocument(resume);
+        DocumentGenerator.generateWordDocument(resume);
     }
 }
