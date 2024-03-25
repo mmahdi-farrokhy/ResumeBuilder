@@ -57,4 +57,49 @@ public class Language extends ResumeSection {
                 ", researchingLevel=" + researchingLevel + "\n" +
                 '}';
     }
+
+    public LanguageLevel estimateAverageLevel() {
+        int upperIntermediateLevels = countUpperIntermediateLevels();
+        LanguageLevel averageLevel;
+
+        if (this.speakingLevel == LanguageLevel.Native ||
+                this.writingLevel == LanguageLevel.Native ||
+                this.readingLevel == LanguageLevel.Native ||
+                this.listeningLevel == LanguageLevel.Native ||
+                this.researchingLevel == LanguageLevel.Native) {
+            averageLevel = LanguageLevel.Native;
+        } else if (upperIntermediateLevels == 5) {
+            averageLevel = LanguageLevel.Advanced;
+        } else if (upperIntermediateLevels == 4) {
+            averageLevel = LanguageLevel.Upper_Intermediate;
+        } else if (upperIntermediateLevels == 3) {
+            averageLevel = LanguageLevel.Intermediate;
+        } else if (upperIntermediateLevels == 2) {
+            averageLevel = LanguageLevel.Pre_Intermediate;
+        } else {
+            averageLevel = LanguageLevel.Basic;
+        }
+
+        return averageLevel;
+    }
+
+    private int countUpperIntermediateLevels() {
+        int upperIntermediateLevels = 0;
+
+        if (this.speakingLevel.compareTo(LanguageLevel.Intermediate) > 0)
+            upperIntermediateLevels++;
+
+        if (this.writingLevel.compareTo(LanguageLevel.Intermediate) > 0)
+            upperIntermediateLevels++;
+
+        if (this.readingLevel.compareTo(LanguageLevel.Intermediate) > 0)
+            upperIntermediateLevels++;
+
+        if (this.listeningLevel.compareTo(LanguageLevel.Intermediate) > 0)
+            upperIntermediateLevels++;
+
+        if (this.readingLevel.compareTo(LanguageLevel.Intermediate) > 0)
+            upperIntermediateLevels++;
+        return upperIntermediateLevels;
+    }
 }
