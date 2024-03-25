@@ -59,6 +59,10 @@ public class DatabaseTest {
         resume.addSection(createProject2(resume));
         resume.addSection(createPresentation(resume));
         resume.addSection(createMembership(resume, "Scientific Association of the Faculty of Computer Engineering", LocalDate.of(2019, 1, 1)));
+        resume.addSection(createHobby(resume, "Escape Room"));
+        resume.addSection(createPatent(resume));
+        resume.addSection(createVolunteerActivity(resume, "Beautime Startup Core Member", 2019));
+        resume.addSection(createVolunteerActivity(resume, "Creating Clean Code Documents", 2023));
         return resume;
     }
 
@@ -140,7 +144,7 @@ public class DatabaseTest {
         research.setTitle("Researching about Clean Code");
         research.setPublisher("Mohammad Mahdi Farrokhy");
         research.setReferenceLink("https://github.com/mmahdi-farrokhy/CleanCodeBook");
-        research.setDate(LocalDate.of(2022, 7, 1));
+        research.setDate(LocalDate.of(2023, 7, 1));
         research.setDescription("In this repository you can read the simplified summary of Clean Code book by Robert C. Martin in separated chapters.");
         research.setResume(resume);
         return research;
