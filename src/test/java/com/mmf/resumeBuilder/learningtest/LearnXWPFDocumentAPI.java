@@ -17,11 +17,6 @@ public class LearnXWPFDocumentAPI {
     }
 
     @Test
-    void learn_word_generation_api() {
-        DocumentGenerator.generateDocument(resume);
-    }
-
-    @Test
     void create_a_new_word_document_and_write_inside_it() {
         DocumentGenerator.createNewWordDocument(resume);
     }
