@@ -8,6 +8,8 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.mmf.resumeBuilder.service.wordtools.WordProcessing.*;
@@ -42,76 +44,78 @@ public class DocumentGenerator {
 
             if (personalInformation != null) {
                 createNameTitle(document, personalInformation);
-            }
 
-            if (contactInformation != null && !contactInformation.isEmpty()) {
-                addContactInformation(document, contactInformation);
-            }
+                if (contactInformation != null && !contactInformation.isEmpty()) {
+                    addContactInformation(document, contactInformation);
+                }
 
-            if (summary != null) {
-                addSummary(document, summary);
-            }
+                if (summary != null) {
+                    addSummary(document, summary);
+                }
 
-            if (jobExperiences != null && !jobExperiences.isEmpty()) {
-                addJobExperiencesToDocument(document, jobExperiences);
-            }
+                if (jobExperiences != null && !jobExperiences.isEmpty()) {
+                    addJobExperiencesToDocument(document, jobExperiences);
+                }
 
-            if (formerColleagues != null && !formerColleagues.isEmpty()) {
-                addFormerColleaguesToDocument(document, formerColleagues);
-            }
+                if (formerColleagues != null && !formerColleagues.isEmpty()) {
+                    addFormerColleaguesToDocument(document, formerColleagues);
+                }
 
-            if ((hardSkills != null && !hardSkills.isEmpty()) || (softSkills != null && !softSkills.isEmpty())) {
-                addSkillsToDocument(document, hardSkills, softSkills);
-            }
+                if ((hardSkills != null && !hardSkills.isEmpty()) || (softSkills != null && !softSkills.isEmpty())) {
+                    addSkillsToDocument(document, hardSkills, softSkills);
+                }
 
-            if (courses != null && !courses.isEmpty()) {
-                addCoursesToDocument(document, courses);
-            }
+                if (courses != null && !courses.isEmpty()) {
+                    addCoursesToDocument(document, courses);
+                }
 
-            if (projects != null && !projects.isEmpty()) {
-                addProjectsToDocument(document, projects);
-            }
+                if (projects != null && !projects.isEmpty()) {
+                    addProjectsToDocument(document, projects);
+                }
 
-            if (educations != null && !educations.isEmpty()) {
-                addEducationsToDocument(document, educations);
-            }
+                if (educations != null && !educations.isEmpty()) {
+                    addEducationsToDocument(document, educations);
+                }
 
-            if (teachingAssistance != null && !teachingAssistance.isEmpty()) {
-                addTeachingAssistanceToDocument(document, teachingAssistance);
-            }
+                if (teachingAssistance != null && !teachingAssistance.isEmpty()) {
+                    addTeachingAssistanceToDocument(document, teachingAssistance);
+                }
 
-            if (presentations != null && !presentations.isEmpty()) {
-                addPresentationsToDocument(document, presentations);
-            }
+                if (presentations != null && !presentations.isEmpty()) {
+                    addPresentationsToDocument(document, presentations);
+                }
 
-            if (patents != null && !patents.isEmpty()) {
-                addPatentsToDocument(document, patents);
-            }
+                if (patents != null && !patents.isEmpty()) {
+                    addPatentsToDocument(document, patents);
+                }
 
-            if (researches != null && !researches.isEmpty()) {
-                addResearchesToDocument(document, researches);
-            }
+                if (researches != null && !researches.isEmpty()) {
+                    addResearchesToDocument(document, researches);
+                }
 
-            if (languages != null && !languages.isEmpty()) {
-                addLanguagesToDocument(document, languages);
-            }
+                if (languages != null && !languages.isEmpty()) {
+                    addLanguagesToDocument(document, languages);
+                }
 
-            if (hobbies != null && !hobbies.isEmpty()) {
-                addHobbiesToDocument(document, hobbies);
-            }
+                if (hobbies != null && !hobbies.isEmpty()) {
+                    addHobbiesToDocument(document, hobbies);
+                }
 
-            if (memberships != null && !memberships.isEmpty()) {
-                addMembershipsToDocument(document, memberships);
-            }
+                if (memberships != null && !memberships.isEmpty()) {
+                    addMembershipsToDocument(document, memberships);
+                }
 
-            if (volunteerActivities != null && !volunteerActivities.isEmpty()) {
-                addVolunteerActivitiesToDocument(document, volunteerActivities);
-            }
+                if (volunteerActivities != null && !volunteerActivities.isEmpty()) {
+                    addVolunteerActivitiesToDocument(document, volunteerActivities);
+                }
 
-            FileOutputStream out = new FileOutputStream(STORE_PATH + "NameTest.docx");
-            document.write(out);
-            out.close();
-            document.close();
+                FileOutputStream out = new FileOutputStream(generateFilePath(personalInformation));
+                document.write(out);
+                out.close();
+                document.close();
+            } else {
+                throw new IOException("Contact information can not be empty");
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -487,5 +491,15 @@ public class DocumentGenerator {
             createBodyRun(bodyParagraph, volunteerActivity.getTitle() + " | " + volunteerActivity.getYear(), false);
             insertNewLine(bodyParagraph);
         }
+    }
+
+    private static String generateFilePath(PersonalInformation personalInformation) {
+        return STORE_PATH +
+                personalInformation.getFullName() +
+                " _ " +
+                LocalDate.now() +
+                " _ " +
+                LocalTime.now().getHour() + "-" + LocalTime.now().getMinute() + "-" + LocalTime.now().getSecond() +
+                ".docx";
     }
 }
