@@ -2,7 +2,6 @@ package com.mmf.resumeBuilder.service;
 
 import com.mmf.resumeBuilder.constants.contactinformation.ContactType;
 import com.mmf.resumeBuilder.entity.resume.*;
-import com.mmf.resumeBuilder.service.wordtools.WordProcessing;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -41,11 +40,38 @@ public class DocumentGenerator {
             createSkillsTitle(document, resume.getHardSkills(), resume.getSoftSkills());
             addSkills(document, resume.getHardSkills(), resume.getSoftSkills());
 
+            createCoursesTitle(document, resume.getCourses());
+            addCourses(document, resume.getCourses());
+
+            createProjectsTitle(document, resume.getProjects());
+            addProjects(document, resume.getProjects());
+
             createEducationTitle(document, resume.getEducations());
             addEducations(document, resume.getEducations());
 
-            createActivitiesTitle(document, resume.getHobbies());
-            addActivities(document, resume.getHobbies());
+            createTeachingAssistanceTitle(document, resume.getTeachingAssistance());
+            addTeachingAssistance(document, resume.getTeachingAssistance());
+
+            createPresentationsTitle(document, resume.getPresentations());
+            addPresentations(document, resume.getPresentations());
+
+            createPatentsTitle(document, resume.getPatents());
+            addPatents(document, resume.getPatents());
+
+            createResearchesTitle(document, resume.getResearches());
+            addResearches(document, resume.getResearches());
+
+            createLanguagesTitle(document, resume.getLanguages());
+            addLanguages(document, resume.getLanguages());
+
+            createHobbiesTitle(document, resume.getHobbies());
+            addHobbies(document, resume.getHobbies());
+
+            createMembershipsTitle(document, resume.getMemberships());
+            addMemberships(document, resume.getMemberships());
+
+            createVolunteerActivitiesTitle(document, resume.getVolunteerActivities());
+            addVolunteerActivities(document, resume.getVolunteerActivities());
 
             FileOutputStream out = new FileOutputStream(STORE_PATH + "NameTest.docx");
             document.write(out);
@@ -56,7 +82,274 @@ public class DocumentGenerator {
         }
     }
 
-    private static void addActivities(XWPFDocument document, List<Hobby> hobbies) {
+    private static void addVolunteerActivities(XWPFDocument document, List<VolunteerActivity> volunteerActivities) {
+        if (volunteerActivities != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            for (VolunteerActivity volunteerActivity : volunteerActivities) {
+                paragraph.setIndentationLeft(INDENTATION);
+                addDashToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+                createBodyRun(paragraph, volunteerActivity.getTitle() + " | " + volunteerActivity.getYear(), false);
+                insertNewLine(paragraph);
+            }
+        }
+    }
+
+    private static void createVolunteerActivitiesTitle(XWPFDocument document, List<VolunteerActivity> volunteerActivities) {
+        if (volunteerActivities != null && !volunteerActivities.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Volunteer Activities", TITLE_SIZE);
+        }
+    }
+
+    private static void addMemberships(XWPFDocument document, List<Membership> memberships) {
+        if (memberships != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            for (Membership membership : memberships) {
+                paragraph.setIndentationLeft(INDENTATION);
+                addDashToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+                String presentationTitle = membership.getTitle() + " | " + membership.getDate();
+                createBodyRun(paragraph, presentationTitle, false);
+                insertNewLine(paragraph);
+            }
+        }
+    }
+
+    private static void createMembershipsTitle(XWPFDocument document, List<Membership> memberships) {
+        if (memberships != null && !memberships.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Memberships", TITLE_SIZE);
+        }
+    }
+
+    private static void addLanguages(XWPFDocument document, List<Language> languages) {
+        if (languages != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            for (Language language : languages) {
+                paragraph.setIndentationLeft(INDENTATION);
+                String presentationTitle = language.getName() + " - " + language.estimateAverageLevel();
+                createBodyRun(paragraph, presentationTitle, false);
+                addBulletToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+            }
+
+            insertNewLine(paragraph);
+        }
+    }
+
+    private static void createLanguagesTitle(XWPFDocument document, List<Language> languages) {
+        if (languages != null && !languages.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Languages", TITLE_SIZE);
+        }
+    }
+
+    private static void addResearches(XWPFDocument document, List<Research> researches) {
+        if (researches != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            int researchNumber = 0;
+            for (Research research : researches) {
+                researchNumber++;
+                paragraph.setIndentationLeft(INDENTATION);
+                addDashToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+                String presentationTitle = research.getTitle() + " | " + research.getPublisher() + " | " + research.getDate();
+                createBodyRun(paragraph, presentationTitle, true);
+                insertNewLine(paragraph);
+
+                if (research.getReferenceLink() != null) {
+                    createHyperlinkRun(paragraph, research.getReferenceLink(), "Research link");
+                    insertNewLine(paragraph);
+                }
+
+                if (research.getDescription() != null) {
+                    createBodyRun(paragraph, research.getDescription(), false);
+                    insertNewLine(paragraph);
+                }
+
+                if (researchNumber < researches.size())
+                    insertNewLine(paragraph);
+            }
+        }
+    }
+
+    private static void createResearchesTitle(XWPFDocument document, List<Research> researches) {
+        if (researches != null && !researches.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Researches", TITLE_SIZE);
+        }
+    }
+
+    private static void addPatents(XWPFDocument document, List<Patent> patents) {
+        if (patents != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            int patentNumber = 0;
+            for (Patent patent : patents) {
+                patentNumber++;
+                paragraph.setIndentationLeft(INDENTATION);
+                addDashToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+                String presentationTitle = patent.getTitle() + " | " + patent.getRegistrationNumber() + " | " + patent.getRegistrationDate();
+                createBodyRun(paragraph, presentationTitle, true);
+                insertNewLine(paragraph);
+
+                if (patent.getReferenceLink() != null) {
+                    createHyperlinkRun(paragraph, patent.getReferenceLink(), "More about the patent");
+                    insertNewLine(paragraph);
+                }
+
+                if (patent.getDescription() != null) {
+                    createBodyRun(paragraph, patent.getDescription(), false);
+                    insertNewLine(paragraph);
+                }
+
+                if (patentNumber < patents.size())
+                    insertNewLine(paragraph);
+            }
+        }
+    }
+
+    private static void createPatentsTitle(XWPFDocument document, List<Patent> patents) {
+        if (patents != null && !patents.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Patents", TITLE_SIZE);
+        }
+    }
+
+    private static void addPresentations(XWPFDocument document, List<Presentation> presentations) {
+        if (presentations != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            int presentationNumber = 0;
+            for (Presentation presentation : presentations) {
+                presentationNumber++;
+                paragraph.setIndentationLeft(INDENTATION);
+                addDashToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+                String presentationTitle = presentation.getTitle() + " | " + presentation.getDate();
+                createBodyRun(paragraph, presentationTitle, true);
+                insertNewLine(paragraph);
+
+                if (presentation.getReferenceLink() != null) {
+                    createHyperlinkRun(paragraph, presentation.getReferenceLink(), "More about the presentation");
+                    insertNewLine(paragraph);
+                }
+
+                if (presentation.getDescription() != null) {
+                    createBodyRun(paragraph, presentation.getDescription(), false);
+                    insertNewLine(paragraph);
+                }
+
+                if (presentationNumber < presentations.size())
+                    insertNewLine(paragraph);
+            }
+        }
+    }
+
+    private static void createPresentationsTitle(XWPFDocument document, List<Presentation> presentations) {
+        if (presentations != null && !presentations.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Presentations", TITLE_SIZE);
+        }
+    }
+
+    private static void addTeachingAssistance(XWPFDocument document, List<TeachingAssistance> teachingAssistance) {
+        if (teachingAssistance != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            for (TeachingAssistance ta : teachingAssistance) {
+                paragraph.setIndentationLeft(INDENTATION);
+                addDashToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+                String teachingAssistanceTitle = ta.getTitle() + " | " + ta.getUniversity() + " | " + calculateDuration(ta.getStartDate(), ta.getEndDate());
+                createBodyRun(paragraph, teachingAssistanceTitle, false);
+                insertNewLine(paragraph);
+            }
+        }
+    }
+
+    private static void createTeachingAssistanceTitle(XWPFDocument document, List<TeachingAssistance> teachingAssistance) {
+        if (teachingAssistance != null && !teachingAssistance.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Teaching Assistance", TITLE_SIZE);
+        }
+    }
+
+    private static void addProjects(XWPFDocument document, List<Project> projects) {
+        if (projects != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            int projectNumber = 0;
+            for (Project project : projects) {
+                projectNumber++;
+                paragraph.setIndentationLeft(INDENTATION);
+                addDashToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+                String projectDuration = calculateDuration(project.getStartDate(), project.getEndDate());
+                String projectTitle = project.getName() + " | " + projectDuration + " | " + project.getStatus();
+
+                createBodyRun(paragraph, projectTitle, true);
+                insertNewLine(paragraph);
+                if (project.getReferenceLink() != null) {
+                    createHyperlinkRun(paragraph, project.getReferenceLink(), "Click to open the project");
+                    insertNewLine(paragraph);
+                }
+
+                if (project.getDescription() != null) {
+                    createBodyRun(paragraph, project.getDescription(), false);
+                    insertNewLine(paragraph);
+                }
+
+                if (projectNumber < projects.size())
+                    insertNewLine(paragraph);
+            }
+        }
+    }
+
+    private static void createProjectsTitle(XWPFDocument document, List<Project> projects) {
+        if (projects != null && !projects.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Projects", TITLE_SIZE);
+        }
+    }
+
+    private static void addCourses(XWPFDocument document, List<Course> courses) {
+        if (courses != null) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+            for (Course course : courses) {
+                paragraph.setIndentationLeft(INDENTATION);
+                addDashToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
+                createBodyRun(paragraph, course.getName() + " | " + course.getInstitute(), false);
+                insertNewLine(paragraph);
+            }
+        }
+    }
+
+    private static void createCoursesTitle(XWPFDocument document, List<Course> courses) {
+        if (courses != null && !courses.isEmpty()) {
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            createTitleRun(paragraph, "Courses", TITLE_SIZE);
+        }
+    }
+
+    private static void addHobbies(XWPFDocument document, List<Hobby> hobbies) {
         if (hobbies != null) {
             XWPFParagraph paragraph = document.createParagraph();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
@@ -67,39 +360,42 @@ public class DocumentGenerator {
                 addBulletToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
             }
 
-            paragraph.createRun().addCarriageReturn();
+            insertNewLine(paragraph);
         }
     }
 
-    private static void createActivitiesTitle(XWPFDocument document, List<Hobby> hobbies) {
+    private static void createHobbiesTitle(XWPFDocument document, List<Hobby> hobbies) {
         if (hobbies != null && !hobbies.isEmpty()) {
             XWPFParagraph paragraph = document.createParagraph();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
-            WordProcessing.createTitleRun(paragraph, "Activities", 16);
+            createTitleRun(paragraph, "Hobbies", TITLE_SIZE);
         }
     }
 
     private static void addEducations(XWPFDocument document, List<Education> educations) {
         if (educations != null) {
-        XWPFParagraph paragraph = document.createParagraph();
-        paragraph.setAlignment(ParagraphAlignment.LEFT);
+            XWPFParagraph paragraph = document.createParagraph();
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            int educationNumber = 0;
+            for (Education education : educations) {
+                educationNumber++;
+                paragraph.setIndentationLeft(INDENTATION);
+                createBodyRun(paragraph, calculateEducationDuration(education), false);
+                insertNewLine(paragraph);
+                createBodyRun(paragraph, extractEducationTitle(education), true);
+                insertNewLine(paragraph);
+            }
 
-        for (Education education : educations) {
-            paragraph.setIndentationLeft(INDENTATION);
-            createBodyRun(paragraph, extractEducationDuration(education), false);
-            paragraph.createRun().addCarriageReturn();
-            createBodyRun(paragraph, extractEducationTitle(education), true);
-            paragraph.createRun().addCarriageReturn();
+            if (educationNumber < educations.size())
+                insertNewLine(paragraph);
         }
-
-        paragraph.createRun().addCarriageReturn();
-    }}
+    }
 
     private static void createEducationTitle(XWPFDocument document, List<Education> educations) {
         if (educations != null && !educations.isEmpty()) {
             XWPFParagraph paragraph = document.createParagraph();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
-            WordProcessing.createTitleRun(paragraph, "Education", 16);
+            createTitleRun(paragraph, "Education", TITLE_SIZE);
         }
     }
 
@@ -124,7 +420,7 @@ public class DocumentGenerator {
                 }
             }
 
-            paragraph.createRun().addCarriageReturn();
+            insertNewLine(paragraph);
         }
     }
 
@@ -132,7 +428,7 @@ public class DocumentGenerator {
         if ((hardSkills != null && !hardSkills.isEmpty()) || (softSkills != null && !softSkills.isEmpty())) {
             XWPFParagraph paragraph = document.createParagraph();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
-            WordProcessing.createTitleRun(paragraph, "Skills", 16);
+            createTitleRun(paragraph, "Skills", TITLE_SIZE);
         }
     }
 
@@ -149,7 +445,7 @@ public class DocumentGenerator {
                 createBodyRun(paragraph, formerColleague.getPosition(), false);
                 addBulletToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
                 createBodyRun(paragraph, formerColleague.getPhoneNumber(), false);
-                paragraph.createRun().addCarriageReturn();
+                insertNewLine(paragraph);
             }
         }
     }
@@ -158,7 +454,7 @@ public class DocumentGenerator {
         if (formerColleagues != null && !formerColleagues.isEmpty()) {
             XWPFParagraph paragraph = document.createParagraph();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
-            WordProcessing.createTitleRun(paragraph, "Former Colleagues", 16);
+            createTitleRun(paragraph, "Former Colleagues", TITLE_SIZE);
         }
     }
 
@@ -167,15 +463,18 @@ public class DocumentGenerator {
             XWPFParagraph paragraph = document.createParagraph();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
             paragraph.setIndentationLeft(INDENTATION);
-
+            int jobExperienceNumber = 0;
             for (JobExperience jobExperience : jobExperiences) {
-                createBodyRun(paragraph, extractJobDuration(jobExperience), false);
-                paragraph.createRun().addCarriageReturn();
+                jobExperienceNumber++;
+                createBodyRun(paragraph, calculateDuration(jobExperience.getStartDate(), jobExperience.getEndDate()), false);
+                insertNewLine(paragraph);
                 createBodyRun(paragraph, extractJobTitle(jobExperience), true);
-                paragraph.createRun().addCarriageReturn();
+                insertNewLine(paragraph);
                 createBodyRun(paragraph, extractJobDescription(jobExperience), false);
-                paragraph.createRun().addCarriageReturn();
-                paragraph.createRun().addCarriageReturn();
+                insertNewLine(paragraph);
+
+                if (jobExperienceNumber < jobExperiences.size())
+                    insertNewLine(paragraph);
             }
         }
     }
@@ -184,7 +483,7 @@ public class DocumentGenerator {
         if (jobExperiences != null && !jobExperiences.isEmpty()) {
             XWPFParagraph paragraph = document.createParagraph();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
-            WordProcessing.createTitleRun(paragraph, "Experiences", 16);
+            createTitleRun(paragraph, "Experiences", TITLE_SIZE);
         }
     }
 
@@ -192,7 +491,7 @@ public class DocumentGenerator {
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.LEFT);
         createBodyRun(paragraph, summary.getText(), true);
-        paragraph.createRun().addCarriageReturn();
+        insertNewLine(paragraph);
     }
 
     private static void addContactInformation(XWPFDocument document, List<ContactMethod> contactInformation) {
@@ -205,13 +504,13 @@ public class DocumentGenerator {
             addBulletToParagraph(paragraph, BODY_SIZE, BULLET_COLOR);
         }
 
-        paragraph.createRun().addCarriageReturn();
+        insertNewLine(paragraph);
     }
 
     private static void createNameTitle(XWPFDocument document, Resume resume) {
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.CENTER);
-        WordProcessing.createTitleRun(paragraph, resume.getPersonalInformation().getFullName(), 35);
+        createTitleRun(paragraph, resume.getPersonalInformation().getFullName(), 35);
     }
 
     private static String extractSkillsTitle(List<HardSkill> hardSkills, List<SoftSkill> softSkills) {
@@ -222,7 +521,7 @@ public class DocumentGenerator {
         return education.getMajor() + " | " + education.getUniversity() + " | " + education.getDegreeLevel();
     }
 
-    private static String extractEducationDuration(Education education) {
+    private static String calculateEducationDuration(Education education) {
         String startDate = String.valueOf(education.getStartYear());
         String endDate = education.getEndYear() == 0 ? "Today" : String.valueOf(education.getStartYear());
         return startDate + " - " + endDate;
@@ -266,10 +565,10 @@ public class DocumentGenerator {
                 jobExperience.getLocation().getCityName();
     }
 
-    private static String extractJobDuration(JobExperience jobExperience) {
-        String startDate = (jobExperience.getStartDate().getMonth().toString()).substring(0, 3) + " " + jobExperience.getStartDate().getYear();
-        String endDate = jobExperience.getEndDate() == null ? "Today" : jobExperience.getStartDate().getMonth() + " " + jobExperience.getStartDate().getYear();
-        return startDate + " - " + endDate;
+    private static String calculateDuration(LocalDate startDate, LocalDate endDate) {
+        String start = (startDate.getMonth().toString()).substring(0, 3) + " " + startDate.getYear();
+        String end = endDate == null ? "Today" : (endDate.getMonth().toString()).substring(0, 3) + " " + endDate.getYear();
+        return start + " - " + end;
     }
 
     private static String extractContactMethod(List<ContactMethod> contactInformation, ContactType contactType) {
