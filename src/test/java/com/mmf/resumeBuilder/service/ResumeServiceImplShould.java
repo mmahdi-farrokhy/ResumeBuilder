@@ -1,6 +1,7 @@
 package com.mmf.resumeBuilder.service;
 
 import com.mmf.resumeBuilder.DatabaseTest;
+import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.constants.hardskill.HardSkillLevel;
 import com.mmf.resumeBuilder.constants.hardskill.HardSkillType;
 import com.mmf.resumeBuilder.entity.resume.HardSkill;
@@ -188,7 +189,7 @@ class ResumeServiceImplShould {
         int resumeId = 1;
         when(resumeJPARepository.findById(resumeId)).thenReturn(Optional.of(resume));
 //        assertThat(resumeService.findResumeById(resumeId)).isEqualTo(resume);
-        resumeService.downloadResume(resumeId);
+        resumeService.downloadResume(resumeId, ResumeTheme.ATSClassic);
     }
 
     @Test

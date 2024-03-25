@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder.service;
 
+import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.entity.resume.Resume;
-import com.mmf.resumeBuilder.entity.resume.ResumeSection;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface ResumeService {
 
     Resume updateResume(Resume resume, Integer resumeId);
 
-    Resume downloadResume(Integer resumeId);
+    Resume downloadResume(Integer resumeId, ResumeTheme theme);
 
     List<Resume> findAllResumesByUserEmail(String userEmail);
 }

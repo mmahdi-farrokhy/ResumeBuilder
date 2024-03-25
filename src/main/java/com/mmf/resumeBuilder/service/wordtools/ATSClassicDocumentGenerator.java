@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.service;
+package com.mmf.resumeBuilder.service.wordtools;
 
 import com.mmf.resumeBuilder.entity.resume.*;
 import com.mmf.resumeBuilder.service.datetools.DateCalculation;
@@ -14,11 +14,12 @@ import java.util.List;
 
 import static com.mmf.resumeBuilder.service.wordtools.WordProcessing.*;
 
-public class ATSClassicDocumentGenerator {
+public class ATSClassicDocumentGenerator implements DocumentGenerator {
     public static final String STORE_PATH = System.getProperty("user.dir") + "\\src\\main\\resumes\\";
     public static final int INDENTATION = 300;
 
-    public static void generateWordDocument(Resume resume) {
+    @Override
+    public void generateWordDocument(Resume resume) {
         try {
             XWPFDocument document = new XWPFDocument();
 

@@ -1,11 +1,13 @@
 package com.mmf.resumeBuilder.service;
 
+import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.exception.InvalidResumeException;
 import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.ResumeJPARepository;
 import com.mmf.resumeBuilder.repository.ResumeRepository;
+import com.mmf.resumeBuilder.service.wordtools.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -98,17 +100,30 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public Resume downloadResume(Integer resumeId) {
+    public Resume downloadResume(Integer resumeId, ResumeTheme theme) {
         Optional<Resume> optionalResume = resumeJPARepository.findById(resumeId);
         if (optionalResume.isEmpty()) {
             throw new ResumeNotFoundException(resumeId);
         }
 
         Resume resume = optionalResume.get();
-//        DocumentGenerator.generateResumeDocument(resume);
-        ATSClassicDocumentGenerator.generateWordDocument(resume);
+        createDocumentGenerator(theme).generateWordDocument(resume);
         return resume;
-        //        return resumeRepository.findResumeById(resumeId);
+    }
+
+    private DocumentGenerator createDocumentGenerator(ResumeTheme theme) {
+        DocumentGenerator documentGenerator1 = null;
+
+        switch (theme) {
+            case ATSClassic -> documentGenerator1 = new ATSClassicDocumentGenerator();
+            case Bold_Modern -> documentGenerator1 = new BoldModernDocumentGenerator();
+            case Classic_Accounting -> documentGenerator1 = new ClassicAccountingDocumentGenerator();
+            case Creative_Teaching -> documentGenerator1 = new CreativeTeachingDocumentGenerator();
+            case Simple_Florist -> documentGenerator1 = new SimpleFloristDocumentGenerator();
+            case Woodworking -> documentGenerator1 = new WoodworkingDocumentGenerator();
+        }
+
+        return documentGenerator1;
     }
 
     @Override

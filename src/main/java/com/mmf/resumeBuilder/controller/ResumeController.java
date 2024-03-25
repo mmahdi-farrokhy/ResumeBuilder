@@ -1,5 +1,6 @@
 package com.mmf.resumeBuilder.controller;
 
+import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.service.ResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class ResumeController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Resume> downloadResume(@PathVariable int id) {
-        return new ResponseEntity<>(resumeService.downloadResume(id), HttpStatus.OK);
+    public ResponseEntity<Resume> downloadResume(@PathVariable int id, @RequestBody ResumeTheme theme) {
+        return new ResponseEntity<>(resumeService.downloadResume(id, theme), HttpStatus.OK);
     }
 
     @GetMapping("/all/{email}")

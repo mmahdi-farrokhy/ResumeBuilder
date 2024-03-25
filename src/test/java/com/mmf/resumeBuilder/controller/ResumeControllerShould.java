@@ -1,6 +1,7 @@
 package com.mmf.resumeBuilder.controller;
 
 import com.mmf.resumeBuilder.DatabaseTest;
+import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.constants.UserRole;
 import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.entity.resume.Resume;
@@ -159,7 +160,7 @@ public class ResumeControllerShould {
                 .andReturn();
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertViewName(modelAndView, "redirect:/resume/download/success");
-        verify(resumeService, times(1)).downloadResume(resume.getId());
+        verify(resumeService, times(1)).downloadResume(resume.getId(), ResumeTheme.ATSClassic);
     }
 
     @Test
