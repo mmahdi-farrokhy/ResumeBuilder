@@ -14,8 +14,7 @@ import java.util.List;
 
 import static com.mmf.resumeBuilder.service.wordtools.WordProcessing.*;
 
-public class DocumentGenerator {
-
+public class ATSClassicDocumentGenerator {
     public static final String STORE_PATH = System.getProperty("user.dir") + "\\src\\main\\resumes\\";
     public static final int INDENTATION = 300;
 
@@ -117,7 +116,7 @@ public class DocumentGenerator {
                 throw new IOException("Contact information can not be empty");
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
