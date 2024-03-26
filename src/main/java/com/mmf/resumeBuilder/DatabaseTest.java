@@ -187,7 +187,9 @@ public class DatabaseTest {
         jobExperience.setCategory(JobCategory.Software_Development);
         jobExperience.setSeniorityLevel(SeniorityLevel.Junior);
         jobExperience.setCompanyName("Negar Andishgan Co. Ltd.");
-        jobExperience.setDescription("Developing and refactoring NrSign.EMG medical test software");
+        jobExperience.setDescription("""
+                I worked as a software developer on the EMG project of this company known as NrSign.EMG, debugged it, refactored some parts and added some  new features to it.
+                Finally, I added the software connection through the network and TCP protocol to this software, which received almost 2.4 megabytes of data per second from the hardware with a sampling rate of 128,000 samples per second, with the size of each sample being 19 bytes. And I process, decode and draw it in the software.""");
         jobExperience.setStartDate(LocalDate.of(2023, 1, 7));
         jobExperience.setStatus(JobStatus.Occupied);
         jobExperience.setLocation(createLocation());
@@ -201,7 +203,9 @@ public class DatabaseTest {
         jobExperience.setCategory(JobCategory.Software_Development);
         jobExperience.setSeniorityLevel(SeniorityLevel.Junior);
         jobExperience.setCompanyName("Zarvan Stun Khodro");
-        jobExperience.setDescription("Developing automotive software Diag and Remap");
+        jobExperience.setDescription("""
+                This company has 2 software called MasterDiag and Promap, which are car diagnostics and remaps tools. I added a few new features to each of them to connect to the ECU of different cars.
+                I also developed the capability of connecting to ECUs with CAN protocol for the company's Promap software.""");
         jobExperience.setStartDate(LocalDate.of(2022, 4, 17));
         jobExperience.setEndDate(LocalDate.of(2022, 12, 21));
         jobExperience.setStatus(JobStatus.Finished);
@@ -265,15 +269,10 @@ public class DatabaseTest {
 
     public static Summary createSummary() {
         Summary summary = new Summary();
-        summary.setText("As a junior software developer with 19 months of hands-on experience, I thrive on turning complex challenges into\n" +
-                "elegant solutions. My proficiency in C# .NET and Java allows me to create robust applications that seamlessly\n" +
-                "bridge user needs with technical capabilities.\n" +
-                "Passionate about clean code and agile principles, I believe in the power of organized design and development to\n" +
-                "create software that stands the test of time. By adhering to best practices, I ensure that every line of code I write\n" +
-                "contributes to a maintainable and scalable product.\n" +
-                "In my journey, I've come to appreciate the collaborative nature of software development. I'm excited to work\n" +
-                "alongside like-minded professionals who share my dedication to crafting exceptional software. Let's connect and\n" +
-                "explore how we can drive innovation through code, design, and a commitment to continuous learning.");
+        summary.setText("""
+                As a junior software developer with 2 years of hands-on experience, I thrive on turning complex challenges into elegant solutions. My proficiency in C# .NET and Java allows me to create robust applications that seamlessly bridge user needs with technical capabilities.
+                Passionate about clean code and agile principles, I believe in the power of organized design and development to create software that stands the test of time. By adhering to best practices, I ensure that every line of code I write contributes to a maintainable and scalable product.
+                In my journey, I've come to appreciate the collaborative nature of software development. I'm excited to work alongside like-minded professionals who share my dedication to crafting exceptional software. Let's connect and explore how we can drive innovation through code, design, and a commitment to continuous learning.""");
         return summary;
     }
 
