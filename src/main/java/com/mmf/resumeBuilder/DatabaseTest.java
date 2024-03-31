@@ -37,7 +37,8 @@ public class DatabaseTest {
         resume.addSection(createContactMethod(resume, ContactType.Phone_Number, "09190763415"));
         resume.addSection(createContactMethod(resume, ContactType.Address, "Tehran, Pardis County"));
         resume.setSummary(createSummary());
-        resume.addSection(createEducation(resume));
+        resume.addSection(createEducation());
+        resume.addSection(createEducation2());
         resume.addSection(createTeachingAssistance(resume));
         resume.addSection(createTeachingAssistance2(resume));
         resume.addSection(createJobExperience1(resume));
@@ -188,11 +189,11 @@ public class DatabaseTest {
         jobExperience.setSeniorityLevel(SeniorityLevel.Junior);
         jobExperience.setCompanyName("Negar Andishgan Co. Ltd.");
         jobExperience.setDescription("""
-                I worked as a software developer on the EMG project of this company known as NrSign.EMG, debugged it, refactored some parts and added some  new features to it.
+                I worked as a software developer on the EMG project of this company known as NrSign.EMG, debugged it, refactored some parts and added some new features to it.
                 Finally, I added the software connection through the network and TCP protocol to this software, which received almost 2.4 megabytes of data per second from the hardware with a sampling rate of 128,000 samples per second, with the size of each sample being 19 bytes. And I process, decode and draw it in the software.""");
         jobExperience.setStartDate(LocalDate.of(2023, 1, 7));
         jobExperience.setStatus(JobStatus.Occupied);
-        jobExperience.setLocation(createLocation());
+        jobExperience.setLocation(createLocation(City.Pardis));
         jobExperience.setResume(resume);
         return jobExperience;
     }
@@ -209,7 +210,7 @@ public class DatabaseTest {
         jobExperience.setStartDate(LocalDate.of(2022, 4, 17));
         jobExperience.setEndDate(LocalDate.of(2022, 12, 21));
         jobExperience.setStatus(JobStatus.Finished);
-        jobExperience.setLocation(createLocation());
+        jobExperience.setLocation(createLocation(City.Tehran));
         jobExperience.setResume(resume);
         return jobExperience;
     }
@@ -223,15 +224,15 @@ public class DatabaseTest {
         jobExperience.setDescription("Developing new sections in Blu environment");
         jobExperience.setStartDate(LocalDate.of(2024, 4, 2));
         jobExperience.setStatus(JobStatus.Occupied);
-        jobExperience.setLocation(createLocation());
+        jobExperience.setLocation(createLocation(City.Tehran));
         jobExperience.setResume(resume);
         return jobExperience;
     }
 
-    public static Location createLocation() {
+    public static Location createLocation(City city) {
         Location location = new Location();
         location.setId(1);
-        location.setCityName(City.Tehran);
+        location.setCityName(city);
         location.setCountryId(location.getCityName().getCountryId());
         return location;
     }
@@ -256,7 +257,7 @@ public class DatabaseTest {
         return teachingAssistance;
     }
 
-    public static Education createEducation(Resume resume) {
+    public static Education createEducation() {
         Education education = new Education();
         education.setDegreeLevel(DegreeLevel.Bachelor);
         education.setMajor(Major.Computer_Engineering);
@@ -264,6 +265,17 @@ public class DatabaseTest {
         education.setGpa(16);
         education.setStartYear(2017);
         education.setEndYear(2021);
+        return education;
+    }
+
+    public static Education createEducation2() {
+        Education education = new Education();
+        education.setDegreeLevel(DegreeLevel.Master);
+        education.setMajor(Major.Software_Engineering);
+        education.setUniversity("Amir Kabir University of Technology (Tehran Polytechnic)");
+        education.setGpa(19.87);
+        education.setStartYear(2024);
+        education.setEndYear(2026);
         return education;
     }
 

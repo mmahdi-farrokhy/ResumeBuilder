@@ -153,7 +153,7 @@ public enum Major {
     French_Language,
     Russian_Language,
     Chinese_Language,
-    German_Language;
+    German_Language, Software_Engineering;
 
     @Override
     public String toString() {

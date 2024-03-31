@@ -192,6 +192,7 @@ public enum City {
     Warangal(Country.India.getId()),
 
     Tehran(Country.Iran.getId()),
+    Pardis(Country.Iran.getId()),
     Kashan(Country.Iran.getId()),
     Mashhad(Country.Iran.getId()),
     Isfahan(Country.Iran.getId()),
