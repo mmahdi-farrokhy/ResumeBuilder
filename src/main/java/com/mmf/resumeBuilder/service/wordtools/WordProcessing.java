@@ -137,6 +137,104 @@ public class WordProcessing {
         }
     }
 
+    public static void addRowToTableDelimitedBySymbol(XWPFDocument document, List<String> rowData, FontProperties font, Boolean bold, int indentation, String symbol, String symbolColor) {
+        XWPFTable table = createTable(document);
+        XWPFTableRow row = table.createRow();
+
+        int columnWidths = 12240;
+
+        XWPFTableCell cell = row.createCell();
+        CTTblWidth width = CTTblWidth.Factory.newInstance();
+        width.setW(columnWidths);
+        width.setType(STTblWidth.DXA);
+
+        if (cell.getCTTc().getTcPr() == null) {
+            cell.getCTTc().addNewTcPr();
+        }
+
+        cell.getCTTc().getTcPr().setTcW(width);
+        if (!cell.getParagraphs().isEmpty())
+            cell.removeParagraph(0);
+
+        XWPFParagraph paragraph = cell.addParagraph();
+        paragraph.setIndentationLeft(indentation);
+
+        int dataNumber = 0;
+        for (String rowDatum : rowData) {
+            dataNumber++;
+            for (String textBlock : rowDatum.split("\\n")) {
+
+                if (bold) {
+                    createBoldBodyRun(paragraph, textBlock, font);
+                } else {
+                    createBodyRun(paragraph, textBlock, font);
+                }
+
+                if (dataNumber < rowData.size()) {
+                    XWPFRun bulletRun = paragraph.createRun();
+                    bulletRun.setText(symbol);
+                    bulletRun.setFontSize(font.getSize());
+                    bulletRun.setColor(symbolColor);
+                    bulletRun.setFontFamily(font.getFamily());
+                    bulletRun.setBold(bold);
+                }
+            }
+        }
+    }
+
+    public static void addDashedRowToTableDelimitedBySymbol(XWPFDocument document, List<String> rowData, FontProperties font, boolean bold, int indentation, String symbol, String symbolColor) {
+        XWPFTable table = createTable(document);
+        XWPFTableRow row = table.createRow();
+
+        int columnWidths = 12240;
+
+        XWPFTableCell cell = row.createCell();
+        CTTblWidth width = CTTblWidth.Factory.newInstance();
+        width.setW(columnWidths);
+        width.setType(STTblWidth.DXA);
+
+        if (cell.getCTTc().getTcPr() == null) {
+            cell.getCTTc().addNewTcPr();
+        }
+
+        cell.getCTTc().getTcPr().setTcW(width);
+        if (!cell.getParagraphs().isEmpty())
+            cell.removeParagraph(0);
+
+        XWPFParagraph paragraph = cell.addParagraph();
+        paragraph.setIndentationLeft(indentation);
+
+        XWPFRun dashRun = paragraph.createRun();
+        dashRun.setText(" - ");
+        dashRun.setFontSize(font.getSize());
+        dashRun.setFontFamily(font.getFamily());
+        dashRun.setColor(symbolColor);
+        dashRun.setBold(bold);
+
+        int dataNumber = 0;
+        for (String rowDatum : rowData) {
+            dataNumber++;
+            for (String textBlock : rowDatum.split("\\n")) {
+
+
+                if (bold) {
+                    createBoldBodyRun(paragraph, textBlock, font);
+                } else {
+                    createBodyRun(paragraph, textBlock, font);
+                }
+
+                if (dataNumber < rowData.size()) {
+                    XWPFRun symbolRun = paragraph.createRun();
+                    symbolRun.setText(symbol);
+                    symbolRun.setFontSize(font.getSize());
+                    symbolRun.setColor(symbolColor);
+                    symbolRun.setFontFamily(font.getFamily());
+                    symbolRun.setBold(bold);
+                }
+            }
+        }
+    }
+
     public static void addDashedRowToTable(XWPFDocument document, List<String> rowData, FontProperties font, String dashColor, boolean bold, int indentation) {
         XWPFTable table = createTable(document);
         XWPFTableRow row = table.createRow();
@@ -230,6 +328,89 @@ public class WordProcessing {
 
         paragraph.setIndentationLeft(indentation);
         createHyperlinkRun(paragraph, uri, description, font, bold);
+    }
+
+    public static void addHyperlinkRowToTableDelimitedBySymbol(XWPFDocument document, String uri, List<String> description, FontProperties font, boolean bold, int indentation, String symbol, String symbolColor) {
+        XWPFTable table = createTable(document);
+        XWPFTableRow row = table.createRow();
+
+        int columnWidths = 12240;
+
+        XWPFTableCell cell = row.createCell();
+        CTTblWidth width = CTTblWidth.Factory.newInstance();
+        width.setW(columnWidths);
+        width.setType(STTblWidth.DXA);
+
+        if (cell.getCTTc().getTcPr() == null) {
+            cell.getCTTc().addNewTcPr();
+        }
+
+        cell.getCTTc().getTcPr().setTcW(width);
+        if (!cell.getParagraphs().isEmpty())
+            cell.removeParagraph(0);
+
+        XWPFParagraph paragraph = cell.addParagraph();
+        paragraph.setIndentationLeft(indentation);
+
+        int dataNumber = 0;
+        for (String descriptionPart : description) {
+            dataNumber++;
+            createHyperlinkRun(paragraph, uri, descriptionPart, font, bold);
+
+            if (dataNumber < description.size()) {
+                XWPFRun symbolRun = paragraph.createRun();
+                symbolRun.setText(symbol);
+                symbolRun.setFontSize(font.getSize());
+                symbolRun.setColor(symbolColor);
+                symbolRun.setFontFamily(font.getFamily());
+                symbolRun.setBold(bold);
+            }
+        }
+    }
+
+    public static void addDashedHyperlinkRowToTableDelimitedBySymbol(XWPFDocument document, String uri, List<String> description, FontProperties font, boolean bold, int indentation, String symbol, String symbolColor) {
+        XWPFTable table = createTable(document);
+        XWPFTableRow row = table.createRow();
+
+        int columnWidths = 12240;
+
+        XWPFTableCell cell = row.createCell();
+        CTTblWidth width = CTTblWidth.Factory.newInstance();
+        width.setW(columnWidths);
+        width.setType(STTblWidth.DXA);
+
+        if (cell.getCTTc().getTcPr() == null) {
+            cell.getCTTc().addNewTcPr();
+        }
+
+        cell.getCTTc().getTcPr().setTcW(width);
+        if (!cell.getParagraphs().isEmpty())
+            cell.removeParagraph(0);
+
+        XWPFParagraph paragraph = cell.addParagraph();
+        paragraph.setIndentationLeft(indentation);
+
+        XWPFRun bulletRun = paragraph.createRun();
+        bulletRun.setText(" - ");
+        bulletRun.setFontSize(font.getSize());
+        bulletRun.setFontFamily(font.getFamily());
+        bulletRun.setColor(symbolColor);
+        bulletRun.setBold(bold);
+
+        int dataNumber = 0;
+        for (String descriptionPart : description) {
+            dataNumber++;
+            createHyperlinkRun(paragraph, uri, descriptionPart, font, bold);
+
+            if (dataNumber < description.size()) {
+                XWPFRun symbolRun = paragraph.createRun();
+                symbolRun.setText(symbol);
+                symbolRun.setFontSize(font.getSize());
+                symbolRun.setColor(symbolColor);
+                symbolRun.setFontFamily(font.getFamily());
+                symbolRun.setBold(bold);
+            }
+        }
     }
 
     public static XWPFTable createTable(XWPFDocument document) {
