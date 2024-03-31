@@ -2,15 +2,37 @@ package com.mmf.resumeBuilder.service.wordtools;
 
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
+
+import java.math.BigInteger;
+import java.util.List;
 
 public class WordProcessing {
-    public static final String TITLE_COLOR = "262626";
-    public static final String BODY_COLOR = "5A5A5A";
-    public static final int BODY_SIZE = 10;
-    public static final String BULLET_COLOR = "D195A9";
-    public static final int TITLE_SIZE = 16;
-    private static final String BODY_FONT_FAMILY = "Times New Roman (Headings CS)";
-    public static final String TITLE_FONT_FAMILY = "Speak Pro (Headings)";
+
+    public static XWPFDocument createDocument(double top, double bottom, double left, double right) {
+        XWPFDocument document = new XWPFDocument();
+        setMargins(document, top, bottom, left, right);
+        return document;
+    }
+
+    public static void setMargins(XWPFDocument document, double topInch, double bottomInch, double leftInch, double rightInch) {
+        CTPageMar pageMar = document.getDocument().getBody().addNewSectPr().addNewPgMar();
+        int topTWIPs = inchToTWIPs(topInch);
+        int bottomWIPs = inchToTWIPs(bottomInch);
+        int leftTWIPs = inchToTWIPs(leftInch);
+        int rightTWIPs = inchToTWIPs(rightInch);
+
+        pageMar.setTop(BigInteger.valueOf(topTWIPs));
+        pageMar.setBottom(BigInteger.valueOf(bottomWIPs));
+        pageMar.setLeft(BigInteger.valueOf(leftTWIPs));
+        pageMar.setRight(BigInteger.valueOf(rightTWIPs));
+    }
+
+    private static int inchToTWIPs(double inch) {
+        return (int) (inch * 1440);
+    }
 
     public static void addBulletToParagraph(XWPFParagraph paragraph, int size, String hexColor) {
         XWPFRun bulletRun = paragraph.createRun();
@@ -26,16 +48,24 @@ public class WordProcessing {
         bulletRun.setColor(hexColor);
     }
 
-    public static void createBodyRun(XWPFParagraph paragraph, String text, boolean bold) {
+    public static void createBodyRun(XWPFParagraph paragraph, String text, FontProperties font) {
         XWPFRun run = paragraph.createRun();
-        run.setFontSize(BODY_SIZE);
-        run.setColor(BODY_COLOR);
-        run.setFontFamily(BODY_FONT_FAMILY);
+        run.setFontSize(font.getSize());
+        run.setColor(font.getColor());
+        run.setFontFamily(font.getFamily());
         run.setText(text);
-        run.setBold(bold);
     }
 
-    public static void createHyperlinkRun(XWPFParagraph paragraph, String uri, String description) {
+    public static void createBoldBodyRun(XWPFParagraph paragraph, String text, FontProperties font) {
+        XWPFRun run = paragraph.createRun();
+        run.setBold(true);
+        run.setFontSize(font.getSize());
+        run.setColor(font.getColor());
+        run.setFontFamily(font.getFamily());
+        run.setText(text);
+    }
+
+    public static void createHyperlinkRun(XWPFParagraph paragraph, String uri, String description, FontProperties font, boolean bold) {
         String rId = paragraph
                 .getDocument()
                 .getPackagePart()
@@ -52,22 +82,162 @@ public class WordProcessing {
                 paragraph);
 
         hyperlinkRun.setText(description);
-        hyperlinkRun.setColor(BODY_COLOR);
-        hyperlinkRun.setFontSize(BODY_SIZE);
-        hyperlinkRun.setFontFamily(BODY_FONT_FAMILY);
+        hyperlinkRun.setColor(font.getColor());
+        hyperlinkRun.setFontSize(font.getSize());
+        hyperlinkRun.setFontFamily(font.getFamily());
         hyperlinkRun.setUnderline(UnderlinePatterns.SINGLE);
+        hyperlinkRun.setBold(bold);
     }
 
-    public static void createTitleRun(XWPFParagraph paragraph, String text, int fontSize) {
+    public static void createTitleRun(XWPFParagraph paragraph, String text, FontProperties font) {
         paragraph.getCTP().getPPr().addNewShd().setFill("F6EAEE");
         XWPFRun run = paragraph.createRun();
-        run.setFontSize(fontSize);
-        run.setColor(TITLE_COLOR);
-        run.setFontFamily(TITLE_FONT_FAMILY);
+        run.setFontSize(font.getSize());
+        run.setColor(font.getColor());
+        run.setFontFamily(font.getFamily());
         run.setText(text);
     }
 
     public static void insertNewLine(XWPFParagraph paragraph) {
         paragraph.createRun().addCarriageReturn();
+    }
+
+    public static void addRowToTable(XWPFDocument document, List<String> rowData, FontProperties font, Boolean bold, int indentation) {
+        XWPFTable table = createTable(document);
+        XWPFTableRow row = table.createRow();
+
+        int pageWidthTwips = 12240;
+        int columnCounter = rowData.size();
+        int columnWidths = pageWidthTwips / columnCounter;
+
+        for (String currentRow : rowData) {
+            XWPFTableCell cell = row.createCell();
+            CTTblWidth width = CTTblWidth.Factory.newInstance();
+            width.setW(columnWidths);
+            width.setType(STTblWidth.DXA);
+
+            if (cell.getCTTc().getTcPr() == null) {
+                cell.getCTTc().addNewTcPr();
+            }
+
+            cell.getCTTc().getTcPr().setTcW(width);
+            if (!cell.getParagraphs().isEmpty())
+                cell.removeParagraph(0);
+
+            for (String textBlock : currentRow.split("\\n")) {
+                XWPFParagraph paragraph = cell.addParagraph();
+                paragraph.setIndentationLeft(indentation);
+
+                if (bold) {
+                    createBoldBodyRun(paragraph, textBlock, font);
+                } else {
+                    createBodyRun(paragraph, textBlock, font);
+                }
+            }
+        }
+    }
+
+    public static void addDashedRowToTable(XWPFDocument document, List<String> rowData, FontProperties font, String dashColor, boolean bold, int indentation) {
+        XWPFTable table = createTable(document);
+        XWPFTableRow row = table.createRow();
+
+        int pageWidthTwips = 12240;
+        int columnCounter = rowData.size();
+        int columnWidths = pageWidthTwips / columnCounter;
+
+        for (String currentRow : rowData) {
+            XWPFTableCell cell = row.createCell();
+            CTTblWidth width = CTTblWidth.Factory.newInstance();
+            width.setW(columnWidths);
+            width.setType(STTblWidth.DXA);
+
+            if (cell.getCTTc().getTcPr() == null) {
+                cell.getCTTc().addNewTcPr();
+            }
+
+            cell.getCTTc().getTcPr().setTcW(width);
+            if (!cell.getParagraphs().isEmpty())
+                cell.removeParagraph(0);
+
+            for (String textBlock : currentRow.split("\\n")) {
+                XWPFParagraph paragraph = cell.addParagraph();
+                paragraph.setIndentationLeft(indentation);
+
+                XWPFRun bulletRun = paragraph.createRun();
+                bulletRun.setText(" - ");
+                bulletRun.setFontSize(font.getSize());
+                bulletRun.setFontFamily(font.getFamily());
+                bulletRun.setColor(dashColor);
+                bulletRun.setBold(bold);
+
+                if (bold) {
+                    createBoldBodyRun(paragraph, textBlock, font);
+                } else {
+                    createBodyRun(paragraph, textBlock, font);
+                }
+            }
+        }
+    }
+
+    public static void addHyperlinkRowToTable(XWPFDocument document, String uri, String description, FontProperties font, boolean bold, int indentation) {
+        XWPFTable table = createTable(document);
+        XWPFTableRow row = table.createRow();
+
+        int columnWidths = 12240;
+        XWPFTableCell cell = row.createCell();
+        CTTblWidth width = CTTblWidth.Factory.newInstance();
+        width.setW(columnWidths);
+        width.setType(STTblWidth.DXA);
+
+        if (cell.getCTTc().getTcPr() == null) {
+            cell.getCTTc().addNewTcPr();
+        }
+
+        cell.getCTTc().getTcPr().setTcW(width);
+        if (!cell.getParagraphs().isEmpty())
+            cell.removeParagraph(0);
+
+        XWPFParagraph paragraph = cell.addParagraph();
+        paragraph.setIndentationLeft(indentation);
+        createHyperlinkRun(paragraph, uri, description, font, bold);
+    }
+
+    public static void addDashedHyperlinkRowToTable(XWPFDocument document, String uri, String description, FontProperties font, String dashColor, boolean bold, int indentation) {
+        XWPFTable table = createTable(document);
+        XWPFTableRow row = table.createRow();
+
+        int columnWidths = 12240;
+        XWPFTableCell cell = row.createCell();
+        CTTblWidth width = CTTblWidth.Factory.newInstance();
+        width.setW(columnWidths);
+        width.setType(STTblWidth.DXA);
+
+        if (cell.getCTTc().getTcPr() == null) {
+            cell.getCTTc().addNewTcPr();
+        }
+
+        cell.getCTTc().getTcPr().setTcW(width);
+        if (!cell.getParagraphs().isEmpty())
+            cell.removeParagraph(0);
+
+        XWPFParagraph paragraph = cell.addParagraph();
+        XWPFRun bulletRun = paragraph.createRun();
+        bulletRun.setText(" - ");
+        bulletRun.setFontSize(font.getSize());
+        bulletRun.setFontFamily(font.getFamily());
+        bulletRun.setColor(dashColor);
+        bulletRun.setBold(bold);
+
+        paragraph.setIndentationLeft(indentation);
+        createHyperlinkRun(paragraph, uri, description, font, bold);
+    }
+
+    public static XWPFTable createTable(XWPFDocument document) {
+        XWPFTable table = document.createTable();
+        if (!table.getRows().isEmpty())
+            table.removeRow(0);
+
+        table.getCTTbl().getTblPr().unsetTblBorders();
+        return table;
     }
 }

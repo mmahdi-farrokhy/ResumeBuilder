@@ -26,7 +26,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
     @Override
     public void generateWordDocument(Resume resume) {
         try {
-            XWPFDocument document = new XWPFDocument();
+            XWPFDocument document = createDocument(0.5, 0.5, 0.5, 0.5);
 
             PersonalInformation personalInformation = resume.getPersonalInformation();
             List<ContactMethod> contactInformation = resume.getContactInformation();
@@ -276,7 +276,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             createBoldBodyRun(bodyParagraph, projectTitle, bodyFont);
             insertNewLine(bodyParagraph);
             if (project.getReferenceLink() != null) {
-                createHyperlinkRun(bodyParagraph, project.getReferenceLink(), "Click to open the project", bodyFont);
+                createHyperlinkRun(bodyParagraph, project.getReferenceLink(), "Click to open the project", bodyFont, false);
                 insertNewLine(bodyParagraph);
             }
 
@@ -353,7 +353,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             insertNewLine(bodyParagraph);
 
             if (presentation.getReferenceLink() != null) {
-                createHyperlinkRun(bodyParagraph, presentation.getReferenceLink(), "More about the presentation", bodyFont);
+                createHyperlinkRun(bodyParagraph, presentation.getReferenceLink(), "More about the presentation", bodyFont, false);
                 insertNewLine(bodyParagraph);
             }
 
@@ -386,7 +386,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             insertNewLine(bodyParagraph);
 
             if (patent.getReferenceLink() != null) {
-                createHyperlinkRun(bodyParagraph, patent.getReferenceLink(), "More about the patent", bodyFont);
+                createHyperlinkRun(bodyParagraph, patent.getReferenceLink(), "More about the patent", bodyFont, false);
                 insertNewLine(bodyParagraph);
             }
 
@@ -419,7 +419,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             insertNewLine(bodyParagraph);
 
             if (research.getReferenceLink() != null) {
-                createHyperlinkRun(bodyParagraph, research.getReferenceLink(), "Research link", bodyFont);
+                createHyperlinkRun(bodyParagraph, research.getReferenceLink(), "Research link", bodyFont, false);
                 insertNewLine(bodyParagraph);
             }
 
@@ -484,7 +484,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Membership membership : memberships) {
             bodyParagraph.setIndentationLeft(INDENTATION);
             addDashToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR);
-            String presentationTitle = membership.getTitle() + " | " + membership.getDate();
+            String presentationTitle = membership.getTitle() + " | " + membership.getDate().getYear();
             createBodyRun(bodyParagraph, presentationTitle, bodyFont);
             insertNewLine(bodyParagraph);
         }
