@@ -8,28 +8,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateDuration;
 import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateYearDuration;
 import static com.mmf.resumeBuilder.service.wordtools.WordProcessing.*;
+import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
     public static final String STORE_PATH = System.getProperty("user.dir") + "\\src\\main\\resumes\\";
     private static final String DATE_COLOR = "575355";
-    private static final String TITLE_COLOR = "2E471D";
+    private static final String HEADING_COLOR = "2E471D";
     public static final String BODY_COLOR = "212010";
     public static final String BOLD_COLOR = "000000";
     private static final String DASH_COLOR = "558335";
-    private static final int TITLE_SIZE = 16;
-    private static final String TITLE_FONT_FAMILY = "Speak Pro (Headings)";
-    public static final int BODY_SIZE = 10;
     public static final int INDENTATION = 300;
-    private static final FontProperties headingFont = new FontProperties(TITLE_SIZE, TITLE_COLOR, "Gill Sans MT (Headings)");
-
+    private static final FontProperties HEADING_FONT = new FontProperties(16, HEADING_COLOR, "Gill Sans MT (Headings)");
+    private static final FontProperties BODY_FONT = new FontProperties(10, BODY_COLOR, "Gill Sans MT (Body)");
+    private static final FontProperties TITLE_FONT = new FontProperties(10, BOLD_COLOR, "Gill Sans MT (Headings)");
+    public static final FontProperties DATE_FONT = new FontProperties(10, DATE_COLOR, "Gill Sans MT");
 
     @Override
     public void generateWordDocument(Resume resume) {
@@ -149,222 +151,198 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
                 phoneNumber = phoneNumberInfo.get().getContent();
         }
 
-        addRowToTable(document, asList(personalInformation.getFirstName(), address), new FontProperties(20, TITLE_COLOR, "Gill Sans MT (Headings)"), false, 0);
-        addRowToTable(document, asList(personalInformation.getLastName(), phoneNumber + " | " + email), new FontProperties(15, BOLD_COLOR, "Gill Sans MT (Body)"), false, 0);
+        FontProperties font = new FontProperties(20, HEADING_COLOR, "Gill Sans MT (Headings)");
+        FontProperties font1 = new FontProperties(15, BOLD_COLOR, "Gill Sans MT (Body)");
+
+        addRowToTable(document, asList(personalInformation.getFirstName(), "", address), font, false, 0);
+        addRowToTable(document, asList(personalInformation.getLastName(), phoneNumber, email), font1, false, 0);
         document.createParagraph();
     }
 
     private static void addSummary(XWPFDocument document, Summary summary) {
-        FontProperties font = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-        addRowToTable(document, singletonList(summary.getText()), font, false, 0);
+        addRowToTable(document, singletonList(summary.getText()), BODY_FONT, false, 0);
         document.createParagraph();
     }
 
     private static void addJobExperiencesToDocument(XWPFDocument document, List<JobExperience> jobExperiences) {
-        addRowToTable(document, singletonList("Experiences"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Experiences"), HEADING_FONT, false, 0);
 
-        for (JobExperience jobExperience : jobExperiences) {
+        for (JobExperience job : jobExperiences) {
+            String jobDuration = calculateDuration(job.getStartDate(), job.getEndDate());
+            String[] title = {job.getTitle(), job.getCompanyName(), job.getLocation().getCityName().toString()};
 
-            FontProperties dateFont = new FontProperties(BODY_SIZE, DATE_COLOR, "Gill Sans MT");
-            addRowToTable(document, singletonList(calculateDuration(jobExperience.getStartDate(), jobExperience.getEndDate())), dateFont, false, INDENTATION);
-
-            FontProperties titleFont = new FontProperties(BODY_SIZE, BOLD_COLOR, "Gill Sans MT (Headings)");
-            String jobTitle = jobExperience.getTitle() + " | " +
-                    jobExperience.getCompanyName() + " | " +
-                    jobExperience.getLocation().getCityName();
-            addRowToTable(document, singletonList(jobTitle), titleFont, true, INDENTATION);
-
-            FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addRowToTable(document, singletonList(jobExperience.getDescription()), bodyFont, false, INDENTATION);
+            addRowToTable(document, singletonList(jobDuration), DATE_FONT, false, INDENTATION);
+            addRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addRowToTable(document, singletonList(job.getDescription()), BODY_FONT, false, INDENTATION);
             document.createParagraph();
         }
     }
 
     private static void addFormerColleaguesToDocument(XWPFDocument document, List<FormerColleague> formerColleagues) {
-        addRowToTable(document, singletonList("Former Colleagues"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Former Colleagues"), HEADING_FONT, false, 0);
 
         for (FormerColleague formerColleague : formerColleagues) {
-            String formerColleagueInfo = formerColleague.getFullName() + " • " + formerColleague.getPosition() + " • " + formerColleague.getPhoneNumber();
-            FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-//            addDashedRowToTable(document, List.of(formerColleagueInfo), bodyFont, TITLE_COLOR, false, INDENTATION);
-            addDashedRowToTable(document, List.of(formerColleagueInfo), bodyFont, DASH_COLOR, false, INDENTATION);
+            String[] formerColleagueInfo = {formerColleague.getFullName(), formerColleague.getPosition(), formerColleague.getPhoneNumber()};
+            addDashedRowToTableDelimitedBySymbol(document, asList(formerColleagueInfo), BODY_FONT, false, INDENTATION, " • ", DASH_COLOR);
         }
 
         document.createParagraph();
     }
 
+
     private static void addSkillsToDocument(XWPFDocument document, List<HardSkill> hardSkills, List<SoftSkill> softSkills) {
-        addRowToTable(document, singletonList("Skills"), headingFont, false, 0);
-        StringBuilder formerColleagueInfo = new StringBuilder();
+        addRowToTable(document, singletonList("Skills"), HEADING_FONT, false, 0);
+        List<String> skills = new LinkedList<>();
 
         if (hardSkills != null) {
             for (HardSkill hardSkill : hardSkills) {
-                formerColleagueInfo.append(hardSkill.getType()).append(" • ");
+                skills.add(hardSkill.getType().toString());
             }
         }
 
         if (softSkills != null) {
             for (SoftSkill softSkill : softSkills) {
-                formerColleagueInfo.append(softSkill.getTitle()).append(" • ");
+                skills.add(softSkill.getTitle());
             }
         }
 
-        FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-        addRowToTable(document, List.of(formerColleagueInfo.toString()), bodyFont, false, INDENTATION);
+        addRowToTableDelimitedBySymbol(document, skills, BODY_FONT, false, INDENTATION, " • ", DASH_COLOR);
         document.createParagraph();
     }
 
     private static void addCoursesToDocument(XWPFDocument document, List<Course> courses) {
-        addRowToTable(document, singletonList("Courses"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Courses"), HEADING_FONT, false, 0);
 
         for (Course course : courses) {
-            String courseInfo = course.getName() + " | " + course.getInstitute();
-            FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-//            addDashedRowToTable(document, List.of(courseInfo), bodyFont, TITLE_COLOR, false, INDENTATION);
-            addDashedRowToTable(document, List.of(courseInfo), bodyFont, DASH_COLOR, false, INDENTATION);
+            String[] courseInfo = {course.getName(), course.getInstitute()};
+            addDashedRowToTableDelimitedBySymbol(document, asList(courseInfo), BODY_FONT, false, INDENTATION, " | ", DASH_COLOR);
         }
 
         document.createParagraph();
     }
 
     private static void addProjectsToDocument(XWPFDocument document, List<Project> projects) {
-        addRowToTable(document, singletonList("Projects"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Projects"), HEADING_FONT, false, 0);
 
         for (Project project : projects) {
-            String projectTitle = project.getName() + " | " +
-                    calculateDuration(project.getStartDate(), project.getEndDate()) + " | " +
-                    project.getStatus() +
-                    " (Click to open the project)";
-            FontProperties titleFont = new FontProperties(BODY_SIZE, BOLD_COLOR, "Gill Sans MT (Headings)");
-            addHyperlinkRowToTable(document, project.getReferenceLink(), projectTitle, titleFont, true, INDENTATION);
-
-            FontProperties descriptionFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addRowToTable(document, singletonList(project.getDescription()), descriptionFont, false, INDENTATION);
+            String[] title = {project.getName(), calculateDuration(project.getStartDate(), project.getEndDate()), project.getStatus().toString() + " (Click to open the project)"};
+            addHyperlinkRowToTableDelimitedBySymbol(document, project.getReferenceLink(), asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addRowToTable(document, singletonList(project.getDescription()), BODY_FONT, false, INDENTATION);
             document.createParagraph();
         }
     }
 
     private static void addEducationsToDocument(XWPFDocument document, List<Education> educations) {
-        addRowToTable(document, singletonList("Education"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Education"), HEADING_FONT, false, 0);
 
         for (Education education : educations) {
-            String educationTitle = education.getMajor() + " | " +
-                    education.getUniversity() + " | " +
-                    education.getDegreeLevel() + " | " +
-                    calculateYearDuration(education.getStartYear(), education.getEndYear());
-            FontProperties titleFont = new FontProperties(BODY_SIZE, BOLD_COLOR, "Gill Sans MT (Headings)");
-//            addDashedRowToTable(document, singletonList(educationTitle), titleFont, TITLE_COLOR, false, INDENTATION);
-            addDashedRowToTable(document, singletonList(educationTitle), titleFont, DASH_COLOR, false, INDENTATION);
+            String[] title = {education.getUniversity(),
+                    education.getDegreeLevel().toString(),
+                    calculateYearDuration(education.getStartYear(), education.getEndYear())};
+
+            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, false, INDENTATION, " | ", DASH_COLOR);
         }
 
         document.createParagraph();
     }
 
     private static void addTeachingAssistanceToDocument(XWPFDocument document, List<TeachingAssistance> teachingAssistanceList) {
-        addRowToTable(document, singletonList("Teaching Assistance"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Teaching Assistance"), HEADING_FONT, false, 0);
 
-        for (TeachingAssistance teachingAssistance : teachingAssistanceList) {
-            String teachingAssistanceTitle = teachingAssistance.getTitle() + " | " +
-                    teachingAssistance.getUniversity() + " | " +
-                    calculateDuration(teachingAssistance.getStartDate(), teachingAssistance.getEndDate());
+        for (TeachingAssistance ta : teachingAssistanceList) {
+            String[] title = {ta.getTitle(),
+                    ta.getUniversity(),
+                    calculateDuration(ta.getStartDate(), ta.getEndDate())};
 
-            FontProperties titleFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addDashedRowToTable(document, singletonList(teachingAssistanceTitle), titleFont, DASH_COLOR, false, INDENTATION);
+            addDashedRowToTableDelimitedBySymbol(document, asList(title), BODY_FONT, false, INDENTATION, " | ", DASH_COLOR);
         }
 
         document.createParagraph();
     }
 
     private static void addPresentationsToDocument(XWPFDocument document, List<Presentation> presentations) {
-        addRowToTable(document, singletonList("Presentations"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Presentations"), HEADING_FONT, false, 0);
 
         for (Presentation presentation : presentations) {
-            String presentationTitle = presentation.getTitle() + " | " + presentation.getDate();
-            FontProperties titleFont = new FontProperties(BODY_SIZE, BOLD_COLOR, "Gill Sans MT (Headings)");
-            addDashedRowToTable(document, singletonList(presentationTitle), titleFont, DASH_COLOR, true, INDENTATION);
-
-            FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addRowToTable(document, singletonList("   " + presentation.getDescription()), bodyFont, false, INDENTATION);
+            String[] title = {presentation.getTitle(), presentation.getDate().toString()};
+            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addRowToTable(document, singletonList("   " + presentation.getDescription()), BODY_FONT, false, INDENTATION);
         }
 
         document.createParagraph();
     }
 
     private static void addPatentsToDocument(XWPFDocument document, List<Patent> patents) {
-        addRowToTable(document, singletonList("Patents"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Patents"), HEADING_FONT, false, 0);
 
         for (Patent patent : patents) {
-            String patentTitle = patent.getTitle() + " | " + patent.getRegistrationNumber() + " | " + patent.getRegistrationDate();
-            FontProperties titleFont = new FontProperties(BODY_SIZE, BOLD_COLOR, "Gill Sans MT (Headings)");
-            addDashedRowToTable(document, singletonList(patentTitle), titleFont, DASH_COLOR, true, INDENTATION);
+            String[] title = {patent.getTitle(),
+                    patent.getRegistrationNumber(),
+                    patent.getRegistrationDate().toString()};
 
-            FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addRowToTable(document, singletonList("   " + patent.getDescription()), bodyFont, false, INDENTATION);
+            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addRowToTable(document, singletonList("   " + patent.getDescription()), BODY_FONT, false, INDENTATION);
         }
 
         document.createParagraph();
     }
 
     private static void addResearchesToDocument(XWPFDocument document, List<Research> researches) {
-        addRowToTable(document, singletonList("Researches"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Researches"), HEADING_FONT, false, 0);
 
         for (Research research : researches) {
-            String researchTitle = research.getTitle() + " | " +
-                    research.getPublisher() + " | " +
-                    research.getDate() +
-                    " (Click to open the research)";
-            FontProperties titleFont = new FontProperties(BODY_SIZE, BOLD_COLOR, "Gill Sans MT (Headings)");
-            addDashedHyperlinkRowToTable(document, research.getReferenceLink(), researchTitle, titleFont, DASH_COLOR, true, INDENTATION);
+            String[] title = {research.getTitle(),
+                    research.getPublisher(),
+                    research.getDate() + " (Click to open the research)"};
 
-            FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addRowToTable(document, singletonList("   " + research.getDescription()), bodyFont, false, INDENTATION);
+            addDashedHyperlinkRowToTableDelimitedBySymbol(document, research.getReferenceLink(), asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addRowToTable(document, singletonList("   " + research.getDescription()), BODY_FONT, false, INDENTATION);
             document.createParagraph();
         }
     }
 
     private static void addLanguagesToDocument(XWPFDocument document, List<Language> languages) {
-        addRowToTable(document, singletonList("Languages"), headingFont, false, 0);
-        StringBuilder languageTitle = new StringBuilder();
+        addRowToTable(document, singletonList("Languages"), HEADING_FONT, false, 0);
+        List<String> languageList = new LinkedList<>();
 
         for (Language language : languages) {
-            languageTitle.append(language.getName()).append(": ").append(language.estimateAverageLevel()).append(" • ");
+            String title = language.getName() + ": " + language.estimateAverageLevel();
+            languageList.add(title);
         }
 
-        FontProperties titleFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-        addRowToTable(document, singletonList(languageTitle.toString()), titleFont, false, INDENTATION);
+        addRowToTableDelimitedBySymbol(document, languageList, BODY_FONT, false, INDENTATION, " • ", DASH_COLOR);
         document.createParagraph();
     }
 
     private static void addHobbiesToDocument(XWPFDocument document, List<Hobby> hobbies) {
-        addRowToTable(document, singletonList("Hobbies"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Hobbies"), HEADING_FONT, false, 0);
+        List<String> hobbyList = new LinkedList<>();
 
         for (Hobby hobby : hobbies) {
-            FontProperties titleFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addRowToTable(document, singletonList(hobby.getTitle() + " • "), titleFont, false, INDENTATION);
+            hobbyList.add(hobby.getTitle());
         }
 
+        addRowToTableDelimitedBySymbol(document, hobbyList, BODY_FONT, false, INDENTATION, " • ", DASH_COLOR);
         document.createParagraph();
     }
 
     private static void addMembershipsToDocument(XWPFDocument document, List<Membership> memberships) {
-        addRowToTable(document, singletonList("Memberships"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Memberships"), HEADING_FONT, false, 0);
 
         for (Membership membership : memberships) {
-            String membershipInfo = " - " + membership.getTitle() + " | " + membership.getDate().getYear();
-            FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addRowToTable(document, singletonList(membershipInfo), bodyFont, false, INDENTATION);
+            String[] membershipInfo = {membership.getTitle(), valueOf(membership.getDate().getYear())};
+            addDashedRowToTableDelimitedBySymbol(document, asList(membershipInfo), BODY_FONT, false, INDENTATION, " | ", DASH_COLOR);
         }
 
         document.createParagraph();
     }
 
     private static void addVolunteerActivitiesToDocument(XWPFDocument document, List<VolunteerActivity> volunteerActivities) {
-        addRowToTable(document, singletonList("Volunteer Activities"), headingFont, false, 0);
+        addRowToTable(document, singletonList("Volunteer Activities"), HEADING_FONT, false, 0);
 
-        for (VolunteerActivity volunteerActivity : volunteerActivities) {
-            String volunteerActivityInfo = " - " + volunteerActivity.getTitle() + " | " + volunteerActivity.getYear();
-            FontProperties bodyFont = new FontProperties(BODY_SIZE, BODY_COLOR, "Gill Sans MT (Body)");
-            addRowToTable(document, singletonList(volunteerActivityInfo), bodyFont, false, INDENTATION);
+        for (VolunteerActivity activity : volunteerActivities) {
+            String[] activityInfo = {activity.getTitle(), valueOf(activity.getYear())};
+            addDashedRowToTableDelimitedBySymbol(document, asList(activityInfo), BODY_FONT, false, INDENTATION, " | ", DASH_COLOR);
         }
 
         document.createParagraph();
