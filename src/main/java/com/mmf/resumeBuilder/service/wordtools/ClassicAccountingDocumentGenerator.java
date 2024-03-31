@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
     private static final String HEADING_COLOR = "2E471D";
     public static final String BODY_COLOR = "212010";
     public static final String BOLD_COLOR = "000000";
-    private static final String DASH_COLOR = "558335";
+    private static final String SYMBOL_COLOR = "558335";
     public static final int INDENTATION = 300;
     private static final FontProperties HEADING_FONT = new FontProperties(16, HEADING_COLOR, "Gill Sans MT (Headings)");
     private static final FontProperties BODY_FONT = new FontProperties(10, BODY_COLOR, "Gill Sans MT (Body)");
@@ -172,7 +171,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             String[] title = {job.getTitle(), job.getCompanyName(), job.getLocation().getCityName().toString()};
 
             addRowToTable(document, singletonList(jobDuration), DATE_FONT, false, INDENTATION);
-            addRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", SYMBOL_COLOR);
             addRowToTable(document, singletonList(job.getDescription()), BODY_FONT, false, INDENTATION);
             document.createParagraph();
         }
@@ -183,7 +182,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (FormerColleague formerColleague : formerColleagues) {
             String[] formerColleagueInfo = {formerColleague.getFullName(), formerColleague.getPosition(), formerColleague.getPhoneNumber()};
-            addDashedRowToTableDelimitedBySymbol(document, asList(formerColleagueInfo), BODY_FONT, false, INDENTATION, " • ", DASH_COLOR);
+            addDashedRowToTableDelimitedBySymbol(document, asList(formerColleagueInfo), BODY_FONT, false, INDENTATION, " • ", SYMBOL_COLOR);
         }
 
         document.createParagraph();
@@ -206,7 +205,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             }
         }
 
-        addRowToTableDelimitedBySymbol(document, skills, BODY_FONT, false, INDENTATION, " • ", DASH_COLOR);
+        addRowToTableDelimitedBySymbol(document, skills, BODY_FONT, false, INDENTATION, " • ", SYMBOL_COLOR);
         document.createParagraph();
     }
 
@@ -215,7 +214,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (Course course : courses) {
             String[] courseInfo = {course.getName(), course.getInstitute()};
-            addDashedRowToTableDelimitedBySymbol(document, asList(courseInfo), BODY_FONT, false, INDENTATION, " | ", DASH_COLOR);
+            addDashedRowToTableDelimitedBySymbol(document, asList(courseInfo), BODY_FONT, false, INDENTATION, " | ", SYMBOL_COLOR);
         }
 
         document.createParagraph();
@@ -226,7 +225,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (Project project : projects) {
             String[] title = {project.getName(), calculateDuration(project.getStartDate(), project.getEndDate()), project.getStatus().toString() + " (Click to open the project)"};
-            addHyperlinkRowToTableDelimitedBySymbol(document, project.getReferenceLink(), asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addHyperlinkRowToTableDelimitedBySymbol(document, project.getReferenceLink(), asList(title), TITLE_FONT, true, INDENTATION, " | ", SYMBOL_COLOR);
             addRowToTable(document, singletonList(project.getDescription()), BODY_FONT, false, INDENTATION);
             document.createParagraph();
         }
@@ -240,7 +239,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
                     education.getDegreeLevel().toString(),
                     calculateYearDuration(education.getStartYear(), education.getEndYear())};
 
-            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, false, INDENTATION, " | ", DASH_COLOR);
+            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, false, INDENTATION, " | ", SYMBOL_COLOR);
         }
 
         document.createParagraph();
@@ -254,7 +253,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
                     ta.getUniversity(),
                     calculateDuration(ta.getStartDate(), ta.getEndDate())};
 
-            addDashedRowToTableDelimitedBySymbol(document, asList(title), BODY_FONT, false, INDENTATION, " | ", DASH_COLOR);
+            addDashedRowToTableDelimitedBySymbol(document, asList(title), BODY_FONT, false, INDENTATION, " | ", SYMBOL_COLOR);
         }
 
         document.createParagraph();
@@ -265,7 +264,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (Presentation presentation : presentations) {
             String[] title = {presentation.getTitle(), presentation.getDate().toString()};
-            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", SYMBOL_COLOR);
             addRowToTable(document, singletonList("   " + presentation.getDescription()), BODY_FONT, false, INDENTATION);
         }
 
@@ -280,7 +279,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
                     patent.getRegistrationNumber(),
                     patent.getRegistrationDate().toString()};
 
-            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addDashedRowToTableDelimitedBySymbol(document, asList(title), TITLE_FONT, true, INDENTATION, " | ", SYMBOL_COLOR);
             addRowToTable(document, singletonList("   " + patent.getDescription()), BODY_FONT, false, INDENTATION);
         }
 
@@ -295,7 +294,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
                     research.getPublisher(),
                     research.getDate() + " (Click to open the research)"};
 
-            addDashedHyperlinkRowToTableDelimitedBySymbol(document, research.getReferenceLink(), asList(title), TITLE_FONT, true, INDENTATION, " | ", DASH_COLOR);
+            addDashedHyperlinkRowToTableDelimitedBySymbol(document, research.getReferenceLink(), asList(title), TITLE_FONT, true, INDENTATION, " | ", SYMBOL_COLOR);
             addRowToTable(document, singletonList("   " + research.getDescription()), BODY_FONT, false, INDENTATION);
             document.createParagraph();
         }
@@ -310,7 +309,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             languageList.add(title);
         }
 
-        addRowToTableDelimitedBySymbol(document, languageList, BODY_FONT, false, INDENTATION, " • ", DASH_COLOR);
+        addRowToTableDelimitedBySymbol(document, languageList, BODY_FONT, false, INDENTATION, " • ", SYMBOL_COLOR);
         document.createParagraph();
     }
 
@@ -322,7 +321,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             hobbyList.add(hobby.getTitle());
         }
 
-        addRowToTableDelimitedBySymbol(document, hobbyList, BODY_FONT, false, INDENTATION, " • ", DASH_COLOR);
+        addRowToTableDelimitedBySymbol(document, hobbyList, BODY_FONT, false, INDENTATION, " • ", SYMBOL_COLOR);
         document.createParagraph();
     }
 
@@ -331,7 +330,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (Membership membership : memberships) {
             String[] membershipInfo = {membership.getTitle(), valueOf(membership.getDate().getYear())};
-            addDashedRowToTableDelimitedBySymbol(document, asList(membershipInfo), BODY_FONT, false, INDENTATION, " | ", DASH_COLOR);
+            addDashedRowToTableDelimitedBySymbol(document, asList(membershipInfo), BODY_FONT, false, INDENTATION, " | ", SYMBOL_COLOR);
         }
 
         document.createParagraph();
@@ -342,7 +341,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (VolunteerActivity activity : volunteerActivities) {
             String[] activityInfo = {activity.getTitle(), valueOf(activity.getYear())};
-            addDashedRowToTableDelimitedBySymbol(document, asList(activityInfo), BODY_FONT, false, INDENTATION, " | ", DASH_COLOR);
+            addDashedRowToTableDelimitedBySymbol(document, asList(activityInfo), BODY_FONT, false, INDENTATION, " | ", SYMBOL_COLOR);
         }
 
         document.createParagraph();
