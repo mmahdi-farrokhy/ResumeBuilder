@@ -6,7 +6,7 @@ public enum DegreeLevel {
     None,
     Associate,
     Bachelor,
-    Master,
+    Masters,
     Phd;
 
     @Override

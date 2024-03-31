@@ -49,7 +49,7 @@ public class DatabaseTest {
         resume.addSection(createResearch(resume));
         resume.addSection(createResearch2(resume));
         resume.addSection(createCourse(resume, "Java Expert", "7learn", "https://7learn.com/crt?h=bdP9hiSTF4"));
-        resume.addSection(createCourse(resume, "Spring Boot - Chad Darby", "Udemy", null));
+        resume.addSection(createCourse(resume, "Spring Boot (Chad Darby)", "Udemy", null));
         resume.addSection(createHardSkill(resume, HardSkillType.Java, HardSkillLevel.Advanced));
         resume.addSection(createHardSkill(resume, HardSkillType.Spring_Boot, HardSkillLevel.Intermediate));
         resume.addSection(createSoftSkill(resume, "Instruction"));
@@ -157,7 +157,7 @@ public class DatabaseTest {
         research.setPublisher("Mohammad Mahdi Farrokhy");
         research.setReferenceLink("https://github.com/mmahdi-farrokhy/Convolutional_Neural_Network");
         research.setDate(LocalDate.of(2022, 11, 5));
-        research.setDescription("I researched about CNN which is a subject under Machine Learning. And also developed a 'hand written digit recognition system' using VHDL");
+        research.setDescription("I researched about CNN which is a subject under Machine Learning. And also developed a hand written digit recognition system' using VHDL");
         research.setResume(resume);
         return research;
     }
@@ -270,7 +270,7 @@ public class DatabaseTest {
 
     public static Education createEducation2() {
         Education education = new Education();
-        education.setDegreeLevel(DegreeLevel.Master);
+        education.setDegreeLevel(DegreeLevel.Masters);
         education.setMajor(Major.Software_Engineering);
         education.setUniversity("Amir Kabir University of Technology (Tehran Polytechnic)");
         education.setGpa(19.87);
