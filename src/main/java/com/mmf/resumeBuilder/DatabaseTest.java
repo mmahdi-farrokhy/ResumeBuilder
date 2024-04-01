@@ -70,13 +70,14 @@ public class DatabaseTest {
     public static Project createProject(Resume resume) {
         Project project = new Project();
         project.setName("Resume Builder");
-        project.setDescription("I designed a resume builder web application using Spring Boot.\n" +
-                "This app has the capabilities of creating a new resume, editing an existing resume and removing a resume from profile.\n" +
-                "\n" +
-                "Stack:\n" +
-                "- Back-End: Java/Spring Boot\n" +
-                "- UI: HTML/CSS/Bootstrap\n" +
-                "- Database: MySQL");
+        project.setDescription("""
+                I designed a resume builder web application using Spring Boot.
+                This app has the capabilities of creating a new resume, editing an existing resume and removing a resume from profile.
+
+                Stack:
+                - Back-End: Java/Spring Boot
+                - UI: HTML/CSS/Bootstrap
+                - Database: MySQL""");
 
         project.setStartDate(LocalDate.of(2023, 12, 1));
         project.setStatus(ProjectStatus.Active);
@@ -157,7 +158,7 @@ public class DatabaseTest {
         research.setPublisher("Mohammad Mahdi Farrokhy");
         research.setReferenceLink("https://github.com/mmahdi-farrokhy/Convolutional_Neural_Network");
         research.setDate(LocalDate.of(2022, 11, 5));
-        research.setDescription("I researched about CNN which is a subject under Machine Learning. And also developed a hand written digit recognition system' using VHDL");
+        research.setDescription("I researched about CNN which is a subject under Machine Learning. And also developed a hand written digit recognition system using VHDL");
         research.setResume(resume);
         return research;
     }
