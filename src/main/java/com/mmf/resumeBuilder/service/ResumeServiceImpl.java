@@ -7,7 +7,7 @@ import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.ResumeJPARepository;
 import com.mmf.resumeBuilder.repository.ResumeRepository;
-import com.mmf.resumeBuilder.service.wordtools.*;
+import com.mmf.resumeBuilder.service.wordtools.documentgenerator.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

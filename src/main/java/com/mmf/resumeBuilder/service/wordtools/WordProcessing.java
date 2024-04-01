@@ -1,5 +1,7 @@
 package com.mmf.resumeBuilder.service.wordtools;
 
+import com.mmf.resumeBuilder.entity.resume.PersonalInformation;
+import com.mmf.resumeBuilder.service.wordtools.documentgenerator.ATSClassicDocumentGenerator;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
@@ -7,9 +9,12 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class WordProcessing {
+    public static final String STORE_PATH = System.getProperty("user.dir") + "\\src\\main\\resumes\\";
 
     public static XWPFDocument createDocument(double top, double bottom, double left, double right) {
         XWPFDocument document = new XWPFDocument();
@@ -117,5 +122,16 @@ public class WordProcessing {
 
         table.getCTTbl().getTblPr().unsetTblBorders();
         return table;
+    }
+
+    public static String generateFilePath(PersonalInformation personalInformation, String themeName) {
+        return STORE_PATH +
+                themeName + " - " +
+                personalInformation.getFullName() +
+                " - " +
+                LocalDate.now().getYear() + "_" + LocalDate.now().getMonth() + "_" + LocalDate.now().getDayOfMonth() + "_" +
+                " - " +
+                LocalTime.now().getHour() + "_" + LocalTime.now().getMinute() + "_" + LocalTime.now().getSecond() +
+                ".docx";
     }
 }

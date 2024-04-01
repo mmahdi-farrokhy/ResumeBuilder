@@ -1,14 +1,13 @@
-package com.mmf.resumeBuilder.service.wordtools;
+package com.mmf.resumeBuilder.service.wordtools.documentgenerator;
 
 import com.mmf.resumeBuilder.constants.contactinformation.ContactType;
 import com.mmf.resumeBuilder.entity.resume.*;
+import com.mmf.resumeBuilder.service.wordtools.FontProperties;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +20,6 @@ import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 
 public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
-    public static final String STORE_PATH = System.getProperty("user.dir") + "\\src\\main\\resumes\\";
     private static final String DATE_COLOR = "575355";
     private static final String HEADING_COLOR = "2E471D";
     public static final String BODY_COLOR = "212010";
@@ -120,7 +118,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
                     addVolunteerActivitiesToDocument(document, volunteerActivities);
                 }
 
-                FileOutputStream out = new FileOutputStream(STORE_PATH + "Test.docx");
+                FileOutputStream out = new FileOutputStream(generateFilePath(personalInformation, "Classic Accounting"));
                 document.write(out);
                 out.close();
                 document.close();
@@ -467,15 +465,5 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             addRunToParagraph(paragraph, valueOf(activity.getYear()), BODY_FONT, false);
             insertNewLine(paragraph);
         }
-    }
-
-    private static String generateFilePath(PersonalInformation personalInformation) {
-        return STORE_PATH +
-                personalInformation.getFullName() +
-                " _ " +
-                LocalDate.now() +
-                " _ " +
-                LocalTime.now().getHour() + "-" + LocalTime.now().getMinute() + "-" + LocalTime.now().getSecond() +
-                ".docx";
     }
 }
