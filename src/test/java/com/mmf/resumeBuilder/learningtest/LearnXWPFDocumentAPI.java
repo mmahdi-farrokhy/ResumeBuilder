@@ -5,6 +5,8 @@ import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.service.wordtools.documentgenerator.ATSClassicDocumentGenerator;
 import com.mmf.resumeBuilder.service.wordtools.documentgenerator.ClassicAccountingDocumentGenerator;
 import com.mmf.resumeBuilder.service.wordtools.documentgenerator.DocumentGenerator;
+import com.mmf.resumeBuilder.service.wordtools.documentgenerator.SimpleFloristDocumentGenerator;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,14 +23,22 @@ public class LearnXWPFDocumentAPI {
     }
 
     @Test
-    void create_a_new_word_document_and_write_inside_it_with_theme_ATC_Classic() {
+    void ATC_Classic_create_a_new_word_document_and_write_inside_it() {
         documentGenerator = new ATSClassicDocumentGenerator();
-        documentGenerator.generateWordDocument(resume);
     }
 
     @Test
-    void create_a_new_word_document_and_write_inside_it_with_theme_Classic_Accounting() {
+    void Classic_Accounting_create_a_new_word_document_and_write_inside_it() {
         documentGenerator = new ClassicAccountingDocumentGenerator();
+    }
+
+    @Test
+    void Simple_Florist_create_a_new_word_document_and_write_inside_it() {
+        documentGenerator = new SimpleFloristDocumentGenerator();
+    }
+
+    @AfterEach
+    void tearDown() {
         documentGenerator.generateWordDocument(resume);
     }
 }
