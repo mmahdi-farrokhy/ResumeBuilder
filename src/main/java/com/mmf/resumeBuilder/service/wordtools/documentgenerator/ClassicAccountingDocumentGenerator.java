@@ -294,6 +294,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (Education education : educations) {
             addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
+            addRunToParagraph(paragraph, education.getMajor().toString(), BODY_FONT, false);
+            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+
             addRunToParagraph(paragraph, education.getUniversity(), BODY_FONT, false);
             addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
 
@@ -338,7 +341,6 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
 
             addRunToParagraph(paragraph, presentation.getDate().toString(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
             insertNewLine(paragraph);
 
             addRunToParagraph(paragraph, "   " + presentation.getDescription(), BODY_FONT, false);
