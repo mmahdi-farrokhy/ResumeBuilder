@@ -1,7 +1,7 @@
 package com.mmf.resumeBuilder.service.wordtools;
 
 import com.mmf.resumeBuilder.entity.resume.PersonalInformation;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.ATSClassicDocumentGenerator;
+import com.mmf.resumeBuilder.service.wordtools.documentgenerator.SimpleFloristDocumentGenerator;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
@@ -133,5 +133,39 @@ public class WordProcessing {
                 " - " +
                 LocalTime.now().getHour() + "_" + LocalTime.now().getMinute() + "_" + LocalTime.now().getSecond() +
                 ".docx";
+    }
+
+    public static XWPFTableRow createRow(XWPFTable table) {
+        XWPFTableRow row = table.createRow();
+        if (!row.getTableCells().isEmpty()) {
+            row.getTableCells().clear();
+        }
+
+        return row;
+    }
+
+    public static XWPFTableCell createCell(XWPFTableRow row) {
+        XWPFTableCell cell = row.createCell();
+        if (!cell.getParagraphs().isEmpty())
+            cell.removeParagraph(0);
+
+        return cell;
+    }
+
+    public static void insertEmptyRow(XWPFTable table) {
+        table.createRow();
+    }
+
+    public static XWPFTableCell getRowCell(XWPFTableRow row, int paragraphIndex) {
+        XWPFTableCell cell = row.getTableCells().get(paragraphIndex);
+        cell.setWidth(SimpleFloristDocumentGenerator.TWO_INCH_WIDTH);
+
+        if (!cell.getParagraphs().isEmpty()) {
+            for (int paragraphNumber = 0; paragraphNumber < cell.getParagraphs().size(); paragraphNumber++) {
+                cell.removeParagraph(0);
+            }
+        }
+
+        return cell;
     }
 }
