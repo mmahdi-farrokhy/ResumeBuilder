@@ -3,6 +3,7 @@ package com.mmf.resumeBuilder.service.wordtools.documentgenerator;
 import com.mmf.resumeBuilder.entity.resume.*;
 import com.mmf.resumeBuilder.service.datetools.DateCalculation;
 import com.mmf.resumeBuilder.service.wordtools.FontProperties;
+import com.mmf.resumeBuilder.service.wordtools.Symbol;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -18,9 +19,11 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
     private static final FontProperties nameTitleFont = new FontProperties(35, "262626", "Speak Pro (Headings)");
     private static final FontProperties sectionTitleFont = new FontProperties(16, "262626", "Speak Pro (Headings)");
     public static final int BODY_SIZE = 10;
-    public static final String BULLET_COLOR = "D195A9";
+    public static final String SYMBOL_COLOR = "D195A9";
     public static final String FILL_COLOR = "F6EAEE";
     private static final FontProperties BODY_FONT = new FontProperties(10, "5A5A5A", "Times New Roman (Headings CS)");
+    private static final Symbol BULLET = new Symbol(SYMBOL_COLOR, '•');
+    private static final Symbol DASH = new Symbol(SYMBOL_COLOR, '-');
 
     @Override
     public void generateWordDocument(Resume resume) {
@@ -134,11 +137,11 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
     private static void addContactInformation(XWPFDocument document, List<ContactMethod> contactInformation) {
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.CENTER);
-        addSymbolToParagraph(paragraph, BODY_SIZE, BULLET_COLOR, '•');
+        addSymbolToParagraph(paragraph, BULLET, BODY_SIZE);
 
         for (ContactMethod contactMethod : contactInformation) {
             addRunToParagraph(paragraph, contactMethod.getContent(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_SIZE, BULLET_COLOR, '•');
+            addSymbolToParagraph(paragraph, BULLET, BODY_SIZE);
         }
 
         insertNewLine(paragraph);
@@ -198,12 +201,12 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
 
         for (FormerColleague formerColleague : formerColleagues) {
             bodyParagraph.setIndentationLeft(300);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             addRunToParagraph(bodyParagraph, formerColleague.getFullName(), BODY_FONT, false);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '•');
+            addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
 
             addRunToParagraph(bodyParagraph, formerColleague.getPosition(), BODY_FONT, false);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '•');
+            addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
 
             addRunToParagraph(bodyParagraph, formerColleague.getPhoneNumber(), BODY_FONT, false);
             insertNewLine(bodyParagraph);
@@ -223,7 +226,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             for (HardSkill hardSkill : hardSkills) {
                 bodyParagraph.setIndentationLeft(INDENTATION);
                 addRunToParagraph(bodyParagraph, hardSkill.getType().toString(), BODY_FONT, false);
-                addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '•');
+                addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
             }
         }
 
@@ -231,7 +234,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             for (SoftSkill softSkill : softSkills) {
                 bodyParagraph.setIndentationLeft(INDENTATION);
                 addRunToParagraph(bodyParagraph, softSkill.getTitle(), BODY_FONT, false);
-                addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '•');
+                addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
             }
         }
 
@@ -249,7 +252,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
 
         for (Course course : courses) {
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             addRunToParagraph(bodyParagraph, course.getName() + " | " + course.getInstitute(), BODY_FONT, false);
             insertNewLine(bodyParagraph);
         }
@@ -268,7 +271,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Project project : projects) {
             projectNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             String projectDuration = DateCalculation.calculateDuration(project.getStartDate(), project.getEndDate());
             String projectTitle = project.getName() + " | " + projectDuration + " | " + project.getStatus();
 
@@ -326,7 +329,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
 
         for (TeachingAssistance ta : teachingAssistance) {
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             String teachingAssistanceTitle = ta.getTitle() + " | " + ta.getUniversity() + " | " + DateCalculation.calculateDuration(ta.getStartDate(), ta.getEndDate());
             addRunToParagraph(bodyParagraph, teachingAssistanceTitle, BODY_FONT, false);
             insertNewLine(bodyParagraph);
@@ -346,7 +349,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Presentation presentation : presentations) {
             presentationNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             String presentationTitle = presentation.getTitle() + " | " + presentation.getDate();
             addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, true);
             insertNewLine(bodyParagraph);
@@ -379,7 +382,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Patent patent : patents) {
             patentNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             String presentationTitle = patent.getTitle() + " | " + patent.getRegistrationNumber() + " | " + patent.getRegistrationDate();
             addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, true);
             insertNewLine(bodyParagraph);
@@ -412,7 +415,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Research research : researches) {
             researchNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             String presentationTitle = research.getTitle() + " | " + research.getPublisher() + " | " + research.getDate();
             addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, true);
             insertNewLine(bodyParagraph);
@@ -447,7 +450,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             bodyParagraph.setIndentationLeft(INDENTATION);
             String presentationTitle = language.getName() + ": " + language.estimateAverageLevel();
             addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, false);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '•');
+            addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
         }
 
         insertNewLine(bodyParagraph);
@@ -465,7 +468,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Hobby hobby : hobbies) {
             bodyParagraph.setIndentationLeft(INDENTATION);
             addRunToParagraph(bodyParagraph, hobby.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '•');
+            addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
         }
 
         insertNewLine(bodyParagraph);
@@ -482,7 +485,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
 
         for (Membership membership : memberships) {
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             String presentationTitle = membership.getTitle() + " | " + membership.getDate().getYear();
             addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, false);
             insertNewLine(bodyParagraph);
@@ -500,7 +503,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
 
         for (VolunteerActivity volunteerActivity : volunteerActivities) {
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addSymbolToParagraph(bodyParagraph, BODY_SIZE, BULLET_COLOR, '-');
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             addRunToParagraph(bodyParagraph, volunteerActivity.getTitle() + " | " + volunteerActivity.getYear(), BODY_FONT, false);
             insertNewLine(bodyParagraph);
         }

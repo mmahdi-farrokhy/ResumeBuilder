@@ -2,12 +2,12 @@ package com.mmf.resumeBuilder.service.wordtools.documentgenerator;
 
 import com.mmf.resumeBuilder.entity.resume.*;
 import com.mmf.resumeBuilder.service.wordtools.FontProperties;
+import com.mmf.resumeBuilder.service.wordtools.Symbol;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateDuration;
@@ -25,6 +25,10 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
     private static final FontProperties TITLE_FONT = new FontProperties(10, "000000", "Arial (Body)");
     private static final FontProperties DATE_FONT = new FontProperties(10, "595959", "Arial (Body)");
     private static final String SYMBOL_COLOR = "394a04";
+    private static final Symbol BULLET = new Symbol(SYMBOL_COLOR, '•');
+    private static final Symbol DASH = new Symbol(SYMBOL_COLOR, '-');
+    private static final Symbol COLON = new Symbol(SYMBOL_COLOR, ':');
+    private static final Symbol PIPE = new Symbol(SYMBOL_COLOR, '|');
 
     @Override
     public void generateWordDocument(Resume resume) {
@@ -142,12 +146,13 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
         contactParagraph.setAlignment(ParagraphAlignment.CENTER);
 
         int methodNumber = 0;
-        for (ContactMethod contactMethod : contactInformation) {
+        for (ContactMethod method : contactInformation) {
             methodNumber++;
-            addRunToParagraph(contactParagraph, contactMethod.getContent(), BODY_FONT, false);
+            addRunToParagraph(contactParagraph, method.getContent(), BODY_FONT, false);
 
-            if (methodNumber < contactInformation.size())
-                addSymbolToParagraph(contactParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+            if (methodNumber < contactInformation.size()) {
+                addSymbolToParagraph(contactParagraph, BULLET, BODY_FONT.getSize());
+            }
         }
 
         insertNewLine(contactParagraph);
@@ -155,19 +160,12 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private void addSummary(XWPFTable table, Summary summary) {
         XWPFTableRow row = createRow(table);
-        XWPFTableCell cell1 = createCell(row);
-        cell1.setWidth(TWO_INCH_WIDTH);
-        XWPFParagraph paragraph1 = cell1.addParagraph();
-        paragraph1.setAlignment(ParagraphAlignment.LEFT);
-        addRunToParagraph(paragraph1, "Summary", HEADING_FONT, true);
+        writeInTableCell(createCell(row, TWO_INCH_WIDTH), "Summary", HEADING_FONT, true);
 
-        XWPFTableCell cell2 = createCell(row);
-        cell2.setWidth(FIVE_INCH_WIDTH);
+        XWPFTableCell bodyCell = createCell(row, FIVE_INCH_WIDTH);
 
         for (String summaryParagraph : summary.getText().split("\\n")) {
-            XWPFParagraph paragraph2 = cell2.addParagraph();
-            paragraph2.setAlignment(ParagraphAlignment.LEFT);
-            addRunToParagraph(paragraph2, summaryParagraph, BODY_FONT, false);
+            writeInTableCell(bodyCell, summaryParagraph, BODY_FONT, false);
         }
 
         insertEmptyRow(table);
@@ -175,37 +173,31 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     public static void addJobExperiencesToDocument(XWPFTable table, List<JobExperience> jobExperiences) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Experiences", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Experiences", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
+        int jobNumber = 0;
         for (JobExperience job : jobExperiences) {
-            XWPFParagraph durationParagraph = bodyCell.addParagraph();
-            XWPFParagraph titleParagraph = bodyCell.addParagraph();
-
+            jobNumber++;
             String jobDuration = calculateDuration(job.getStartDate(), job.getEndDate());
-            addRunToParagraph(durationParagraph, jobDuration, DATE_FONT, false);
+            writeInTableCell(bodyCell, jobDuration, DATE_FONT, false);
 
-            addRunToParagraph(titleParagraph, job.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(titleParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            XWPFParagraph titleParagraph = bodyCell.addParagraph();
+            List<String> titleParts = Arrays.asList(job.getTitle(),
+                    job.getCompanyName(),
+                    job.getLocation().getCityName().toString());
 
-            addRunToParagraph(titleParagraph, job.getCompanyName(), TITLE_FONT, true);
-            addSymbolToParagraph(titleParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
-
-            addRunToParagraph(titleParagraph, job.getLocation().getCityName().toString(), TITLE_FONT, true);
+            writeInTableCell(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
 
             int paragraphNumber = 0;
             String[] split = job.getDescription().split("\\n");
             for (String descriptionBlock : split) {
                 paragraphNumber++;
-                XWPFParagraph descriptionParagraph = bodyCell.addParagraph();
-                addRunToParagraph(descriptionParagraph, descriptionBlock, BODY_FONT, false);
+                writeInTableCell(bodyCell, descriptionBlock, BODY_FONT, false);
 
-                if (paragraphNumber == split.length)
-                    insertNewLine(descriptionParagraph);
+                if (paragraphNumber == split.length && jobNumber < jobExperiences.size())
+                    insertNewLine(bodyCell);
             }
         }
 
@@ -214,25 +206,17 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addFormerColleaguesToDocument(XWPFTable table, List<FormerColleague> formerColleagues) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Former Colleagues", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Former Colleagues", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
-
         for (FormerColleague formerColleague : formerColleagues) {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
+            List<String> titleParts = Arrays.asList(formerColleague.getFullName(),
+                    formerColleague.getPosition(),
+                    formerColleague.getPhoneNumber());
 
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
-
-            addRunToParagraph(titleParagraph, formerColleague.getFullName(), BODY_FONT, false);
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
-
-            addRunToParagraph(titleParagraph, formerColleague.getPosition(), BODY_FONT, false);
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
-
-            addRunToParagraph(titleParagraph, formerColleague.getPhoneNumber(), BODY_FONT, false);
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            writeInTableCell(titleParagraph, titleParts, BODY_FONT, BULLET, false);
         }
 
         insertEmptyRow(table);
@@ -240,12 +224,9 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addSkillsToDocument(XWPFTable table, List<HardSkill> hardSkills, List<SoftSkill> softSkills) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Skills", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Skills", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         List<String> skills = new LinkedList<>();
 
@@ -258,37 +239,24 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             skills = Stream.concat(skills.stream(), softSkillList.stream()).toList();
         }
 
-        int skillNumber = 0;
         XWPFParagraph titleParagraph = bodyCell.addParagraph();
-        for (String skill : skills) {
-            skillNumber++;
-
-            addRunToParagraph(titleParagraph, skill, BODY_FONT, false);
-
-            if (skillNumber < skills.size())
-                addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
-        }
+        writeInTableCell(titleParagraph, skills, BODY_FONT, BULLET, false);
 
         insertEmptyRow(table);
     }
 
     private static void addCoursesToDocument(XWPFTable table, List<Course> courses) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Courses", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Courses", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (Course course : courses) {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
+            List<String> titleParts = Arrays.asList(course.getName(), course.getInstitute());
 
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
-
-            addRunToParagraph(titleParagraph, course.getName(), BODY_FONT, false);
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-            addRunToParagraph(titleParagraph, course.getInstitute(), BODY_FONT, false);
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            writeInTableCell(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);
@@ -296,33 +264,30 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addProjectsToDocument(XWPFTable table, List<Project> projects) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Projects", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Projects", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (Project project : projects) {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
-
-            addHyperlinkRunToParagraph(titleParagraph, project.getReferenceLink(), project.getName(), TITLE_FONT, true);
-            addSymbolToParagraph(titleParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
-
             String projectDuration = calculateDuration(project.getStartDate(), project.getEndDate());
-            addHyperlinkRunToParagraph(titleParagraph, project.getReferenceLink(), projectDuration, TITLE_FONT, true);
-            addSymbolToParagraph(titleParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
 
-            addHyperlinkRunToParagraph(titleParagraph, project.getReferenceLink(), project.getStatus().toString(), TITLE_FONT, true);
+            Map<String, String> titleParts = new LinkedHashMap<>() {{
+                put(project.getName(), project.getReferenceLink());
+                put(projectDuration, project.getReferenceLink());
+                put(project.getStatus().toString(), project.getReferenceLink());
+            }};
+
+            writeHyperlinkInTableCell(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
 
             int projectNumber = 0;
-            String[] split = project.getDescription().split("\\n");
-            for (String descriptionBlock : split) {
+            String[] descriptionText = project.getDescription().split("\\n");
+            for (String descriptionBlock : descriptionText) {
                 projectNumber++;
                 XWPFParagraph descriptionParagraph = bodyCell.addParagraph();
                 addRunToParagraph(descriptionParagraph, descriptionBlock, BODY_FONT, false);
 
-                if (projectNumber == split.length)
+                if (projectNumber == descriptionText.length)
                     insertNewLine(descriptionParagraph);
             }
         }
@@ -332,27 +297,21 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addEducationsToDocument(XWPFTable table, List<Education> educations) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Education", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Education", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (Education education : educations) {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
-
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
-
             String major = education.getDegreeLevel() + " of " + education.getMajor();
-            addRunToParagraph(titleParagraph, major, BODY_FONT, false);
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-
-            addRunToParagraph(titleParagraph, education.getUniversity(), BODY_FONT, false);
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-
             String educationDuration = calculateYearDuration(education.getStartYear(), education.getEndYear());
-            addRunToParagraph(titleParagraph, educationDuration, BODY_FONT, false);
+
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            List<String> titleParts = Arrays.asList(education.getDegreeLevel() + " of " + education.getMajor(),
+                    major,
+                    education.getUniversity(),
+                    educationDuration);
+            writeInTableCell(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);
@@ -360,26 +319,19 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addTeachingAssistanceToDocument(XWPFTable table, List<TeachingAssistance> teachingAssistanceList) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Teaching Assistance", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Teaching Assistance", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (TeachingAssistance ta : teachingAssistanceList) {
             XWPFParagraph paragraph = bodyCell.addParagraph();
-
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
-
-            addRunToParagraph(paragraph, ta.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-
-            addRunToParagraph(paragraph, ta.getUniversity(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-
             String duration = calculateDuration(ta.getStartDate(), ta.getEndDate());
-            addRunToParagraph(paragraph, duration, BODY_FONT, false);
+            List<String> titleParts = Arrays.asList(ta.getTitle(),
+                    ta.getUniversity(),
+                    duration);
+
+            addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
+            writeInTableCell(paragraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);
@@ -387,25 +339,20 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addPresentationsToDocument(XWPFTable table, List<Presentation> presentations) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Presentations", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Presentations", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (Presentation presentation : presentations) {
             XWPFParagraph presentationParagraph = bodyCell.addParagraph();
 
-            addSymbolToParagraph(presentationParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '-');
+            List<String> titlePArt = Arrays.asList(presentation.getTitle(), presentation.getDate().toString());
 
-            addRunToParagraph(presentationParagraph, presentation.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(presentationParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(presentationParagraph, DASH, TITLE_FONT.getSize());
+            writeInTableCell(presentationParagraph, titlePArt, BODY_FONT, PIPE, true);
 
-            addRunToParagraph(presentationParagraph, presentation.getDate().toString(), TITLE_FONT, true);
-
-            String[] split = presentation.getDescription().split("\\n");
-            for (String descriptionParagraph : split) {
+            String[] descriptionText = presentation.getDescription().split("\\n");
+            for (String descriptionParagraph : descriptionText) {
                 XWPFParagraph paragraph = bodyCell.addParagraph();
                 addRunToParagraph(paragraph, descriptionParagraph, BODY_FONT, false);
                 insertNewLine(paragraph);
@@ -417,28 +364,19 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addPatentsToDocument(XWPFTable table, List<Patent> patents) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Patents", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Patents", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (Patent patent : patents) {
-            XWPFParagraph presentationParagraph = bodyCell.addParagraph();
+            XWPFParagraph patentParagraph = bodyCell.addParagraph();
+            List<String> titleParts = Arrays.asList(patent.getTitle(), patent.getRegistrationNumber(), patent.getRegistrationDate().toString());
 
-            addSymbolToParagraph(presentationParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(patentParagraph, DASH, TITLE_FONT.getSize());
+            writeInTableCell(patentParagraph, titleParts, BODY_FONT, PIPE, true);
 
-            addRunToParagraph(presentationParagraph, patent.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(presentationParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-
-            addRunToParagraph(presentationParagraph, patent.getRegistrationNumber(), TITLE_FONT, true);
-            addSymbolToParagraph(presentationParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-
-            addRunToParagraph(presentationParagraph, patent.getRegistrationDate().toString(), TITLE_FONT, true);
-
-            String[] split = patent.getDescription().split("\\n");
-            for (String descriptionParagraph : split) {
+            String[] descriptionText = patent.getDescription().split("\\n");
+            for (String descriptionParagraph : descriptionText) {
                 XWPFParagraph paragraph = bodyCell.addParagraph();
                 addRunToParagraph(paragraph, descriptionParagraph, BODY_FONT, false);
                 insertNewLine(paragraph);
@@ -450,34 +388,30 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addResearchesToDocument(XWPFTable table, List<Research> researches) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Researches", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Researches", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (Research research : researches) {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
+            Map<String, String> titleParts = new LinkedHashMap<>() {{
 
-            addSymbolToParagraph(titleParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '-');
+                addSymbolToParagraph(titleParagraph, DASH, TITLE_FONT.getSize());
+                put(research.getTitle(), research.getReferenceLink());
+                put(research.getPublisher(), research.getReferenceLink());
+                put(research.getDate() + " (Click to open the research)", research.getReferenceLink());
+            }};
 
-            addHyperlinkRunToParagraph(titleParagraph, research.getReferenceLink(), research.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(titleParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
-
-            addHyperlinkRunToParagraph(titleParagraph, research.getReferenceLink(), research.getPublisher(), TITLE_FONT, true);
-            addSymbolToParagraph(titleParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
-
-            addHyperlinkRunToParagraph(titleParagraph, research.getReferenceLink(), research.getDate() + " (Click to open the research)", TITLE_FONT, true);
+            writeHyperlinkInTableCell(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
 
             int researchNumber = 0;
-            String[] split = research.getDescription().split("\\n");
-            for (String descriptionBlock : split) {
+            String[] descriptionText = research.getDescription().split("\\n");
+            for (String descriptionBlock : descriptionText) {
                 researchNumber++;
                 XWPFParagraph descriptionParagraph = bodyCell.addParagraph();
                 addRunToParagraph(descriptionParagraph, descriptionBlock, BODY_FONT, false);
 
-                if (researchNumber == split.length)
+                if (researchNumber == descriptionText.length)
                     insertNewLine(descriptionParagraph);
             }
         }
@@ -487,24 +421,21 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addLanguagesToDocument(XWPFTable table, List<Language> languages) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Languages", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Languages", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         XWPFParagraph titleParagraph = bodyCell.addParagraph();
         int languageNumber = 0;
         for (Language language : languages) {
             languageNumber++;
             addRunToParagraph(titleParagraph, language.getName().toString(), BODY_FONT, false);
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, ':');
+            addSymbolToParagraph(titleParagraph, COLON, BODY_FONT.getSize());
 
             addRunToParagraph(titleParagraph, language.estimateAverageLevel().toString(), BODY_FONT, false);
 
             if (languageNumber < languages.size())
-                addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+                addSymbolToParagraph(titleParagraph, BULLET, BODY_FONT.getSize());
         }
 
         insertEmptyRow(table);
@@ -512,63 +443,52 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addHobbiesToDocument(XWPFTable table, List<Hobby> hobbies) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Hobbies", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Hobbies", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         XWPFParagraph titleParagraph = bodyCell.addParagraph();
-        int hobbyNumber = 0;
-        for (Hobby hobby : hobbies) {
-            hobbyNumber++;
-            addRunToParagraph(titleParagraph, hobby.getTitle(), BODY_FONT, false);
 
-            if (hobbyNumber < hobbies.size())
-                addSymbolToParagraph(titleParagraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '•');
+        List<String> hobbyList = new LinkedList<>();
+        for (Hobby hobby : hobbies) {
+            hobbyList.add(hobby.getTitle());
         }
+
+        writeInTableCell(titleParagraph, hobbyList, BODY_FONT, BULLET, false);
 
         insertEmptyRow(table);
     }
 
     private static void addMembershipsToDocument(XWPFTable table, List<Membership> memberships) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Memberships", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Memberships", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (Membership membership : memberships) {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
+            List<String> titleParts = Arrays.asList(membership.getTitle(), membership.getDate().toString());
 
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
-            addRunToParagraph(titleParagraph, membership.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-            addRunToParagraph(titleParagraph, membership.getDate().toString(), BODY_FONT, false);
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            writeInTableCell(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);
     }
 
-    private static void addVolunteerActivitiesToDocument(XWPFTable table, List<VolunteerActivity> volunteerActivities) {
+    private static void addVolunteerActivitiesToDocument(XWPFTable
+                                                                 table, List<VolunteerActivity> volunteerActivities) {
         XWPFTableRow row = table.createRow();
-        XWPFTableCell headingCell = getRowCell(row, 0);
-        XWPFParagraph headingParagraph = headingCell.addParagraph();
-        addRunToParagraph(headingParagraph, "Volunteer Activities", HEADING_FONT, true);
+        writeInTableCell(getRowCell(row, 0), "Volunteer Activities", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
-        bodyCell.setWidth(FIVE_INCH_WIDTH);
 
         for (VolunteerActivity activity : volunteerActivities) {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
+            List<String> titleParts = Arrays.asList(activity.getTitle(), valueOf(activity.getYear()));
 
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
-            addRunToParagraph(titleParagraph, activity.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(titleParagraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
-            addRunToParagraph(titleParagraph, valueOf(activity.getYear()), BODY_FONT, false);
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            writeInTableCell(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);

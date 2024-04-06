@@ -3,6 +3,7 @@ package com.mmf.resumeBuilder.service.wordtools.documentgenerator;
 import com.mmf.resumeBuilder.constants.contactinformation.ContactType;
 import com.mmf.resumeBuilder.entity.resume.*;
 import com.mmf.resumeBuilder.service.wordtools.FontProperties;
+import com.mmf.resumeBuilder.service.wordtools.Symbol;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
@@ -30,6 +31,10 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
     private static final FontProperties BODY_FONT = new FontProperties(10, BODY_COLOR, "Gill Sans MT (Body)");
     private static final FontProperties TITLE_FONT = new FontProperties(10, BOLD_COLOR, "Gill Sans MT (Headings)");
     public static final FontProperties DATE_FONT = new FontProperties(10, DATE_COLOR, "Gill Sans MT");
+    private static final Symbol BULLET = new Symbol(SYMBOL_COLOR, '•');
+    private static final Symbol DASH = new Symbol(SYMBOL_COLOR, '-');
+    private static final Symbol COLON = new Symbol(SYMBOL_COLOR, ':');
+    private static final Symbol PIPE = new Symbol(SYMBOL_COLOR, '|');
 
     @Override
     public void generateWordDocument(Resume resume) {
@@ -180,9 +185,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             insertNewLine(paragraph);
 
             addRunToParagraph(paragraph, job.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
             addRunToParagraph(paragraph, job.getCompanyName(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
             addRunToParagraph(paragraph, job.getLocation().getCityName().toString(), TITLE_FONT, true);
             insertNewLine(paragraph);
 
@@ -202,13 +207,13 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         paragraph.setIndentationLeft(INDENTATION);
 
         for (FormerColleague formerColleague : formerColleagues) {
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, formerColleague.getFullName(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, formerColleague.getPosition(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, formerColleague.getPhoneNumber(), BODY_FONT, false);
             insertNewLine(paragraph);
@@ -236,7 +241,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             addRunToParagraph(paragraph, skill, BODY_FONT, false);
 
             if (skillNumber < skills.size()) {
-                addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+                addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
             }
         }
 
@@ -249,10 +254,10 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         paragraph.setIndentationLeft(INDENTATION);
 
         for (Course course : courses) {
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, course.getName(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, course.getInstitute(), BODY_FONT, false);
             insertNewLine(paragraph);
@@ -268,11 +273,11 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         for (Project project : projects) {
             projectNumber++;
             addHyperlinkRunToParagraph(paragraph, project.getReferenceLink(), project.getName(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
             String projectDuration = calculateDuration(project.getStartDate(), project.getEndDate());
             addHyperlinkRunToParagraph(paragraph, project.getReferenceLink(), projectDuration, TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
             addHyperlinkRunToParagraph(paragraph, project.getReferenceLink(), project.getStatus().toString(), TITLE_FONT, true);
             insertNewLine(paragraph);
@@ -293,15 +298,15 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         paragraph.setIndentationLeft(INDENTATION);
 
         for (Education education : educations) {
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
             addRunToParagraph(paragraph, education.getMajor().toString(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, education.getUniversity(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, education.getDegreeLevel().toString(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
 
             String educationDuration = calculateYearDuration(education.getStartYear(), education.getEndYear());
             addRunToParagraph(paragraph, educationDuration, BODY_FONT, false);
@@ -316,12 +321,12 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         paragraph.setIndentationLeft(INDENTATION);
 
         for (TeachingAssistance ta : teachingAssistanceList) {
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
             addRunToParagraph(paragraph, ta.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '•');
+            addSymbolToParagraph(paragraph, BULLET, TITLE_FONT.getSize());
 
             addRunToParagraph(paragraph, ta.getUniversity(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '•');
+            addSymbolToParagraph(paragraph, BULLET, TITLE_FONT.getSize());
 
             addRunToParagraph(paragraph, calculateDuration(ta.getStartDate(), ta.getEndDate()), BODY_FONT, false);
             insertNewLine(paragraph);
@@ -336,9 +341,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         int presentationNumber = 0;
         for (Presentation presentation : presentations) {
             presentationNumber++;
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, TITLE_FONT.getSize());
             addRunToParagraph(paragraph, presentation.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
             addRunToParagraph(paragraph, presentation.getDate().toString(), TITLE_FONT, true);
             insertNewLine(paragraph);
@@ -359,12 +364,12 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         int patentNumber = 0;
         for (Patent patent : patents) {
             patentNumber++;
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, TITLE_FONT.getSize());
             addRunToParagraph(paragraph, patent.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
             addRunToParagraph(paragraph, patent.getRegistrationNumber(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
             addRunToParagraph(paragraph, patent.getRegistrationDate().toString(), TITLE_FONT, true);
             insertNewLine(paragraph);
@@ -385,12 +390,12 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         int researchNumber = 0;
         for (Research research : researches) {
             researchNumber++;
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, TITLE_FONT.getSize());
             addHyperlinkRunToParagraph(paragraph, research.getReferenceLink(), research.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
             addHyperlinkRunToParagraph(paragraph, research.getReferenceLink(), research.getPublisher(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, TITLE_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
             addHyperlinkRunToParagraph(paragraph, research.getReferenceLink(), research.getDate() + " (Click to open the research)", TITLE_FONT, true);
             insertNewLine(paragraph);
@@ -412,11 +417,11 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         for (Language language : languages) {
             languageNumber++;
             addRunToParagraph(paragraph, language.getName().toString(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, ':');
+            addSymbolToParagraph(paragraph, COLON, BODY_FONT.getSize());
             addRunToParagraph(paragraph, language.estimateAverageLevel().toString(), BODY_FONT, false);
 
             if (languageNumber < languages.size())
-                addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+                addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
         }
 
         insertNewLine(paragraph);
@@ -433,7 +438,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             addRunToParagraph(paragraph, hobby.getTitle(), BODY_FONT, false);
 
             if (hobbyNumber < hobbies.size())
-                addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '•');
+                addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
         }
 
         insertNewLine(paragraph);
@@ -445,9 +450,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         paragraph.setIndentationLeft(INDENTATION);
 
         for (Membership membership : memberships) {
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
             addRunToParagraph(paragraph, membership.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, valueOf(membership.getDate().getYear()), BODY_FONT, false);
             insertNewLine(paragraph);
@@ -460,9 +465,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         paragraph.setIndentationLeft(INDENTATION);
 
         for (VolunteerActivity activity : volunteerActivities) {
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '-');
+            addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
             addRunToParagraph(paragraph, activity.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BODY_FONT.getSize(), SYMBOL_COLOR, '|');
+            addSymbolToParagraph(paragraph, PIPE, BODY_FONT.getSize());
 
             addRunToParagraph(paragraph, valueOf(activity.getYear()), BODY_FONT, false);
             insertNewLine(paragraph);

@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 public class WordProcessing {
     public static final String STORE_PATH = System.getProperty("user.dir") + "\\src\\main\\resumes\\";
@@ -30,15 +31,15 @@ public class WordProcessing {
         pageMar.setRight(BigInteger.valueOf((int) (rightInch * 1440)));
     }
 
-    public static void addSymbolToParagraph(XWPFParagraph paragraph, int size, String hexColor, char symbol) {
+    public static void addSymbolToParagraph(XWPFParagraph paragraph, Symbol symbol, int size) {
         XWPFRun symbolRun = paragraph.createRun();
         symbolRun.setFontSize(size);
-        symbolRun.setColor(hexColor);
+        symbolRun.setColor(symbol.color());
 
-        if (symbol == ':')
-            symbolRun.setText(symbol + " ");
+        if (symbol.type() == ':')
+            symbolRun.setText(symbol.type() + " ");
         else
-            symbolRun.setText(" " + symbol + " ");
+            symbolRun.setText(" " + symbol.type() + " ");
     }
 
     public static void addRunToParagraph(XWPFParagraph paragraph, String text, FontProperties font, boolean bold) {
@@ -83,6 +84,10 @@ public class WordProcessing {
 
     public static void insertNewLine(XWPFParagraph paragraph) {
         paragraph.createRun().addCarriageReturn();
+    }
+
+    public static void insertNewLine(XWPFTableCell cell) {
+        cell.addParagraph();
     }
 
     public static void addSingleRowTableToDocument(XWPFDocument document, List<String> rowData, FontProperties font, Boolean bold, int indentation) {
@@ -144,8 +149,9 @@ public class WordProcessing {
         return row;
     }
 
-    public static XWPFTableCell createCell(XWPFTableRow row) {
+    public static XWPFTableCell createCell(XWPFTableRow row, String width) {
         XWPFTableCell cell = row.createCell();
+        cell.setWidth(width);
         if (!cell.getParagraphs().isEmpty())
             cell.removeParagraph(0);
 
@@ -167,5 +173,37 @@ public class WordProcessing {
         }
 
         return cell;
+    }
+
+    public static void writeInTableCell(XWPFTableCell cell, String text, FontProperties font, boolean bold) {
+        XWPFParagraph paragraph = cell.addParagraph();
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+        addRunToParagraph(paragraph, text, font, bold);
+    }
+
+    public static void writeInTableCell(XWPFParagraph paragraph, List<String> textParts, FontProperties font, Symbol symbol, boolean bold) {
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+        int partNumber = 0;
+        for (String textPart : textParts) {
+            partNumber++;
+            addRunToParagraph(paragraph, textPart, font, bold);
+
+            if (partNumber < textParts.size())
+                addSymbolToParagraph(paragraph, symbol, font.getSize());
+        }
+    }
+
+    public static void writeHyperlinkInTableCell(XWPFParagraph paragraph, Map<String, String> textParts, FontProperties font, Symbol symbol, boolean bold) {
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+        int partNumber = 0;
+        for (Map.Entry<String, String> textPart : textParts.entrySet()) {
+            partNumber++;
+            addHyperlinkRunToParagraph(paragraph, textPart.getValue(), textPart.getKey(), font, bold);
+
+            if (partNumber < textParts.size())
+                addSymbolToParagraph(paragraph, symbol, font.getSize());
+        }
     }
 }
