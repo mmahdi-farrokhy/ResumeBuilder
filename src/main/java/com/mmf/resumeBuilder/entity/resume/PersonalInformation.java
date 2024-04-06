@@ -5,6 +5,8 @@ import com.mmf.resumeBuilder.constants.user.detail.Gender;
 import com.mmf.resumeBuilder.constants.user.detail.MaritalStatus;
 import com.mmf.resumeBuilder.constants.user.detail.MilitaryServiceStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -21,12 +23,18 @@ public class PersonalInformation extends ResumeSection {
     @Column(name = "id")
     private int id;
 
+    @NotNull
+    @NotBlank
     @Column(name = "first_name")
     private String firstName;
 
+    @NotNull
+    @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
+    @NotNull
+    @NotBlank
     @Column(name = "phone_number")
     private String phoneNumber;
 
