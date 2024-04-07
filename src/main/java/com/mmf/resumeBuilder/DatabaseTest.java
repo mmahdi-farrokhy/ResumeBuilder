@@ -58,10 +58,10 @@ public class DatabaseTest {
         resume.addSection(createLanguage(resume, LanguageName.English, LanguageLevel.Intermediate, LanguageLevel.Intermediate, LanguageLevel.Upper_Intermediate, LanguageLevel.Upper_Intermediate, LanguageLevel.Upper_Intermediate));
         resume.addSection(createProject(resume));
         resume.addSection(createProject2(resume));
-        resume.addSection(createPresentation(resume));
+        resume.addSection(createPresentation());
         resume.addSection(createMembership(resume, "Scientific Association of the Faculty of Computer Engineering", LocalDate.of(2019, 1, 1)));
         resume.addSection(createHobby(resume, "Escape Room"));
-        resume.addSection(createPatent(resume));
+        resume.addSection(createPatent());
         resume.addSection(createVolunteerActivity(resume, "Beautime Startup Core Member", 2019));
         resume.addSection(createVolunteerActivity(resume, "Creating Clean Code Documents", 2023));
         return resume;
@@ -323,7 +323,7 @@ public class DatabaseTest {
         return membership;
     }
 
-    public static Patent createPatent(Resume resume) {
+    public static Patent createPatent() {
         Patent patent = new Patent();
         patent.setTitle("Curtain Relay");
         patent.setDescription("A simple product that opens and blinds the curtains");
@@ -332,7 +332,7 @@ public class DatabaseTest {
         return patent;
     }
 
-    public static Presentation createPresentation(Resume resume) {
+    public static Presentation createPresentation() {
         Presentation presentation = new Presentation();
         presentation.setTitle("Introduction of new product in company");
         presentation.setDate(LocalDate.of(2024, 5, 19));
