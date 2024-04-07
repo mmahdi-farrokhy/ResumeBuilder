@@ -38,6 +38,8 @@ public class WordProcessing {
 
         if (symbol.type() == ':')
             symbolRun.setText(symbol.type() + " ");
+        else if (symbol.type() == '\n')
+            insertNewLine(paragraph);
         else
             symbolRun.setText(" " + symbol.type() + " ");
     }
@@ -49,6 +51,32 @@ public class WordProcessing {
         run.setFontFamily(font.getFamily());
         run.setText(text);
         run.setBold(bold);
+    }
+
+    public static void addRunToParagraph(XWPFParagraph paragraph, List<String> textParts, FontProperties font, Symbol symbol, boolean bold) {
+        int partNumber = 0;
+        for (String textPart : textParts) {
+            partNumber++;
+
+            addRunToParagraph(paragraph, textPart, font, bold);
+            if (partNumber < textParts.size()) {
+                addSymbolToParagraph(paragraph, symbol, font.getSize());
+            }
+        }
+    }
+
+    public static void addHyperlinkRunToParagraph(XWPFParagraph paragraph, Map<String, String> textParts, FontProperties font, Symbol symbol, boolean bold) {
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+        int counter = 0;
+        for (Map.Entry<String, String> textPart : textParts.entrySet()) {
+            counter++;
+            addHyperlinkRunToParagraph(paragraph, textPart.getValue(), textPart.getKey(), font, bold);
+
+            if (counter < textParts.size()) {
+                addSymbolToParagraph(paragraph, symbol, font.getSize());
+            }
+        }
     }
 
     public static void addHyperlinkRunToParagraph(XWPFParagraph paragraph, String uri, String description, FontProperties font, boolean bold) {
@@ -84,10 +112,6 @@ public class WordProcessing {
 
     public static void insertNewLine(XWPFParagraph paragraph) {
         paragraph.createRun().addCarriageReturn();
-    }
-
-    public static void insertNewLine(XWPFTableCell cell) {
-        cell.addParagraph();
     }
 
     public static void addSingleRowTableToDocument(XWPFDocument document, List<String> rowData, FontProperties font, Boolean bold, int indentation) {
@@ -175,35 +199,8 @@ public class WordProcessing {
         return cell;
     }
 
-    public static void writeInTableCell(XWPFTableCell cell, String text, FontProperties font, boolean bold) {
-        XWPFParagraph paragraph = cell.addParagraph();
+    public static void writeText(XWPFParagraph paragraph, String text, FontProperties font, boolean bold) {
         paragraph.setAlignment(ParagraphAlignment.LEFT);
         addRunToParagraph(paragraph, text, font, bold);
-    }
-
-    public static void writeInTableCell(XWPFParagraph paragraph, List<String> textParts, FontProperties font, Symbol symbol, boolean bold) {
-        paragraph.setAlignment(ParagraphAlignment.LEFT);
-
-        int partNumber = 0;
-        for (String textPart : textParts) {
-            partNumber++;
-            addRunToParagraph(paragraph, textPart, font, bold);
-
-            if (partNumber < textParts.size())
-                addSymbolToParagraph(paragraph, symbol, font.getSize());
-        }
-    }
-
-    public static void writeHyperlinkInTableCell(XWPFParagraph paragraph, Map<String, String> textParts, FontProperties font, Symbol symbol, boolean bold) {
-        paragraph.setAlignment(ParagraphAlignment.LEFT);
-
-        int partNumber = 0;
-        for (Map.Entry<String, String> textPart : textParts.entrySet()) {
-            partNumber++;
-            addHyperlinkRunToParagraph(paragraph, textPart.getValue(), textPart.getKey(), font, bold);
-
-            if (partNumber < textParts.size())
-                addSymbolToParagraph(paragraph, symbol, font.getSize());
-        }
     }
 }
