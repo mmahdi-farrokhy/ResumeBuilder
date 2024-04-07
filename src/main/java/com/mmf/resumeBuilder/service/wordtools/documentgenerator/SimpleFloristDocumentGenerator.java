@@ -25,6 +25,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
     private static final FontProperties TITLE_FONT = new FontProperties(10, "000000", "Arial (Body)");
     private static final FontProperties DATE_FONT = new FontProperties(10, "595959", "Arial (Body)");
     private static final String SYMBOL_COLOR = "394a04";
+    public static final Symbol NEW_LINE = new Symbol(SYMBOL_COLOR, '\n');
     private static final Symbol BULLET = new Symbol(SYMBOL_COLOR, '•');
     private static final Symbol DASH = new Symbol(SYMBOL_COLOR, '-');
     private static final Symbol COLON = new Symbol(SYMBOL_COLOR, ':');
@@ -160,45 +161,35 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private void addSummary(XWPFTable table, Summary summary) {
         XWPFTableRow row = createRow(table);
-        writeInTableCell(createCell(row, TWO_INCH_WIDTH), "Summary", HEADING_FONT, true);
+        writeText(createCell(row, TWO_INCH_WIDTH).addParagraph(), "Summary", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = createCell(row, FIVE_INCH_WIDTH);
 
-        for (String summaryParagraph : summary.getText().split("\\n")) {
-            writeInTableCell(bodyCell, summaryParagraph, BODY_FONT, false);
-        }
-
+        List<String> paragraphs = Arrays.stream(summary.getText().split("\\n")).toList();
+        addRunToParagraph(bodyCell.addParagraph(), paragraphs, BODY_FONT, NEW_LINE, false);
         insertEmptyRow(table);
     }
 
     public static void addJobExperiencesToDocument(XWPFTable table, List<JobExperience> jobExperiences) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Experiences", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Experiences", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
-        int jobNumber = 0;
         for (JobExperience job : jobExperiences) {
-            jobNumber++;
             String jobDuration = calculateDuration(job.getStartDate(), job.getEndDate());
-            writeInTableCell(bodyCell, jobDuration, DATE_FONT, false);
+            writeText(bodyCell.addParagraph(), jobDuration, DATE_FONT, false);
 
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
             List<String> titleParts = Arrays.asList(job.getTitle(),
                     job.getCompanyName(),
                     job.getLocation().getCityName().toString());
+            List<String> split = Arrays.stream(job.getDescription().split("\\n")).toList();
 
-            writeInTableCell(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
-
-            int paragraphNumber = 0;
-            String[] split = job.getDescription().split("\\n");
-            for (String descriptionBlock : split) {
-                paragraphNumber++;
-                writeInTableCell(bodyCell, descriptionBlock, BODY_FONT, false);
-
-                if (paragraphNumber == split.length && jobNumber < jobExperiences.size())
-                    insertNewLine(bodyCell);
-            }
+            addRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
+            XWPFParagraph paragraph = bodyCell.addParagraph();
+            addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
+            insertNewLine(paragraph);
         }
 
         insertEmptyRow(table);
@@ -206,7 +197,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addFormerColleaguesToDocument(XWPFTable table, List<FormerColleague> formerColleagues) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Former Colleagues", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Former Colleagues", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
         for (FormerColleague formerColleague : formerColleagues) {
@@ -216,7 +207,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
                     formerColleague.getPhoneNumber());
 
             addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
-            writeInTableCell(titleParagraph, titleParts, BODY_FONT, BULLET, false);
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, BULLET, false);
         }
 
         insertEmptyRow(table);
@@ -224,7 +215,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addSkillsToDocument(XWPFTable table, List<HardSkill> hardSkills, List<SoftSkill> softSkills) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Skills", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Skills", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -240,14 +231,14 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
         }
 
         XWPFParagraph titleParagraph = bodyCell.addParagraph();
-        writeInTableCell(titleParagraph, skills, BODY_FONT, BULLET, false);
+        addRunToParagraph(titleParagraph, skills, BODY_FONT, BULLET, false);
 
         insertEmptyRow(table);
     }
 
     private static void addCoursesToDocument(XWPFTable table, List<Course> courses) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Courses", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Courses", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -256,7 +247,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             List<String> titleParts = Arrays.asList(course.getName(), course.getInstitute());
 
             addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
-            writeInTableCell(titleParagraph, titleParts, BODY_FONT, PIPE, false);
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);
@@ -264,7 +255,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addProjectsToDocument(XWPFTable table, List<Project> projects) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Projects", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Projects", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -278,7 +269,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
                 put(project.getStatus().toString(), project.getReferenceLink());
             }};
 
-            writeHyperlinkInTableCell(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
+            addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
 
             int projectNumber = 0;
             String[] descriptionText = project.getDescription().split("\\n");
@@ -297,7 +288,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addEducationsToDocument(XWPFTable table, List<Education> educations) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Education", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Education", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -311,7 +302,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
                     major,
                     education.getUniversity(),
                     educationDuration);
-            writeInTableCell(titleParagraph, titleParts, BODY_FONT, PIPE, false);
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);
@@ -319,7 +310,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addTeachingAssistanceToDocument(XWPFTable table, List<TeachingAssistance> teachingAssistanceList) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Teaching Assistance", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Teaching Assistance", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -331,7 +322,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
                     duration);
 
             addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
-            writeInTableCell(paragraph, titleParts, BODY_FONT, PIPE, false);
+            addRunToParagraph(paragraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);
@@ -339,7 +330,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addPresentationsToDocument(XWPFTable table, List<Presentation> presentations) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Presentations", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Presentations", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -349,7 +340,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             List<String> titlePArt = Arrays.asList(presentation.getTitle(), presentation.getDate().toString());
 
             addSymbolToParagraph(presentationParagraph, DASH, TITLE_FONT.getSize());
-            writeInTableCell(presentationParagraph, titlePArt, BODY_FONT, PIPE, true);
+            addRunToParagraph(presentationParagraph, titlePArt, BODY_FONT, PIPE, true);
 
             String[] descriptionText = presentation.getDescription().split("\\n");
             for (String descriptionParagraph : descriptionText) {
@@ -364,7 +355,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addPatentsToDocument(XWPFTable table, List<Patent> patents) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Patents", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Patents", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -373,7 +364,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             List<String> titleParts = Arrays.asList(patent.getTitle(), patent.getRegistrationNumber(), patent.getRegistrationDate().toString());
 
             addSymbolToParagraph(patentParagraph, DASH, TITLE_FONT.getSize());
-            writeInTableCell(patentParagraph, titleParts, BODY_FONT, PIPE, true);
+            addRunToParagraph(patentParagraph, titleParts, BODY_FONT, PIPE, true);
 
             String[] descriptionText = patent.getDescription().split("\\n");
             for (String descriptionParagraph : descriptionText) {
@@ -388,12 +379,14 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addResearchesToDocument(XWPFTable table, List<Research> researches) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Researches", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Researches", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
         for (Research research : researches) {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
+            XWPFParagraph bodyParagraph = bodyCell.addParagraph();
+
             Map<String, String> titleParts = new LinkedHashMap<>() {{
 
                 addSymbolToParagraph(titleParagraph, DASH, TITLE_FONT.getSize());
@@ -401,19 +394,11 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
                 put(research.getPublisher(), research.getReferenceLink());
                 put(research.getDate() + " (Click to open the research)", research.getReferenceLink());
             }};
+            List<String> descriptionText = Arrays.stream(research.getDescription().split("\\n")).toList();
 
-            writeHyperlinkInTableCell(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
-
-            int researchNumber = 0;
-            String[] descriptionText = research.getDescription().split("\\n");
-            for (String descriptionBlock : descriptionText) {
-                researchNumber++;
-                XWPFParagraph descriptionParagraph = bodyCell.addParagraph();
-                addRunToParagraph(descriptionParagraph, descriptionBlock, BODY_FONT, false);
-
-                if (researchNumber == descriptionText.length)
-                    insertNewLine(descriptionParagraph);
-            }
+            addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
+            addRunToParagraph(bodyParagraph, descriptionText, BODY_FONT, NEW_LINE, false);
+            insertNewLine(bodyParagraph);
         }
 
         insertEmptyRow(table);
@@ -421,7 +406,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addLanguagesToDocument(XWPFTable table, List<Language> languages) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Languages", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Languages", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -443,7 +428,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
 
     private static void addHobbiesToDocument(XWPFTable table, List<Hobby> hobbies) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Hobbies", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Hobbies", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -454,14 +439,13 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             hobbyList.add(hobby.getTitle());
         }
 
-        writeInTableCell(titleParagraph, hobbyList, BODY_FONT, BULLET, false);
-
+        addRunToParagraph(titleParagraph, hobbyList, BODY_FONT, BULLET, false);
         insertEmptyRow(table);
     }
 
     private static void addMembershipsToDocument(XWPFTable table, List<Membership> memberships) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Memberships", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Memberships", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -470,7 +454,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             List<String> titleParts = Arrays.asList(membership.getTitle(), membership.getDate().toString());
 
             addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
-            writeInTableCell(titleParagraph, titleParts, BODY_FONT, PIPE, false);
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);
@@ -479,7 +463,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
     private static void addVolunteerActivitiesToDocument(XWPFTable
                                                                  table, List<VolunteerActivity> volunteerActivities) {
         XWPFTableRow row = table.createRow();
-        writeInTableCell(getRowCell(row, 0), "Volunteer Activities", HEADING_FONT, true);
+        writeText(getRowCell(row, 0).addParagraph(), "Volunteer Activities", HEADING_FONT, true);
 
         XWPFTableCell bodyCell = getRowCell(row, 1);
 
@@ -488,7 +472,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             List<String> titleParts = Arrays.asList(activity.getTitle(), valueOf(activity.getYear()));
 
             addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
-            writeInTableCell(titleParagraph, titleParts, BODY_FONT, PIPE, false);
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         insertEmptyRow(table);

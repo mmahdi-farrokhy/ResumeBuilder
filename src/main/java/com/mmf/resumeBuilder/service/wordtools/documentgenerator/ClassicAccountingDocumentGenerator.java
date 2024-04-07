@@ -9,9 +9,7 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateDuration;
@@ -35,6 +33,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
     private static final Symbol DASH = new Symbol(SYMBOL_COLOR, '-');
     private static final Symbol COLON = new Symbol(SYMBOL_COLOR, ':');
     private static final Symbol PIPE = new Symbol(SYMBOL_COLOR, '|');
+    private static final Symbol NEW_LINE = new Symbol(SYMBOL_COLOR, '\n');
 
     @Override
     public void generateWordDocument(Resume resume) {
@@ -164,11 +163,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
     private static void addSummary(XWPFDocument document, Summary summary) {
         XWPFParagraph paragraph = document.createParagraph();
-
-        for (String summaryParagraph : summary.getText().split("\\n")) {
-            addRunToParagraph(paragraph, summaryParagraph, BODY_FONT, false);
-            insertNewLine(paragraph);
-        }
+        var split = Arrays.stream(summary.getText().split("\\n")).toList();
+        addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
+        insertNewLine(paragraph);
     }
 
     private static void addJobExperiencesToDocument(XWPFDocument document, List<JobExperience> jobExperiences) {
@@ -184,17 +181,13 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             addRunToParagraph(paragraph, jobDuration, DATE_FONT, false);
             insertNewLine(paragraph);
 
-            addRunToParagraph(paragraph, job.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
-            addRunToParagraph(paragraph, job.getCompanyName(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
-            addRunToParagraph(paragraph, job.getLocation().getCityName().toString(), TITLE_FONT, true);
+            List<String> titleParts = Arrays.asList(job.getTitle(), job.getCompanyName(), job.getLocation().getCityName().toString());
+            addRunToParagraph(paragraph, titleParts, TITLE_FONT, PIPE, true);
             insertNewLine(paragraph);
 
-            for (String descriptionParagraph : job.getDescription().split("\\n")) {
-                addRunToParagraph(paragraph, descriptionParagraph, BODY_FONT, false);
-                insertNewLine(paragraph);
-            }
+            var split = Arrays.stream(job.getDescription().split("\\n")).toList();
+            addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
+            insertNewLine(paragraph);
 
             if (jobNumber < jobExperiences.size())
                 insertNewLine(paragraph);
@@ -209,13 +202,8 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         for (FormerColleague formerColleague : formerColleagues) {
             addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
 
-            addRunToParagraph(paragraph, formerColleague.getFullName(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
-
-            addRunToParagraph(paragraph, formerColleague.getPosition(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
-
-            addRunToParagraph(paragraph, formerColleague.getPhoneNumber(), BODY_FONT, false);
+            List<String> titleParts = Arrays.asList(formerColleague.getFullName(), formerColleague.getPosition(), formerColleague.getPhoneNumber());
+            addRunToParagraph(paragraph, titleParts, BODY_FONT, BULLET, false);
             insertNewLine(paragraph);
         }
     }
@@ -235,16 +223,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             skills = Stream.concat(skills.stream(), softSkillList.stream()).toList();
         }
 
-        int skillNumber = 0;
-        for (String skill : skills) {
-            skillNumber++;
-            addRunToParagraph(paragraph, skill, BODY_FONT, false);
-
-            if (skillNumber < skills.size()) {
-                addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
-            }
-        }
-
+        addRunToParagraph(paragraph, skills, BODY_FONT, BULLET, false);
         insertNewLine(paragraph);
     }
 
@@ -255,11 +234,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (Course course : courses) {
             addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
+            List<String> titleParts = Arrays.asList(course.getName(), course.getInstitute());
 
-            addRunToParagraph(paragraph, course.getName(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, PIPE, BODY_FONT.getSize());
-
-            addRunToParagraph(paragraph, course.getInstitute(), BODY_FONT, false);
+            addRunToParagraph(paragraph, titleParts, BODY_FONT, PIPE, false);
             insertNewLine(paragraph);
         }
     }
@@ -272,20 +249,20 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         int projectNumber = 0;
         for (Project project : projects) {
             projectNumber++;
-            addHyperlinkRunToParagraph(paragraph, project.getReferenceLink(), project.getName(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
-
             String projectDuration = calculateDuration(project.getStartDate(), project.getEndDate());
-            addHyperlinkRunToParagraph(paragraph, project.getReferenceLink(), projectDuration, TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
-            addHyperlinkRunToParagraph(paragraph, project.getReferenceLink(), project.getStatus().toString(), TITLE_FONT, true);
+            Map<String, String> titleParts = new LinkedHashMap<>() {{
+                put(project.getName(), project.getReferenceLink());
+                put(projectDuration, project.getReferenceLink());
+                put(project.getStatus().toString(), project.getReferenceLink());
+            }};
+            addHyperlinkRunToParagraph(paragraph, titleParts, TITLE_FONT, PIPE, true);
+
             insertNewLine(paragraph);
 
-            for (String descriptionParagraph : project.getDescription().split("\\n")) {
-                addRunToParagraph(paragraph, descriptionParagraph, BODY_FONT, false);
-                insertNewLine(paragraph);
-            }
+            var split = Arrays.stream(project.getDescription().split("\\n")).toList();
+            addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
+            insertNewLine(paragraph);
 
             if (projectNumber < projects.size())
                 insertNewLine(paragraph);
@@ -299,18 +276,13 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (Education education : educations) {
             addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
-            addRunToParagraph(paragraph, education.getMajor().toString(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
-
-            addRunToParagraph(paragraph, education.getUniversity(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
-
-            addRunToParagraph(paragraph, education.getDegreeLevel().toString(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
-
             String educationDuration = calculateYearDuration(education.getStartYear(), education.getEndYear());
-            addRunToParagraph(paragraph, educationDuration, BODY_FONT, false);
 
+            List<String> titleParts = Arrays.asList(education.getMajor().toString(),
+                    education.getUniversity(),
+                    education.getDegreeLevel().toString(),
+                    educationDuration);
+            addRunToParagraph(paragraph, titleParts, BODY_FONT, BULLET, false);
             insertNewLine(paragraph);
         }
     }
@@ -322,13 +294,10 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (TeachingAssistance ta : teachingAssistanceList) {
             addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
-            addRunToParagraph(paragraph, ta.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BULLET, TITLE_FONT.getSize());
+            String duration = calculateDuration(ta.getStartDate(), ta.getEndDate());
+            List<String> titleParts = Arrays.asList(ta.getTitle(), ta.getUniversity(), duration);
 
-            addRunToParagraph(paragraph, ta.getUniversity(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BULLET, TITLE_FONT.getSize());
-
-            addRunToParagraph(paragraph, calculateDuration(ta.getStartDate(), ta.getEndDate()), BODY_FONT, false);
+            addRunToParagraph(paragraph, titleParts, TITLE_FONT, BULLET, false);
             insertNewLine(paragraph);
         }
     }
@@ -341,14 +310,14 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         int presentationNumber = 0;
         for (Presentation presentation : presentations) {
             presentationNumber++;
-            addSymbolToParagraph(paragraph, DASH, TITLE_FONT.getSize());
-            addRunToParagraph(paragraph, presentation.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
+            List<String> titleParts = Arrays.asList(presentation.getTitle(), presentation.getDate().toString());
 
-            addRunToParagraph(paragraph, presentation.getDate().toString(), TITLE_FONT, true);
+            addSymbolToParagraph(paragraph, DASH, TITLE_FONT.getSize());
+            addRunToParagraph(paragraph, titleParts, TITLE_FONT, PIPE, true);
             insertNewLine(paragraph);
 
-            addRunToParagraph(paragraph, "   " + presentation.getDescription(), BODY_FONT, false);
+            var split = Arrays.stream(presentation.getDescription().split("\\n")).toList();
+            addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
             insertNewLine(paragraph);
 
             if (presentationNumber < presentations.size())
@@ -365,16 +334,15 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         for (Patent patent : patents) {
             patentNumber++;
             addSymbolToParagraph(paragraph, DASH, TITLE_FONT.getSize());
-            addRunToParagraph(paragraph, patent.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
 
-            addRunToParagraph(paragraph, patent.getRegistrationNumber(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
-
-            addRunToParagraph(paragraph, patent.getRegistrationDate().toString(), TITLE_FONT, true);
+            List<String> titleParts = Arrays.asList(patent.getTitle(),
+                    patent.getRegistrationNumber(),
+                    patent.getRegistrationDate().toString());
+            addRunToParagraph(paragraph, titleParts, TITLE_FONT, PIPE, true);
             insertNewLine(paragraph);
 
-            addRunToParagraph(paragraph, "   " + patent.getDescription(), TITLE_FONT, false);
+            var split = Arrays.stream(patent.getDescription().split("\\n")).toList();
+            addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
             insertNewLine(paragraph);
 
             if (patentNumber < patents.size())
@@ -390,17 +358,18 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         int researchNumber = 0;
         for (Research research : researches) {
             researchNumber++;
+            Map<String, String> links = new LinkedHashMap<>() {{
+                put(research.getTitle(), research.getReferenceLink());
+                put(research.getPublisher(), research.getReferenceLink());
+                put(research.getDate() + " (Click to open the research)", research.getReferenceLink());
+            }};
+
             addSymbolToParagraph(paragraph, DASH, TITLE_FONT.getSize());
-            addHyperlinkRunToParagraph(paragraph, research.getReferenceLink(), research.getTitle(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
-
-            addHyperlinkRunToParagraph(paragraph, research.getReferenceLink(), research.getPublisher(), TITLE_FONT, true);
-            addSymbolToParagraph(paragraph, PIPE, TITLE_FONT.getSize());
-
-            addHyperlinkRunToParagraph(paragraph, research.getReferenceLink(), research.getDate() + " (Click to open the research)", TITLE_FONT, true);
+            addHyperlinkRunToParagraph(paragraph, links, TITLE_FONT, PIPE, true);
             insertNewLine(paragraph);
 
-            addRunToParagraph(paragraph, "   " + research.getDescription(), BODY_FONT, false);
+            var split = Arrays.stream(research.getDescription().split("\\n")).toList();
+            addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
             insertNewLine(paragraph);
 
             if (researchNumber < researches.size())
@@ -432,15 +401,12 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setIndentationLeft(INDENTATION);
 
-        int hobbyNumber = 0;
+        List<String> hobbyList = new LinkedList<>();
         for (Hobby hobby : hobbies) {
-            hobbyNumber++;
-            addRunToParagraph(paragraph, hobby.getTitle(), BODY_FONT, false);
-
-            if (hobbyNumber < hobbies.size())
-                addSymbolToParagraph(paragraph, BULLET, BODY_FONT.getSize());
+            hobbyList.add(hobby.getTitle());
         }
 
+        addRunToParagraph(paragraph, hobbyList, BODY_FONT, BULLET, false);
         insertNewLine(paragraph);
     }
 
@@ -451,10 +417,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (Membership membership : memberships) {
             addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
-            addRunToParagraph(paragraph, membership.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, PIPE, BODY_FONT.getSize());
+            List<String> titleParts = Arrays.asList(membership.getTitle(), valueOf(membership.getDate().getYear()));
 
-            addRunToParagraph(paragraph, valueOf(membership.getDate().getYear()), BODY_FONT, false);
+            addRunToParagraph(paragraph, titleParts, BODY_FONT, PIPE, false);
             insertNewLine(paragraph);
         }
     }
@@ -466,10 +431,9 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
 
         for (VolunteerActivity activity : volunteerActivities) {
             addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
-            addRunToParagraph(paragraph, activity.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, PIPE, BODY_FONT.getSize());
+            List<String> titleParts = Arrays.asList(activity.getTitle(), valueOf(activity.getYear()));
 
-            addRunToParagraph(paragraph, valueOf(activity.getYear()), BODY_FONT, false);
+            addRunToParagraph(paragraph, titleParts, BODY_FONT, PIPE, false);
             insertNewLine(paragraph);
         }
     }

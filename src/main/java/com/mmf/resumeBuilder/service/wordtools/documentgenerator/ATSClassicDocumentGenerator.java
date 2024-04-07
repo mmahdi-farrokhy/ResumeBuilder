@@ -10,9 +10,12 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
+import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateYearDuration;
 import static com.mmf.resumeBuilder.service.wordtools.WordProcessing.*;
+import static java.lang.String.valueOf;
 
 public class ATSClassicDocumentGenerator implements DocumentGenerator {
     public static final int INDENTATION = 300;
@@ -24,6 +27,9 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
     private static final FontProperties BODY_FONT = new FontProperties(10, "5A5A5A", "Times New Roman (Headings CS)");
     private static final Symbol BULLET = new Symbol(SYMBOL_COLOR, '•');
     private static final Symbol DASH = new Symbol(SYMBOL_COLOR, '-');
+    private static final Symbol PIPE = new Symbol(SYMBOL_COLOR, '|');
+    private static final Symbol COLON = new Symbol(SYMBOL_COLOR, ':');
+    private static final Symbol NEW_LINE = new Symbol(SYMBOL_COLOR, '\n');
 
     @Override
     public void generateWordDocument(Resume resume) {
@@ -137,24 +143,23 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
     private static void addContactInformation(XWPFDocument document, List<ContactMethod> contactInformation) {
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.CENTER);
-        addSymbolToParagraph(paragraph, BULLET, BODY_SIZE);
 
+        List<String> list = new LinkedList<>();
         for (ContactMethod contactMethod : contactInformation) {
-            addRunToParagraph(paragraph, contactMethod.getContent(), BODY_FONT, false);
-            addSymbolToParagraph(paragraph, BULLET, BODY_SIZE);
+            list.add(contactMethod.getContent());
         }
 
+        addRunToParagraph(paragraph, list, BODY_FONT, BULLET, false);
         insertNewLine(paragraph);
     }
 
     private static void addSummary(XWPFDocument document, Summary summary) {
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.LEFT);
+        var split = Arrays.stream(summary.getText().split("\\n")).toList();
 
-        for (String summaryParagraph : summary.getText().split("\\n")) {
-            addRunToParagraph(paragraph, summaryParagraph, BODY_FONT, true);
-            insertNewLine(paragraph);
-        }
+        addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, true);
+        insertNewLine(paragraph);
     }
 
     private static void addJobExperiencesToDocument(XWPFDocument document, List<JobExperience> jobExperiences) {
@@ -173,18 +178,17 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             addRunToParagraph(bodyParagraph, DateCalculation.calculateDuration(jobExperience.getStartDate(), jobExperience.getEndDate()), BODY_FONT, false);
             insertNewLine(bodyParagraph);
 
-            String jobTitle = jobExperience.getTitle() +
-                    " | " +
-                    jobExperience.getCompanyName() +
-                    " | " +
-                    jobExperience.getLocation().getCityName();
-            addRunToParagraph(bodyParagraph, jobTitle, BODY_FONT, true);
+            List<String> titleParts = Arrays.asList(jobExperience.getTitle(),
+                    jobExperience.getCompanyName(),
+                    jobExperience.getLocation().getCityName().toString());
+
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
             insertNewLine(bodyParagraph);
 
-            for (String descriptionParagraph : jobExperience.getDescription().split("\\n")) {
-                addRunToParagraph(bodyParagraph, descriptionParagraph, BODY_FONT, false);
-                insertNewLine(bodyParagraph);
-            }
+            var split = Arrays.stream(jobExperience.getDescription().split("\\n")).toList();
+
+            addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
+            insertNewLine(bodyParagraph);
 
             if (jobExperienceNumber < jobExperiences.size())
                 insertNewLine(bodyParagraph);
@@ -202,42 +206,35 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (FormerColleague formerColleague : formerColleagues) {
             bodyParagraph.setIndentationLeft(300);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            addRunToParagraph(bodyParagraph, formerColleague.getFullName(), BODY_FONT, false);
-            addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
 
-            addRunToParagraph(bodyParagraph, formerColleague.getPosition(), BODY_FONT, false);
-            addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
-
-            addRunToParagraph(bodyParagraph, formerColleague.getPhoneNumber(), BODY_FONT, false);
+            List<String> titleParts = Arrays.asList(formerColleague.getFullName(), formerColleague.getPosition(), formerColleague.getPhoneNumber());
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, BULLET, false);
             insertNewLine(bodyParagraph);
         }
     }
 
     private static void addSkillsToDocument(XWPFDocument document, List<HardSkill> hardSkills, List<SoftSkill> softSkills) {
         XWPFParagraph titleParagraph = document.createParagraph();
-        XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
         addHeadingRunToParagraph(titleParagraph, "Skills", sectionTitleFont, FILL_COLOR);
 
+        XWPFParagraph bodyParagraph = document.createParagraph();
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
+        bodyParagraph.setIndentationLeft(INDENTATION);
+
+        List<String> skills = new LinkedList<>();
 
         if (hardSkills != null) {
-            for (HardSkill hardSkill : hardSkills) {
-                bodyParagraph.setIndentationLeft(INDENTATION);
-                addRunToParagraph(bodyParagraph, hardSkill.getType().toString(), BODY_FONT, false);
-                addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
-            }
+            skills = hardSkills.stream().map(h -> h.getType().toString()).toList();
         }
 
         if (softSkills != null) {
-            for (SoftSkill softSkill : softSkills) {
-                bodyParagraph.setIndentationLeft(INDENTATION);
-                addRunToParagraph(bodyParagraph, softSkill.getTitle(), BODY_FONT, false);
-                addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
-            }
+            List<String> softSkillList = softSkills.stream().map(SoftSkill::getTitle).toList();
+            skills = Stream.concat(skills.stream(), softSkillList.stream()).toList();
         }
 
+        addRunToParagraph(bodyParagraph, skills, BODY_FONT, BULLET, false);
         insertNewLine(bodyParagraph);
     }
 
@@ -253,7 +250,8 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Course course : courses) {
             bodyParagraph.setIndentationLeft(INDENTATION);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            addRunToParagraph(bodyParagraph, course.getName() + " | " + course.getInstitute(), BODY_FONT, false);
+            List<String> titleParts = Arrays.asList(course.getName(), course.getInstitute());
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
             insertNewLine(bodyParagraph);
         }
     }
@@ -273,9 +271,14 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             bodyParagraph.setIndentationLeft(INDENTATION);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             String projectDuration = DateCalculation.calculateDuration(project.getStartDate(), project.getEndDate());
-            String projectTitle = project.getName() + " | " + projectDuration + " | " + project.getStatus();
+            Map<String, String> links = new LinkedHashMap<>() {{
+                put(project.getName(), project.getReferenceLink());
+                put(projectDuration, project.getReferenceLink());
+                put(project.getStatus().toString(), project.getReferenceLink());
+            }};
 
-            addRunToParagraph(bodyParagraph, projectTitle, BODY_FONT, true);
+            addHyperlinkRunToParagraph(bodyParagraph, links, BODY_FONT, PIPE, true);
+
             insertNewLine(bodyParagraph);
             if (project.getReferenceLink() != null) {
                 addHyperlinkRunToParagraph(bodyParagraph, project.getReferenceLink(), "Click to open the project", BODY_FONT, false);
@@ -283,10 +286,9 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             }
 
             if (project.getDescription() != null) {
-                for (String descriptionParagraph : project.getDescription().split("\\n")) {
-                    addRunToParagraph(bodyParagraph, descriptionParagraph, BODY_FONT, false);
-                    insertNewLine(bodyParagraph);
-                }
+                var split = Arrays.stream(project.getDescription().split("\\n")).toList();
+                addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
+                insertNewLine(bodyParagraph);
             }
 
             if (projectNumber < projects.size())
@@ -306,11 +308,16 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Education education : educations) {
             educationNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            addRunToParagraph(bodyParagraph, DateCalculation.calculateYearDuration(education.getStartYear(), education.getEndYear()), BODY_FONT, false);
+            String duration = calculateYearDuration(education.getStartYear(), education.getEndYear());
+            addRunToParagraph(bodyParagraph, duration, BODY_FONT, false);
             insertNewLine(bodyParagraph);
 
-            String educationTitle = education.getMajor() + " | " + education.getUniversity() + " | " + education.getDegreeLevel();
-            addRunToParagraph(bodyParagraph, educationTitle, BODY_FONT, true);
+            List<String> titleParts = Arrays.asList(education.getMajor().toString(),
+                    education.getUniversity(),
+                    education.getDegreeLevel().toString());
+
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
+
             insertNewLine(bodyParagraph);
 
             if (educationNumber < educations.size())
@@ -330,8 +337,12 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (TeachingAssistance ta : teachingAssistance) {
             bodyParagraph.setIndentationLeft(INDENTATION);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            String teachingAssistanceTitle = ta.getTitle() + " | " + ta.getUniversity() + " | " + DateCalculation.calculateDuration(ta.getStartDate(), ta.getEndDate());
-            addRunToParagraph(bodyParagraph, teachingAssistanceTitle, BODY_FONT, false);
+
+            List<String> titleParts = Arrays.asList(ta.getTitle(),
+                    ta.getUniversity(),
+                    DateCalculation.calculateDuration(ta.getStartDate(), ta.getEndDate()));
+
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
             insertNewLine(bodyParagraph);
         }
     }
@@ -350,8 +361,9 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             presentationNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            String presentationTitle = presentation.getTitle() + " | " + presentation.getDate();
-            addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, true);
+
+            List<String> titleParts = Arrays.asList(presentation.getTitle(), presentation.getDate().toString());
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
             insertNewLine(bodyParagraph);
 
             if (presentation.getReferenceLink() != null) {
@@ -383,8 +395,9 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             patentNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            String presentationTitle = patent.getTitle() + " | " + patent.getRegistrationNumber() + " | " + patent.getRegistrationDate();
-            addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, true);
+
+            List<String> titleParts = Arrays.asList(patent.getTitle(), patent.getRegistrationNumber(), patent.getRegistrationDate().toString());
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
             insertNewLine(bodyParagraph);
 
             if (patent.getReferenceLink() != null) {
@@ -416,20 +429,22 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             researchNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            String presentationTitle = research.getTitle() + " | " + research.getPublisher() + " | " + research.getDate();
-            addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, true);
-            insertNewLine(bodyParagraph);
 
             if (research.getReferenceLink() != null) {
-                addHyperlinkRunToParagraph(bodyParagraph, research.getReferenceLink(), "Research link", BODY_FONT, false);
+                Map<String, String> titleParts = new LinkedHashMap<>() {{
+                    put(research.getTitle(), research.getReferenceLink());
+                    put(research.getPublisher(), research.getReferenceLink());
+                    put(research.getDate().toString(), research.getReferenceLink());
+                }};
+
+                addHyperlinkRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
                 insertNewLine(bodyParagraph);
             }
 
             if (research.getDescription() != null) {
-                for (String researchParagraph : research.getDescription().split("\\n")) {
-                    addRunToParagraph(bodyParagraph, researchParagraph, BODY_FONT, false);
-                    insertNewLine(bodyParagraph);
-                }
+                var split = Arrays.stream(research.getDescription().split("\\n")).toList();
+                addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
+                insertNewLine(bodyParagraph);
             }
 
             if (researchNumber < researches.size())
@@ -445,12 +460,18 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         addHeadingRunToParagraph(titleParagraph, "Languages", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
+        bodyParagraph.setIndentationLeft(INDENTATION);
 
+        int languageNumber = 0;
         for (Language language : languages) {
-            bodyParagraph.setIndentationLeft(INDENTATION);
-            String presentationTitle = language.getName() + ": " + language.estimateAverageLevel();
-            addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, false);
-            addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
+            languageNumber++;
+            addRunToParagraph(bodyParagraph, language.getName().toString(), BODY_FONT, false);
+            addSymbolToParagraph(bodyParagraph, COLON, BODY_FONT.getSize());
+
+            addRunToParagraph(bodyParagraph, language.estimateAverageLevel().toString(), BODY_FONT, false);
+
+            if (languageNumber < languages.size())
+                addSymbolToParagraph(bodyParagraph, BULLET, BODY_FONT.getSize());
         }
 
         insertNewLine(bodyParagraph);
@@ -465,12 +486,12 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
+        List<String> hobbyList = new LinkedList<>();
         for (Hobby hobby : hobbies) {
-            bodyParagraph.setIndentationLeft(INDENTATION);
-            addRunToParagraph(bodyParagraph, hobby.getTitle(), BODY_FONT, false);
-            addSymbolToParagraph(bodyParagraph, BULLET, BODY_SIZE);
+            hobbyList.add(hobby.getTitle());
         }
 
+        addRunToParagraph(bodyParagraph, hobbyList, BODY_FONT, BULLET, false);
         insertNewLine(bodyParagraph);
     }
 
@@ -486,8 +507,8 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Membership membership : memberships) {
             bodyParagraph.setIndentationLeft(INDENTATION);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            String presentationTitle = membership.getTitle() + " | " + membership.getDate().getYear();
-            addRunToParagraph(bodyParagraph, presentationTitle, BODY_FONT, false);
+            List<String> titleParts = Arrays.asList(membership.getTitle(), valueOf(membership.getDate().getYear()));
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
             insertNewLine(bodyParagraph);
         }
     }
@@ -504,7 +525,9 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (VolunteerActivity volunteerActivity : volunteerActivities) {
             bodyParagraph.setIndentationLeft(INDENTATION);
             addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            addRunToParagraph(bodyParagraph, volunteerActivity.getTitle() + " | " + volunteerActivity.getYear(), BODY_FONT, false);
+
+            List<String> titleParts = Arrays.asList(volunteerActivity.getTitle(), valueOf(volunteerActivity.getYear()));
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
             insertNewLine(bodyParagraph);
         }
     }
