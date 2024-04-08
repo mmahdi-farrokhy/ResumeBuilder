@@ -15,4 +15,4 @@ To use this API you should first clone this repository on your local system usin
 
 ``` git clone https://github.com/mmahdi-farrokhy/ResumeBuilder.git```
 
-You also should have [Postman]([url](https://dl.pstmn.io/download/latest/win64)) or similar applications installed to send requests to the API.
+You also should have [Postman](https://dl.pstmn.io/download/latest/win64) or similar applications installed to send requests to the API.
