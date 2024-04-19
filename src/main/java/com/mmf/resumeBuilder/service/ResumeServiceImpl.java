@@ -112,18 +112,16 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     private DocumentGenerator createDocumentGenerator(ResumeTheme theme) {
-        DocumentGenerator documentGenerator1 = null;
+        DocumentGenerator documentGenerator = null;
 
         switch (theme) {
-            case ATSClassic -> documentGenerator1 = new ATSClassicDocumentGenerator();
-            case Bold_Modern -> documentGenerator1 = new BoldModernDocumentGenerator();
-            case Classic_Accounting -> documentGenerator1 = new ClassicAccountingDocumentGenerator();
-            case Creative_Teaching -> documentGenerator1 = new CreativeTeachingDocumentGenerator();
-            case Simple_Florist -> documentGenerator1 = new SimpleFloristDocumentGenerator();
-            case Woodworking -> documentGenerator1 = new WoodworkingDocumentGenerator();
+            case ATSClassic -> documentGenerator = new ATSClassicDocumentGenerator();
+            case Classic_Accounting -> documentGenerator = new ClassicAccountingDocumentGenerator();
+            case Simple_Florist -> documentGenerator = new SimpleFloristDocumentGenerator();
+            case Woodworking -> documentGenerator = new WoodworkingDocumentGenerator();
         }
 
-        return documentGenerator1;
+        return documentGenerator;
     }
 
     @Override
@@ -134,6 +132,5 @@ public class ResumeServiceImpl implements ResumeService {
         }
 
         return allResumes.get();
-//        return resumeRepository.findAllResumesByUserEmail(userEmail);
     }
 }
