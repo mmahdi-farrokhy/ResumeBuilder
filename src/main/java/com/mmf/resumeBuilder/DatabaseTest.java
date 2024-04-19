@@ -36,6 +36,8 @@ public class DatabaseTest {
         resume.addSection(createContactMethod(resume, ContactType.Email, "mmahdifarrokhy@gmail.com"));
         resume.addSection(createContactMethod(resume, ContactType.Phone_Number, "09190763415"));
         resume.addSection(createContactMethod(resume, ContactType.Address, "Tehran, Pardis County"));
+        resume.addSection(createContactMethod(resume, ContactType.LinkedIn, "https://www.linkedin.com/in/mmahdi-farrokhy/"));
+        resume.addSection(createContactMethod(resume, ContactType.GitHub, "https://github.com/mmahdi-farrokhy"));
         resume.setSummary(createSummary());
         resume.addSection(createEducation());
         resume.addSection(createEducation2());
