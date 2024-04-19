@@ -2,10 +2,7 @@ package com.mmf.resumeBuilder.learningtest;
 
 import com.mmf.resumeBuilder.DatabaseTest;
 import com.mmf.resumeBuilder.entity.resume.Resume;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.ATSClassicDocumentGenerator;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.ClassicAccountingDocumentGenerator;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.DocumentGenerator;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.SimpleFloristDocumentGenerator;
+import com.mmf.resumeBuilder.service.wordtools.documentgenerator.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +32,11 @@ public class LearnXWPFDocumentAPI {
     @Test
     void Simple_Florist_create_a_new_word_document_and_write_inside_it() {
         documentGenerator = new SimpleFloristDocumentGenerator();
+    }
+
+    @Test
+    void Wood_Working_create_a_new_word_document_and_write_inside_it() {
+        documentGenerator = new WoodworkingDocumentGenerator();
     }
 
     @AfterEach
