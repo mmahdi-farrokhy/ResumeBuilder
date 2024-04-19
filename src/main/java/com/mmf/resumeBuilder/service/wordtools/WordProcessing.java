@@ -2,12 +2,15 @@ package com.mmf.resumeBuilder.service.wordtools;
 
 import com.mmf.resumeBuilder.entity.resume.PersonalInformation;
 import com.mmf.resumeBuilder.service.wordtools.documentgenerator.SimpleFloristDocumentGenerator;
+import com.mmf.resumeBuilder.service.wordtools.documentgenerator.WoodworkingDocumentGenerator;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,6 +22,14 @@ public class WordProcessing {
 
     public static XWPFDocument createDocument(double top, double bottom, double left, double right) {
         XWPFDocument document = new XWPFDocument();
+        setMargins(document, top, bottom, left, right);
+        return document;
+    }
+
+    public static XWPFDocument openWordTemplate(String templateFile, double top, double bottom, double left, double right) throws IOException {
+        InputStream inputStream = WoodworkingDocumentGenerator.class.getClassLoader().getResourceAsStream(templateFile);
+        assert inputStream != null;
+        XWPFDocument document = new XWPFDocument(inputStream);
         setMargins(document, top, bottom, left, right);
         return document;
     }
@@ -37,7 +48,7 @@ public class WordProcessing {
         symbolRun.setColor(symbol.color());
 
         if (symbol.type() == ':')
-            symbolRun.setText(symbol.type() + " ");
+            symbolRun.setText(": ");
         else if (symbol.type() == '\n')
             insertNewLine(paragraph);
         else
@@ -197,10 +208,5 @@ public class WordProcessing {
         }
 
         return cell;
-    }
-
-    public static void writeText(XWPFParagraph paragraph, String text, FontProperties font, boolean bold) {
-        paragraph.setAlignment(ParagraphAlignment.LEFT);
-        addRunToParagraph(paragraph, text, font, bold);
     }
 }
