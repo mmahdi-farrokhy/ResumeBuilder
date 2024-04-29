@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.service.wordtools;
+package com.mmf.resumeBuilder.service.tools.word;
 
 public record Symbol(String color, char type) {
 }

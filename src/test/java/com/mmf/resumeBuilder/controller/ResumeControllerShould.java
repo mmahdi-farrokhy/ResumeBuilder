@@ -1,5 +1,10 @@
 package com.mmf.resumeBuilder.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmf.resumeBuilder.DatabaseTest;
 import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.constants.UserRole;
@@ -11,20 +16,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.ModelAndViewAssert.assertModelAttributeValue;
-import static org.springframework.test.web.ModelAndViewAssert.assertViewName;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -33,6 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ResumeControllerShould {
+    public static final String STORE_PATH = System.getProperty("user.dir") + "\\src\\main\\resumes\\";
+    public static final String API_ENDPOINT = "/api/v1/resume";
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -68,140 +76,134 @@ public class ResumeControllerShould {
         user.setRole(UserRole.User);
         user.addResume(resume);
         user.addResume(tmpResume);
+
+        jdbcTemplate.execute("insert into app_user (email, password, role) " +
+                "values ('" + user.getEmail() + "', '" +
+                user.getPassword() + "', '" +
+                user.getRole() + "');");
     }
 
     @AfterEach
     public void reset() {
-        jdbcTemplate.execute("DELETE FROM app_user");
         jdbcTemplate.execute("DELETE FROM resume");
-    }
-
-    private int countResumes() {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM resume", Integer.class);
+        jdbcTemplate.execute("DELETE FROM app_user");
     }
 
     @Test
     @Order(1)
-    void open_resume_html_containing_all_resumes_on_request_to_endpoint_resume() throws Exception {
-        when(resumeService.findAllResumesByUserEmail("mmahdifarrokhy@gmail.com")).thenReturn(expectedResumes);
-        when(resumeService.findAllResumesByUserEmail("mmahdifarrokhy@gmail.com")).thenReturn(expectedResumes2);
-        when(resumeService.findAllResumesByUserEmail("mmahdifarrokhy@gmail.com")).thenReturn(expectedResumes3);
+    void create_a_new_resume_and_save_in_database_on_post_request_to_endpoint_api_v1_resume() throws Exception {
+        when(resumeService.saveResume(resume)).thenReturn(resume);
 
-        MvcResult mvcResult = mockMvc.perform(get("/resume")
-                        .flashAttr("user", user)
-                        .param("email", user.getEmail())
-                        .param("password", user.getPassword())
-                        .param("role", user.getRole().toString()))
-                .andExpect(model().attribute("user", user))
-                .andExpect(status().isOk())
-                .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "resume");
-        assertModelAttributeValue(modelAndView, "resumes", expectedResumes);
-        verify(resumeService, times(1)).findAllResumesByUserEmail("mmahdifarrokhy@gmail.com");
+        ObjectMapper requestObjectMapper = new ObjectMapper();
+        requestObjectMapper.registerModule(new JavaTimeModule());
+        requestObjectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = requestObjectMapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(resume);
 
-        user.setEmail("mmahdifarrokhy@gmail.com");
-        mvcResult = mockMvc.perform(get("/resume")
-                        .flashAttr("user", user)
-                        .param("email", user.getEmail())
-                        .param("password", user.getPassword())
-                        .param("role", user.getRole().toString()))
-                .andExpect(model().attribute("user", user))
-                .andExpect(status().isOk())
+        MvcResult mvcResult = mockMvc.perform(post(API_ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isCreated())
                 .andReturn();
-        modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "resume");
-        assertModelAttributeValue(modelAndView, "resumes", expectedResumes2);
-        verify(resumeService, times(1)).findAllResumesByUserEmail("mmahdifarrokhy@gmail.com");
 
-        user.setEmail("mmahdifarrokhy@gmail.com");
-        mvcResult = mockMvc.perform(get("/resume")
-                        .flashAttr("user", user)
-                        .param("email", user.getEmail())
-                        .param("password", user.getPassword())
-                        .param("role", user.getRole().toString()))
-                .andExpect(model().attribute("user", user))
-                .andExpect(status().isOk())
-                .andReturn();
-        modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "resume");
-        assertModelAttributeValue(modelAndView, "resumes", expectedResumes3);
+        String responseJson = mvcResult.getResponse().getContentAsString();
+        ObjectMapper responseObjectMapper = new ObjectMapper();
+        responseObjectMapper.registerModule(new JavaTimeModule());
+        responseObjectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        Resume returnedResume = responseObjectMapper.readValue(responseJson, Resume.class);
+
+        assertThat(returnedResume).isEqualTo(resume);
+        verify(resumeService, times(1)).saveResume(resume);
+
+        when(resumeService.findAllResumesByUserEmail(user.getEmail())).thenReturn(singletonList(resume));
+        List<Resume> allResumesByUserEmail = resumeService.findAllResumesByUserEmail(user.getEmail());
+        assertThat(allResumesByUserEmail.size()).isEqualTo(1);
+
         verify(resumeService, times(1)).findAllResumesByUserEmail("mmahdifarrokhy@gmail.com");
     }
 
     @Test
     @Order(2)
-    void redirect_to_endpoint_resume_delete_success_on_request_to_endpoint_resume_delete_id() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(delete("/resume/delete")
-                        .flashAttr("resume", resume))
-                .andExpect(status().is(302))
+    void delete_a_resume_from_database_on_delete_request_to_endpoint_api_v1_resume_id() throws Exception {
+        mockMvc.perform(delete(API_ENDPOINT + "/" + resume.getId()))
+                .andExpect(status().isNoContent())
                 .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "redirect:/resume/delete/success");
-        verify(resumeService, times(1)).deleteResume(resume);
+
+        when(resumeService.findAllResumesByUserEmail(user.getEmail())).thenReturn(emptyList());
+        List<Resume> allResumesByUserEmailAfterDelete = resumeService.findAllResumesByUserEmail(user.getEmail());
+        assertThat(allResumesByUserEmailAfterDelete.size()).isEqualTo(0);
     }
 
     @Test
     @Order(3)
-    void return_resume_delete_success_html_request_to_endpoint_resume_delete_success() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/resume/delete/success"))
+    void get_all_resumes_for_a_user_by_sending_a_get_request_to_endpoint_api_v1_resume_email() throws Exception {
+        when(resumeService.findAllResumesByUserEmail(user.getEmail()))
+                .thenReturn(Arrays.asList(resume, resume));
+
+        MvcResult mvcResult = mockMvc.perform(get(API_ENDPOINT + "/all/" + user.getEmail()))
                 .andExpect(status().isOk())
                 .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "resume-delete-success");
-    }
 
-    @Test
-    @Order(3)
-    void redirect_to_endpoint_resume_download_success_on_request_to_endpoint_resume_download_id() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/resume/download")
-                        .flashAttr("resume", resume))
-                .andExpect(status().is(302))
-                .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "redirect:/resume/download/success");
-        verify(resumeService, times(1)).downloadResume(resume.getId(), ResumeTheme.ATSClassic);
+        String responseJson = mvcResult.getResponse().getContentAsString();
+        ObjectMapper responseObjectMapper = new ObjectMapper();
+        responseObjectMapper.registerModule(new JavaTimeModule());
+        responseObjectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        List<Resume> returnedResume = responseObjectMapper.readValue(
+                responseJson, new TypeReference<>() {
+                });
+
+        assertThat(returnedResume).isEqualTo(Arrays.asList(resume, resume));
+        verify(resumeService, times(1)).findAllResumesByUserEmail(user.getEmail());
     }
 
     @Test
     @Order(4)
-    void return_resume_download_success_html_request_to_endpoint_resume_download_success() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/resume/download/success"))
+    void update_a_resume_in_database_on_post_request_to_endpoint_api_v1_resume_id() throws Exception {
+        Resume clonedResume = (Resume) resume.clone();
+        clonedResume.removeSection(resume.getJobExperiences().getLast());
+        when(resumeService.updateResume(clonedResume, resume.getId())).thenReturn(clonedResume);
+
+        ObjectMapper requestObjectMapper = new ObjectMapper();
+        requestObjectMapper.registerModule(new JavaTimeModule());
+        requestObjectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = requestObjectMapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(clonedResume);
+
+        MvcResult mvcResult = mockMvc.perform(post(API_ENDPOINT + "/" + resume.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "resume-download-success");
+
+        String responseJson = mvcResult.getResponse().getContentAsString();
+        ObjectMapper responseObjectMapper = new ObjectMapper();
+        responseObjectMapper.registerModule(new JavaTimeModule());
+        responseObjectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        Resume returnedResume = responseObjectMapper.readValue(responseJson, Resume.class);
+
+        assertThat(returnedResume).isEqualTo(clonedResume);
+        verify(resumeService, times(1)).updateResume(clonedResume, resume.getId());
     }
 
     @Test
-    @Order(5)
-    void redirect_to_endpoint_resume_edit_success_on_request_to_endpoint_resume_edit_id() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/resume/edit")
-                        .flashAttr("resume", resume))
-                .andExpect(status().is(302))
-                .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "redirect:/resume/edit/success");
-        verify(resumeService, times(1)).saveResume(resume);
-    }
+    @Order(4)
+    void download_a_resume_from_database_on_get_request_to_endpoint_api_v1_resume_id() throws Exception {
+        when(resumeService.downloadResume(resume.getId(), ResumeTheme.ATSClassic))
+                .thenReturn(resume);
 
-    @Test
-    @Order(6)
-    void return_resume_edit_success_html_on_request_to_endpoint_resume_edit_success() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/resume/edit/success"))
+        MvcResult mvcResult = mockMvc.perform(get(API_ENDPOINT + "/" + resume.getId() + "/theme")
+                        .param("theme", "ATSClassic"))
                 .andExpect(status().isOk())
                 .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "resume-edit-success");
-    }
 
-    @Test
-    @Order(6)
-    void return_resume_share_success_html_on_request_to_endpoint_resume_share_success() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/resume/share/success"))
-                .andExpect(status().isOk())
-                .andReturn();
-        ModelAndView modelAndView = mvcResult.getModelAndView();
-        assertViewName(modelAndView, "resume-share-success");
+        String responseJson = mvcResult.getResponse().getContentAsString();
+        ObjectMapper responseObjectMapper = new ObjectMapper();
+        responseObjectMapper.registerModule(new JavaTimeModule());
+        responseObjectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        Resume returnedResume = responseObjectMapper.readValue(responseJson, Resume.class);
+
+        assertThat(returnedResume).isEqualTo(resume);
+        verify(resumeService, times(1))
+                .downloadResume(resume.getId(), ResumeTheme.ATSClassic);
     }
 }

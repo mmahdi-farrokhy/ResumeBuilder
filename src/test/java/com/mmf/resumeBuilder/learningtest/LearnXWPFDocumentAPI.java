@@ -2,7 +2,7 @@ package com.mmf.resumeBuilder.learningtest;
 
 import com.mmf.resumeBuilder.DatabaseTest;
 import com.mmf.resumeBuilder.entity.resume.Resume;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.*;
+import com.mmf.resumeBuilder.service.tools.word.documentgenerator.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

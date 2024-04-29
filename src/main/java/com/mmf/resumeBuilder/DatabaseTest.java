@@ -10,7 +10,6 @@ import com.mmf.resumeBuilder.constants.job.JobCategory;
 import com.mmf.resumeBuilder.constants.job.JobStatus;
 import com.mmf.resumeBuilder.constants.language.LanguageLevel;
 import com.mmf.resumeBuilder.constants.language.LanguageName;
-import com.mmf.resumeBuilder.constants.location.City;
 import com.mmf.resumeBuilder.constants.project.ProjectStatus;
 import com.mmf.resumeBuilder.constants.user.detail.*;
 import com.mmf.resumeBuilder.entity.User;
@@ -64,8 +63,8 @@ public class DatabaseTest {
         resume.addSection(createMembership(resume, "Scientific Association of the Faculty of Computer Engineering", LocalDate.of(2019, 1, 1)));
         resume.addSection(createHobby(resume, "Escape Room"));
         resume.addSection(createPatent());
-        resume.addSection(createVolunteerActivity(resume, "Beautime Startup Core Member", 2019));
-        resume.addSection(createVolunteerActivity(resume, "Creating Clean Code Documents", 2023));
+        resume.addSection(createVolunteerActivity(resume, "Beautime Startup Core Member", 2019, 1));
+        resume.addSection(createVolunteerActivity(resume, "Creating Clean Code Documents", 2023, 2));
         return resume;
     }
 
@@ -196,7 +195,7 @@ public class DatabaseTest {
                 Finally, I added the software connection through the network and TCP protocol to this software, which received almost 2.4 megabytes of data per second from the hardware with a sampling rate of 128,000 samples per second, with the size of each sample being 19 bytes. And I process, decode and draw it in the software.""");
         jobExperience.setStartDate(LocalDate.of(2023, 1, 7));
         jobExperience.setStatus(JobStatus.Occupied);
-        jobExperience.setLocation(createLocation(City.Pardis));
+        jobExperience.setLocation(createLocations("Pardis", "Iran"));
         jobExperience.setResume(resume);
         return jobExperience;
     }
@@ -213,7 +212,7 @@ public class DatabaseTest {
         jobExperience.setStartDate(LocalDate.of(2022, 4, 17));
         jobExperience.setEndDate(LocalDate.of(2022, 12, 21));
         jobExperience.setStatus(JobStatus.Finished);
-        jobExperience.setLocation(createLocation(City.Tehran));
+        jobExperience.setLocation(createLocations("Tehran", "Iran"));
         jobExperience.setResume(resume);
         return jobExperience;
     }
@@ -227,16 +226,15 @@ public class DatabaseTest {
         jobExperience.setDescription("Developing new sections in Blu environment");
         jobExperience.setStartDate(LocalDate.of(2024, 4, 2));
         jobExperience.setStatus(JobStatus.Occupied);
-        jobExperience.setLocation(createLocation(City.Tehran));
+        jobExperience.setLocation(createLocations("Tehran", "Iran"));
         jobExperience.setResume(resume);
         return jobExperience;
     }
 
-    public static Location createLocation(City city) {
+    public static Location createLocations(String city, String country) {
         Location location = new Location();
-        location.setId(1);
-        location.setCityName(city);
-        location.setCountryId(location.getCityName().getCountryId());
+        location.setCity(city);
+        location.setCountry(country);
         return location;
     }
 
@@ -354,10 +352,12 @@ public class DatabaseTest {
         return publication;
     }
 
-    public static VolunteerActivity createVolunteerActivity(Resume resume, String title, int year) {
+    public static VolunteerActivity createVolunteerActivity(Resume resume, String title, int year, int id) {
         VolunteerActivity volunteerActivity = new VolunteerActivity();
+//        volunteerActivity.setId(id);
         volunteerActivity.setTitle(title);
         volunteerActivity.setYear(year);
+        volunteerActivity.setResume(resume);
         return volunteerActivity;
     }
 }

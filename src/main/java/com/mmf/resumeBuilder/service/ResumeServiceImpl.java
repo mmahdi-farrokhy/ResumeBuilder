@@ -7,7 +7,7 @@ import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.ResumeJPARepository;
 import com.mmf.resumeBuilder.repository.ResumeRepository;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.*;
+import com.mmf.resumeBuilder.service.tools.word.documentgenerator.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,6 @@ public class ResumeServiceImpl implements ResumeService {
         }
 
         return resumeJPARepository.save(resume);
-//        return resumeRepository.saveResume(resume);
     }
 
     @Override

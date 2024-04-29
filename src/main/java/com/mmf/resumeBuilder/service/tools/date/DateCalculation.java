@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.service.datetools;
+package com.mmf.resumeBuilder.service.tools.date;
 
 import java.time.LocalDate;
 

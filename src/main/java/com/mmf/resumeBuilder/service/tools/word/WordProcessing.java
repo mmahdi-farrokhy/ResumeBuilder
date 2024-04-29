@@ -1,8 +1,9 @@
-package com.mmf.resumeBuilder.service.wordtools;
+package com.mmf.resumeBuilder.service.tools.word;
 
+import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.entity.resume.PersonalInformation;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.SimpleFloristDocumentGenerator;
-import com.mmf.resumeBuilder.service.wordtools.documentgenerator.WoodworkingDocumentGenerator;
+import com.mmf.resumeBuilder.service.tools.word.documentgenerator.SimpleFloristDocumentGenerator;
+import com.mmf.resumeBuilder.service.tools.word.documentgenerator.WoodworkingDocumentGenerator;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
@@ -164,10 +165,10 @@ public class WordProcessing {
         return table;
     }
 
-    public static String generateFilePath(PersonalInformation personalInformation, String themeName) {
+    public static String generateFilePath(PersonalInformation personalInformation, ResumeTheme theme) {
         return STORE_PATH +
-                themeName + " - " +
-                personalInformation.getFullName() +
+                theme + " - " +
+                personalInformation.generateFullName() +
                 " - " +
                 LocalDate.now().getYear() + "_" + LocalDate.now().getMonth() + "_" + LocalDate.now().getDayOfMonth() + "_" +
                 " - " +

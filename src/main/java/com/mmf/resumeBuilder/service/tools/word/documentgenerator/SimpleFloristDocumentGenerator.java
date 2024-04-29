@@ -1,8 +1,9 @@
-package com.mmf.resumeBuilder.service.wordtools.documentgenerator;
+package com.mmf.resumeBuilder.service.tools.word.documentgenerator;
 
+import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.entity.resume.*;
-import com.mmf.resumeBuilder.service.wordtools.FontProperties;
-import com.mmf.resumeBuilder.service.wordtools.Symbol;
+import com.mmf.resumeBuilder.service.tools.word.FontProperties;
+import com.mmf.resumeBuilder.service.tools.word.Symbol;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.FileOutputStream;
@@ -10,9 +11,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateDuration;
-import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateYearDuration;
-import static com.mmf.resumeBuilder.service.wordtools.WordProcessing.*;
+import static com.mmf.resumeBuilder.service.tools.date.DateCalculation.calculateDuration;
+import static com.mmf.resumeBuilder.service.tools.date.DateCalculation.calculateYearDuration;
+import static com.mmf.resumeBuilder.service.tools.word.WordProcessing.*;
 import static java.lang.String.valueOf;
 
 public class SimpleFloristDocumentGenerator implements DocumentGenerator {
@@ -124,7 +125,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
                     addVolunteerActivitiesToDocument(table, volunteerActivities);
                 }
 
-                FileOutputStream out = new FileOutputStream(generateFilePath(personalInformation, "Simple Florist"));
+                FileOutputStream out = new FileOutputStream(generateFilePath(personalInformation, ResumeTheme.Simple_Florist));
                 document.write(out);
                 out.close();
                 document.close();
@@ -139,7 +140,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
     private void createNameTitle(XWPFDocument document, PersonalInformation personalInformation) {
         XWPFParagraph nameParagraph = document.createParagraph();
         nameParagraph.setAlignment(ParagraphAlignment.CENTER);
-        addRunToParagraph(nameParagraph, personalInformation.getFullName(), NAME_HEADING_FONT, true);
+        addRunToParagraph(nameParagraph, personalInformation.generateFullName(), NAME_HEADING_FONT, true);
     }
 
     private void addContactInformationToDocument(XWPFDocument document, List<ContactMethod> contactInformation) {
@@ -184,7 +185,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             XWPFParagraph titleParagraph = bodyCell.addParagraph();
             List<String> titleParts = Arrays.asList(job.getTitle(),
                     job.getCompanyName(),
-                    job.getLocation().getCityName().toString());
+                    job.getLocation().getCity());
             List<String> split = Arrays.stream(job.getDescription().split("\\n")).toList();
 
             addRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true);

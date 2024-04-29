@@ -1,4 +1,4 @@
-INSERT INTO resumeBuilder.location(city_name, country_id)
+INSERT INTO resume_builder.location(city_name, country_id)
 VALUES
 ('Kabul',1),
 ('Herat',1),

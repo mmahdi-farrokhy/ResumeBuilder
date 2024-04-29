@@ -1,4 +1,4 @@
-INSERT INTO resumeBuiler.country(name, iso_code)
+INSERT INTO resume_builder.country(name, iso_code)
 VALUES
 ('AFGHANISTAN','AF'),
 ('Argentina','AR'),
@@ -12,7 +12,7 @@ VALUES
 ('CHINA','CN'),
 ('FRANCE','FR'),
 ('GERMANY','DE'),
-('HONG_KONG','HK')
+('HONG_KONG','HK'),
 ('HUNGARY','HU'),
 ('INDIA','IS'),
 ('IRAN','IR'),

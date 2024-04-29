@@ -1,9 +1,10 @@
-package com.mmf.resumeBuilder.service.wordtools.documentgenerator;
+package com.mmf.resumeBuilder.service.tools.word.documentgenerator;
 
+import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.constants.contactinformation.ContactType;
 import com.mmf.resumeBuilder.entity.resume.*;
-import com.mmf.resumeBuilder.service.wordtools.FontProperties;
-import com.mmf.resumeBuilder.service.wordtools.Symbol;
+import com.mmf.resumeBuilder.service.tools.word.FontProperties;
+import com.mmf.resumeBuilder.service.tools.word.Symbol;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
@@ -12,9 +13,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateDuration;
-import static com.mmf.resumeBuilder.service.datetools.DateCalculation.calculateYearDuration;
-import static com.mmf.resumeBuilder.service.wordtools.WordProcessing.*;
+import static com.mmf.resumeBuilder.service.tools.date.DateCalculation.calculateDuration;
+import static com.mmf.resumeBuilder.service.tools.date.DateCalculation.calculateYearDuration;
+import static com.mmf.resumeBuilder.service.tools.word.WordProcessing.*;
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 
@@ -122,7 +123,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
                     addVolunteerActivitiesToDocument(document, volunteerActivities);
                 }
 
-                FileOutputStream out = new FileOutputStream(generateFilePath(personalInformation, "Classic Accounting"));
+                FileOutputStream out = new FileOutputStream(generateFilePath(personalInformation, ResumeTheme.Classic_Accounting));
                 document.write(out);
                 out.close();
                 document.close();
@@ -181,7 +182,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             addRunToParagraph(paragraph, jobDuration, DATE_FONT, false);
             insertNewLine(paragraph);
 
-            List<String> titleParts = Arrays.asList(job.getTitle(), job.getCompanyName(), job.getLocation().getCityName().toString());
+            List<String> titleParts = Arrays.asList(job.getTitle(), job.getCompanyName(), job.getLocation().getCity());
             addRunToParagraph(paragraph, titleParts, TITLE_FONT, PIPE, true);
             insertNewLine(paragraph);
 

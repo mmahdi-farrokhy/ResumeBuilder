@@ -6,7 +6,7 @@ CREATE TABLE resume_builder.personal_information (
     phone_number VARCHAR(20) NOT NULL,
     marital_status ENUM('Single', 'Married') NOT NULL,
 	gender VARCHAR(20) NOT NULL,
-	military_service_status ENUM('None', 'Completed', 'Exempted', 'Educational_Exemption', 'Ongoing', 'Not_Served_Yet') 
+	military_service_status ENUM('None', 'Completed', 'Exempted', 'Educational_Exemption', 'Ongoing', 'Not_Served_Yet'),
 	birth_date DATE NOT NULL,
 	foreigner TINYINT(1) NOT NULL,
 	disability_type VARCHAR(20) NOT NULL
@@ -63,8 +63,8 @@ CREATE TABLE resume_builder.teaching_assistance (
 -- Create location table
 CREATE TABLE resume_builder.location (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    city_name VARCHAR(50) NOT NULL,
-    country_id INT NOT NULL
+    city VARCHAR(50) NOT NULL,
+	country VARCHAR(50) NOT NULL,    
 );
 
 -- Create job_experience table

@@ -1,4 +1,4 @@
-package com.mmf.resumeBuilder.service.wordtools.documentgenerator;
+package com.mmf.resumeBuilder.service.tools.word.documentgenerator;
 
 import com.mmf.resumeBuilder.entity.resume.Resume;
 
