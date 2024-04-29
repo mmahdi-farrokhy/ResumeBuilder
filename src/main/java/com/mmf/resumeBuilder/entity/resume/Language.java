@@ -1,13 +1,17 @@
 package com.mmf.resumeBuilder.entity.resume;
 
-import com.mmf.resumeBuilder.constants.language.LanguageName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mmf.resumeBuilder.constants.language.LanguageLevel;
+import com.mmf.resumeBuilder.constants.language.LanguageName;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "language")
@@ -43,6 +47,7 @@ public class Language extends ResumeSection {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
+    @JsonIgnore
     private Resume resume;
 
     @Override
@@ -101,5 +106,18 @@ public class Language extends ResumeSection {
         if (this.readingLevel.compareTo(LanguageLevel.Intermediate) > 0)
             upperIntermediateLevels++;
         return upperIntermediateLevels;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Language language = (Language) o;
+        return name == language.name && speakingLevel == language.speakingLevel && writingLevel == language.writingLevel && readingLevel == language.readingLevel && listeningLevel == language.listeningLevel && researchingLevel == language.researchingLevel;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, speakingLevel, writingLevel, readingLevel, listeningLevel, researchingLevel, resume);
     }
 }

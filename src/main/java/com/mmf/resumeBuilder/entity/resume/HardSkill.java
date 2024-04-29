@@ -1,13 +1,15 @@
 package com.mmf.resumeBuilder.entity.resume;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mmf.resumeBuilder.constants.hardskill.HardSkillLevel;
 import com.mmf.resumeBuilder.constants.hardskill.HardSkillType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
@@ -30,6 +32,7 @@ public class HardSkill extends ResumeSection {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
     @NonNull
+    @JsonIgnore
     private Resume resume;
 
     @Override
@@ -39,5 +42,18 @@ public class HardSkill extends ResumeSection {
                 ", type=" + type + "\n" +
                 ", level=" + level + "\n" +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HardSkill hardSkill = (HardSkill) o;
+        return type == hardSkill.type && level == hardSkill.level ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, level, resume);
     }
 }

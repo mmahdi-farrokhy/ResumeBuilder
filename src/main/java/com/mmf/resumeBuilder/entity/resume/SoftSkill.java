@@ -1,11 +1,15 @@
 package com.mmf.resumeBuilder.entity.resume;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "soft_skill")
@@ -20,6 +24,7 @@ public class SoftSkill extends ResumeSection {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
+    @JsonIgnore
     private Resume resume;
 
     @Override
@@ -28,5 +33,18 @@ public class SoftSkill extends ResumeSection {
                 "id=" + id + "\n" +
                 ", title='" + title + "\n" +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SoftSkill softSkill = (SoftSkill) o;
+        return Objects.equals(title, softSkill.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, resume);
     }
 }

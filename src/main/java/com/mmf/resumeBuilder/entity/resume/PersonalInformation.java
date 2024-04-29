@@ -7,13 +7,16 @@ import com.mmf.resumeBuilder.constants.user.detail.MilitaryServiceStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "personal_information")
@@ -76,7 +79,20 @@ public class PersonalInformation extends ResumeSection {
                 '}';
     }
 
-    public String getFullName(){
+    public String generateFullName() {
         return firstName + " " + lastName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonalInformation that = (PersonalInformation) o;
+        return foreigner == that.foreigner && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(phoneNumber, that.phoneNumber) && maritalStatus == that.maritalStatus && gender == that.gender && militaryServiceStatus == that.militaryServiceStatus && Objects.equals(birthDate, that.birthDate) && disabilityType == that.disabilityType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, phoneNumber, maritalStatus, gender, militaryServiceStatus, birthDate, foreigner, disabilityType);
     }
 }

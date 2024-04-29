@@ -1,13 +1,17 @@
 package com.mmf.resumeBuilder.entity.resume;
 
-import com.mmf.resumeBuilder.constants.location.City;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name = "location")
 public class Location {
@@ -16,19 +20,22 @@ public class Location {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "city_name", columnDefinition = "VARCHAR(50)")
-    @Enumerated(EnumType.STRING)
-    private City cityName;
+    @Column(name = "city", columnDefinition = "VARCHAR(50)")
+    private String city;
 
-    @Column(name = "country_id")
-    private int countryId;
+    @Column(name = "country")
+    private String country;
 
     @Override
-    public String toString() {
-        return "Location{" +
-                "id=" + id + "\n" +
-                ", cityName=" + cityName + "\n" +
-                ", countryId=" + countryId + "\n" +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location locations = (Location) o;
+        return Objects.equals(city, locations.city) && Objects.equals(country, locations.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(city, country);
     }
 }

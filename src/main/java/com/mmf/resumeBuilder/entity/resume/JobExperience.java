@@ -1,16 +1,19 @@
 package com.mmf.resumeBuilder.entity.resume;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mmf.resumeBuilder.constants.job.JobCategory;
 import com.mmf.resumeBuilder.constants.job.JobStatus;
 import com.mmf.resumeBuilder.constants.user.detail.SeniorityLevel;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "job_experience")
@@ -34,7 +37,7 @@ public class JobExperience extends ResumeSection {
     @Column(name = "company_name")
     private String companyName;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 5000)
     private String description;
 
     @Column(name = "start_date")
@@ -47,12 +50,13 @@ public class JobExperience extends ResumeSection {
     @Enumerated(EnumType.STRING)
     private JobStatus status;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location location;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
+    @JsonIgnore
     private Resume resume;
 
     @Override
@@ -69,5 +73,18 @@ public class JobExperience extends ResumeSection {
                 ", status=" + status + "\n" +
                 ", location=" + location + "\n" +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JobExperience that = (JobExperience) o;
+        return Objects.equals(title, that.title) && category == that.category && seniorityLevel == that.seniorityLevel && Objects.equals(companyName, that.companyName) && Objects.equals(description, that.description) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && status == that.status && Objects.equals(location, that.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, category, seniorityLevel, companyName, description, startDate, endDate, status, location, resume);
     }
 }

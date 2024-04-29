@@ -1,13 +1,16 @@
 package com.mmf.resumeBuilder.entity.resume;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "patent")
@@ -34,6 +37,7 @@ public class Patent extends ResumeSection {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
+    @JsonIgnore
     private Resume resume;
 
     @Override
@@ -46,5 +50,18 @@ public class Patent extends ResumeSection {
                 ", referenceLink='" + referenceLink + "\n" +
                 ", description='" + description + "\n" +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Patent patent = (Patent) o;
+        return Objects.equals(title, patent.title) && Objects.equals(registrationNumber, patent.registrationNumber) && Objects.equals(registrationDate, patent.registrationDate) && Objects.equals(referenceLink, patent.referenceLink) && Objects.equals(description, patent.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, registrationNumber, registrationDate, referenceLink, description, resume);
     }
 }

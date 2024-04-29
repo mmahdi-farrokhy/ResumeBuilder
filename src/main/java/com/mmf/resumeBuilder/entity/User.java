@@ -1,5 +1,7 @@
 package com.mmf.resumeBuilder.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mmf.resumeBuilder.constants.UserRole;
 import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.validation.NotDuplicatedEmail;
@@ -11,10 +13,10 @@ import lombok.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -38,6 +40,7 @@ public class User {
     private UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Resume> resumes;
 
     public void addResume(Resume newResume) {
@@ -55,5 +58,18 @@ public class User {
                 ", password='" + password + '\n' +
                 ", role=" + role + '\n' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email) && Objects.equals(password, user.password) && role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, password, role);
     }
 }

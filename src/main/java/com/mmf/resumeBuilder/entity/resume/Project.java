@@ -1,14 +1,18 @@
 package com.mmf.resumeBuilder.entity.resume;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mmf.resumeBuilder.constants.project.ProjectStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "project")
@@ -21,7 +25,7 @@ public class Project extends ResumeSection {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 5000)
     private String description;
 
     @Column(name = "start_date")
@@ -38,6 +42,7 @@ public class Project extends ResumeSection {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
+    @JsonIgnore
     private Resume resume;
 
     @Override
@@ -51,5 +56,18 @@ public class Project extends ResumeSection {
                 ", status=" + status + "\n" +
                 ", referenceLink='" + referenceLink + "\n" +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Project project = (Project) o;
+        return Objects.equals(name, project.name) && Objects.equals(description, project.description) && Objects.equals(startDate, project.startDate) && Objects.equals(endDate, project.endDate) && status == project.status && Objects.equals(referenceLink, project.referenceLink) ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, startDate, endDate, status, referenceLink, resume);
     }
 }

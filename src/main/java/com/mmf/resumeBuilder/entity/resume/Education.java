@@ -1,13 +1,17 @@
 package com.mmf.resumeBuilder.entity.resume;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mmf.resumeBuilder.constants.education.DegreeLevel;
 import com.mmf.resumeBuilder.constants.education.Major;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "education")
@@ -39,18 +43,32 @@ public class Education extends ResumeSection {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
+    @JsonIgnore
     private Resume resume;
 
     @Override
     public String toString() {
         return "Education{" +
                 "id=" + id + "\n" +
-                ", degreeLevel=" + degreeLevel +"\n" +
-                ", major=" + major +"\n" +
+                ", degreeLevel=" + degreeLevel + "\n" +
+                ", major=" + major + "\n" +
                 ", university='" + university + "\n" +
-                ", gpa=" + gpa +"\n" +
-                ", startYear=" + startYear +"\n" +
-                ", endYear=" + endYear +"\n" +
+                ", gpa=" + gpa + "\n" +
+                ", startYear=" + startYear + "\n" +
+                ", endYear=" + endYear + "\n" +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Education education = (Education) o;
+        return Double.compare(gpa, education.gpa) == 0 && startYear == education.startYear && endYear == education.endYear && degreeLevel == education.degreeLevel && major == education.major && Objects.equals(university, education.university) ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(degreeLevel, major, university, gpa, startYear, endYear, resume);
     }
 }

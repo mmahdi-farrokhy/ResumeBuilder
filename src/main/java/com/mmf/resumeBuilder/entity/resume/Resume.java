@@ -3,17 +3,16 @@ package com.mmf.resumeBuilder.entity.resume;
 import com.mmf.resumeBuilder.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "resume")
@@ -77,13 +76,13 @@ public class Resume implements Cloneable {
     private List<Publication> publications;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
-    private List<VolunteerActivity> volunteerActivities;
-
-    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<Membership> memberships;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<Hobby> hobbies;
+
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
+    private List<VolunteerActivity> volunteerActivities;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "app_user_id")
@@ -260,5 +259,18 @@ public class Resume implements Cloneable {
 
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resume resume = (Resume) o;
+        return Objects.equals(personalInformation, resume.personalInformation) && Objects.equals(contactInformation, resume.contactInformation) && Objects.equals(summary, resume.summary) && Objects.equals(educations, resume.educations) && Objects.equals(teachingAssistance, resume.teachingAssistance) && Objects.equals(jobExperiences, resume.jobExperiences) && Objects.equals(formerColleagues, resume.formerColleagues) && Objects.equals(researches, resume.researches) && Objects.equals(courses, resume.courses) && Objects.equals(hardSkills, resume.hardSkills) && Objects.equals(softSkills, resume.softSkills) && Objects.equals(languages, resume.languages) && Objects.equals(projects, resume.projects) && Objects.equals(patents, resume.patents) && Objects.equals(presentations, resume.presentations) && Objects.equals(awards, resume.awards) && Objects.equals(publications, resume.publications) && Objects.equals(volunteerActivities, resume.volunteerActivities) && Objects.equals(memberships, resume.memberships) && Objects.equals(hobbies, resume.hobbies) && Objects.equals(user, resume.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(personalInformation, contactInformation, summary, educations, teachingAssistance, jobExperiences, formerColleagues, researches, courses, hardSkills, softSkills, languages, projects, patents, presentations, awards, publications, volunteerActivities, memberships, hobbies, user);
     }
 }

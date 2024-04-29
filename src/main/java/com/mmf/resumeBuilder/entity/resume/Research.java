@@ -1,13 +1,16 @@
 package com.mmf.resumeBuilder.entity.resume;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "research")
@@ -34,6 +37,7 @@ public class Research extends ResumeSection {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "resume_id")
+    @JsonIgnore
     private Resume resume;
 
     @Override
@@ -46,5 +50,18 @@ public class Research extends ResumeSection {
                 ", date=" + date + "\n" +
                 ", description='" + description + "\n" +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Research research = (Research) o;
+        return Objects.equals(title, research.title) && Objects.equals(publisher, research.publisher) && Objects.equals(referenceLink, research.referenceLink) && Objects.equals(date, research.date) && Objects.equals(description, research.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, publisher, referenceLink, date, description, resume);
     }
 }
