@@ -33,8 +33,8 @@ public class User {
     private String email;
 
     @Column(name = "password")
-    @NotNull(message = "لطفا کلمه عبور را وارد کنید")
-    @Size(min = 8, message = "کلمه عبور باید حداقل 8 کاراکتر باشد")
+    @NotNull(message = "Password can not be empty")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
     @Column(name = "role")
