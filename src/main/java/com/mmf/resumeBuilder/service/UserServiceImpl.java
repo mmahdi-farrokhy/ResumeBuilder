@@ -40,19 +40,9 @@ public class UserServiceImpl implements UserService {
     public User updateUser(User user, String userEmail) {
         User optionalUser = userRepository.findByEmail(userEmail);
         if (optionalUser != null) {
-            User unwrappedUser = copyAppUser(user);
-            return userRepository.save(unwrappedUser);
+            return userRepository.save(user);
         } else {
             throw new UserNotFoundException(userEmail);
         }
-    }
-
-    private User copyAppUser(User sourceUser) {
-        User destinationUser = new User();
-        destinationUser.setEmail(sourceUser.getEmail());
-        destinationUser.setPassword(sourceUser.getPassword());
-        destinationUser.setRole(sourceUser.getRole());
-        destinationUser.setResumes(sourceUser.getResumes());
-        return destinationUser;
     }
 }

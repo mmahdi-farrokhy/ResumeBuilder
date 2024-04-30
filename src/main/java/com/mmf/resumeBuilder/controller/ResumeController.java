@@ -37,7 +37,7 @@ public class ResumeController {
         return new ResponseEntity<>(resumeService.findAllResumesByUserEmail(email), HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Resume> updateResume(@RequestBody Resume resume, @PathVariable int id) {
         return new ResponseEntity<>(resumeService.updateResume(resume, id), HttpStatus.OK);
     }

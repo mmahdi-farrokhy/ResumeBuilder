@@ -1,7 +1,6 @@
 package com.mmf.resumeBuilder.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mmf.resumeBuilder.constants.UserRole;
 import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.validation.NotDuplicatedEmail;
@@ -9,7 +8,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;

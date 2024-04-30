@@ -8,8 +8,10 @@ import com.mmf.resumeBuilder.entity.resume.HardSkill;
 import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.exception.InvalidResumeException;
 import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
+import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.ResumeJPARepository;
 import com.mmf.resumeBuilder.repository.ResumeRepositoryImpl;
+import com.mmf.resumeBuilder.service.tools.word.WordProcessing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +20,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.File;
+import java.util.List;
 import java.util.Optional;
 
+import static com.mmf.resumeBuilder.service.tools.word.WordProcessing.STORE_PATH;
+import static com.mmf.resumeBuilder.service.tools.word.WordProcessing.generateFilePath;
+import static java.util.Collections.singletonList;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,10 +49,9 @@ class ResumeServiceImplShould {
     Resume resume;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         resumeJPARepository = mock(ResumeJPARepository.class);
-        resumeRepository = mock(ResumeRepositoryImpl.class);
-        resumeService = new ResumeServiceImpl(resumeRepository, resumeJPARepository);
+        resumeService = new ResumeServiceImpl(resumeJPARepository);
         resume = DatabaseTest.createResume();
         resume.setId(0);
     }
@@ -55,7 +64,7 @@ class ResumeServiceImplShould {
 
     @Test
     void find_resume_by_id_and_throw_exception_if_resume_id_is_invalid() {
-        when(resumeJPARepository.findById(1)).thenReturn(Optional.empty());
+        when(resumeJPARepository.findById(1)).thenReturn(empty());
         assertThatExceptionOfType(ResumeNotFoundException.class)
                 .isThrownBy(() -> resumeService.findResumeById(1))
                 .withMessage("Resume with id 1 not found");
@@ -68,29 +77,10 @@ class ResumeServiceImplShould {
         resumeService.saveResume(resume);
 
         ArgumentCaptor<Resume> resumeArgumentCaptor = ArgumentCaptor.forClass(Resume.class);
-        verify(resumeJPARepository).save(resumeArgumentCaptor.capture());
+        verify(resumeJPARepository, times(1)).save(resumeArgumentCaptor.capture());
+
         Resume capturedResume = resumeArgumentCaptor.getValue();
-        assertThat(capturedResume.getPersonalInformation()).isEqualTo(resume.getPersonalInformation());
-        assertThat(capturedResume.getContactInformation()).isEqualTo(resume.getContactInformation());
-        assertThat(capturedResume.getSummary()).isEqualTo(resume.getSummary());
-        assertThat(capturedResume.getEducations()).isEqualTo(resume.getEducations());
-        assertThat(capturedResume.getTeachingAssistance()).isEqualTo(resume.getTeachingAssistance());
-        assertThat(capturedResume.getJobExperiences()).isEqualTo(resume.getJobExperiences());
-        assertThat(capturedResume.getFormerColleagues()).isEqualTo(resume.getFormerColleagues());
-        assertThat(capturedResume.getResearches()).isEqualTo(resume.getResearches());
-        assertThat(capturedResume.getCourses()).isEqualTo(resume.getCourses());
-        assertThat(capturedResume.getHardSkills()).isEqualTo(resume.getHardSkills());
-        assertThat(capturedResume.getSoftSkills()).isEqualTo(resume.getSoftSkills());
-        assertThat(capturedResume.getLanguages()).isEqualTo(resume.getLanguages());
-        assertThat(capturedResume.getProjects()).isEqualTo(resume.getProjects());
-        assertThat(capturedResume.getPatents()).isEqualTo(resume.getPatents());
-        assertThat(capturedResume.getPresentations()).isEqualTo(resume.getPresentations());
-        assertThat(capturedResume.getAwards()).isEqualTo(resume.getAwards());
-        assertThat(capturedResume.getPublications()).isEqualTo(resume.getPublications());
-        assertThat(capturedResume.getVolunteerActivities()).isEqualTo(resume.getVolunteerActivities());
-        assertThat(capturedResume.getMemberships()).isEqualTo(resume.getMemberships());
-        assertThat(capturedResume.getHobbies()).isEqualTo(resume.getHobbies());
-        assertThat(capturedResume.getUser()).isEqualTo(resume.getUser());
+        assertThat(capturedResume).isEqualTo(resume);
     }
 
     @Test
@@ -109,7 +99,7 @@ class ResumeServiceImplShould {
         assertThat(resumeService.findResumeById(resumeId)).isEqualTo(resume);
 
         resumeService.deleteResume(resumeId);
-        when(resumeJPARepository.findById(resumeId)).thenReturn(Optional.empty());
+        when(resumeJPARepository.findById(resumeId)).thenReturn(empty());
         assertThatExceptionOfType(ResumeNotFoundException.class)
                 .isThrownBy(() -> resumeService.findResumeById(resumeId))
                 .withMessage("Resume with id " + resumeId + " not found");
@@ -118,9 +108,9 @@ class ResumeServiceImplShould {
     @Test
     void delete_a_resume_by_id_and_throw_exception_if_resume_id_is_invalid() {
         int resumeId = 1;
-        when(resumeJPARepository.findById(resumeId)).thenReturn(Optional.empty());
+        when(resumeJPARepository.findById(resumeId)).thenReturn(empty());
         assertThatExceptionOfType(ResumeNotFoundException.class)
-                .isThrownBy(() -> resumeService.findResumeById(resumeId))
+                .isThrownBy(() -> resumeService.deleteResume(resumeId))
                 .withMessage("Resume with id " + resumeId + " not found");
     }
 
@@ -128,7 +118,6 @@ class ResumeServiceImplShould {
     void delete_a_resume() {
         when(resumeJPARepository.existsById(resume.getId())).thenReturn(true);
         resumeService.deleteResume(resume);
-        when(resumeJPARepository.existsById(resume.getId())).thenReturn(false);
     }
 
     @Test
@@ -148,29 +137,11 @@ class ResumeServiceImplShould {
         resumeService.updateResume(resume, resume.getId());
 
         ArgumentCaptor<Resume> resumeArgumentCaptor = ArgumentCaptor.forClass(Resume.class);
-        verify(resumeJPARepository).save(resumeArgumentCaptor.capture());
+        verify(resumeJPARepository, times(1)).save(resumeArgumentCaptor.capture());
         Resume capturedResume = resumeArgumentCaptor.getValue();
-        assertThat(capturedResume.getPersonalInformation()).isEqualTo(resume.getPersonalInformation());
-        assertThat(capturedResume.getContactInformation()).isEqualTo(resume.getContactInformation());
-        assertThat(capturedResume.getSummary()).isEqualTo(resume.getSummary());
-        assertThat(capturedResume.getEducations()).isEqualTo(resume.getEducations());
-        assertThat(capturedResume.getTeachingAssistance()).isEqualTo(resume.getTeachingAssistance());
-        assertThat(capturedResume.getJobExperiences()).isEqualTo(resume.getJobExperiences());
-        assertThat(capturedResume.getFormerColleagues()).isEqualTo(resume.getFormerColleagues());
-        assertThat(capturedResume.getResearches()).isEqualTo(resume.getResearches());
-        assertThat(capturedResume.getCourses()).isEqualTo(resume.getCourses());
-        assertThat(capturedResume.getHardSkills()).isEqualTo(resume.getHardSkills());
-        assertThat(capturedResume.getSoftSkills()).isEqualTo(resume.getSoftSkills());
-        assertThat(capturedResume.getLanguages()).isEqualTo(resume.getLanguages());
-        assertThat(capturedResume.getProjects()).isEqualTo(resume.getProjects());
-        assertThat(capturedResume.getPatents()).isEqualTo(resume.getPatents());
-        assertThat(capturedResume.getPresentations()).isEqualTo(resume.getPresentations());
-        assertThat(capturedResume.getAwards()).isEqualTo(resume.getAwards());
-        assertThat(capturedResume.getPublications()).isEqualTo(resume.getPublications());
-        assertThat(capturedResume.getVolunteerActivities()).isEqualTo(resume.getVolunteerActivities());
-        assertThat(capturedResume.getMemberships()).isEqualTo(resume.getMemberships());
-        assertThat(capturedResume.getHobbies()).isEqualTo(resume.getHobbies());
-        assertThat(capturedResume.getUser()).isEqualTo(resume.getUser());
+        assertThat(capturedResume).isEqualTo(resume);
+
+        verify(resumeJPARepository, times(1)).existsById(resume.getId());
     }
 
     @Test
@@ -188,11 +159,79 @@ class ResumeServiceImplShould {
     void download_a_resume() {
         int resumeId = 1;
         when(resumeJPARepository.findById(resumeId)).thenReturn(Optional.of(resume));
-//        assertThat(resumeService.findResumeById(resumeId)).isEqualTo(resume);
-        resumeService.downloadResume(resumeId, ResumeTheme.ATSClassic);
+
+        Resume returnedResume = resumeService.downloadResume(resumeId, ResumeTheme.ATSClassic);
+        assertThat(returnedResume).isEqualTo(resume);
+        verify(resumeJPARepository, times(1)).findById(resumeId);
+        assertTrue(fileExists(
+                generateFilePath(resume.getPersonalInformation(), ResumeTheme.ATSClassic)));
+
+        returnedResume = resumeService.downloadResume(resumeId, ResumeTheme.Classic_Accounting);
+        assertThat(returnedResume).isEqualTo(resume);
+        verify(resumeJPARepository, times(2)).findById(resumeId);
+        assertTrue(fileExists(
+                generateFilePath(resume.getPersonalInformation(), ResumeTheme.Classic_Accounting)));
+
+        returnedResume = resumeService.downloadResume(resumeId, ResumeTheme.Simple_Florist);
+        assertThat(returnedResume).isEqualTo(resume);
+        verify(resumeJPARepository, times(3)).findById(resumeId);
+        assertTrue(fileExists(
+                generateFilePath(resume.getPersonalInformation(), ResumeTheme.Simple_Florist)));
+
+        returnedResume = resumeService.downloadResume(resumeId, ResumeTheme.Woodworking);
+        assertThat(returnedResume).isEqualTo(resume);
+        verify(resumeJPARepository, times(4)).findById(resumeId);
+        assertTrue(fileExists(
+                generateFilePath(resume.getPersonalInformation(), ResumeTheme.Woodworking)));
+    }
+
+    private boolean fileExists(String fileNameWithLocation) {
+        File dir = new File(WordProcessing.STORE_PATH);
+        if (!dir.isDirectory()) {
+            return false;
+        }
+
+        String fileName = fileNameWithLocation.replace(STORE_PATH, "");
+        String fileNameWithoutExtensionAndSecond = fileName.substring(0, fileName.length() - 7);
+
+        for (File file : dir.listFiles()) {
+            if (file.isFile() && file.getName().startsWith(fileNameWithoutExtensionAndSecond)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Test
-    void findAllResumesByUserEmail() {
+    void download_a_resume_and_throw_exception_if_resume_does_not_exist() {
+        int resumeId = 1;
+        when(resumeJPARepository.findById(resumeId)).thenReturn(empty());
+
+        assertThatExceptionOfType(ResumeNotFoundException.class)
+                .isThrownBy(() -> resumeService.downloadResume(resumeId, ResumeTheme.ATSClassic))
+                .withMessage("Resume with id " + resumeId + " not found");
+    }
+
+    @Test
+    void find_all_resumes_by_user_email() {
+        String email = resume.getUser().getEmail();
+        when(resumeJPARepository.findAllResumesByUserEmail(email))
+                .thenReturn(of(singletonList(resume)));
+
+        List<Resume> allResumesByUserEmail = resumeService.findAllResumesByUserEmail(email);
+        assertThat(allResumesByUserEmail).isEqualTo(singletonList(resume));
+        verify(resumeJPARepository, times(1)).findAllResumesByUserEmail(email);
+    }
+
+    @Test
+    void find_all_resumes_by_user_email_and_throw_exception_if_user_does_not_exist() {
+        String email = resume.getUser().getEmail();
+        when(resumeJPARepository.findAllResumesByUserEmail(email))
+                .thenReturn(empty());
+
+        assertThatExceptionOfType(UserNotFoundException.class)
+                .isThrownBy(() -> resumeService.findAllResumesByUserEmail(email))
+                .withMessage("User with email " + email + " not found");
     }
 }

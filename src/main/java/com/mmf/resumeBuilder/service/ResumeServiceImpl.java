@@ -6,7 +6,6 @@ import com.mmf.resumeBuilder.exception.InvalidResumeException;
 import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.ResumeJPARepository;
-import com.mmf.resumeBuilder.repository.ResumeRepository;
 import com.mmf.resumeBuilder.service.tools.word.documentgenerator.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,18 +16,16 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
-    private final ResumeRepository resumeRepository;
-    private final ResumeJPARepository resumeJPARepository;
+    private final ResumeJPARepository resumeRepository;
 
     @Override
     public Resume findResumeById(int resumeId) {
-        Optional<Resume> resume = resumeJPARepository.findById(resumeId);
+        Optional<Resume> resume = resumeRepository.findById(resumeId);
         if (resume.isEmpty()) {
             throw new ResumeNotFoundException(resumeId);
         }
 
         return resume.get();
-//        return resumeRepository.findResumeById(resumeId);
     }
 
     @Override
@@ -37,70 +34,40 @@ public class ResumeServiceImpl implements ResumeService {
             throw new InvalidResumeException();
         }
 
-        return resumeJPARepository.save(resume);
+        return resumeRepository.save(resume);
     }
 
     @Override
     public void deleteResume(Integer resumeId) {
-        Optional<Resume> resume = resumeJPARepository.findById(resumeId);
+        Optional<Resume> resume = resumeRepository.findById(resumeId);
         if (resume.isEmpty()) {
             throw new ResumeNotFoundException(resumeId);
         }
 
-        resumeJPARepository.delete(resume.get());
-//        resumeRepository.deleteResume(resumeId);
+        resumeRepository.delete(resume.get());
     }
 
     @Override
     public void deleteResume(Resume resume) {
-        if (!resumeJPARepository.existsById(resume.getId())) {
+        if (!resumeRepository.existsById(resume.getId())) {
             throw new ResumeNotFoundException(resume.getId());
         }
 
-        resumeJPARepository.delete(resume);
-//        resumeRepository.deleteResume(resume);
+        resumeRepository.delete(resume);
     }
 
     @Override
     public Resume updateResume(Resume resume, Integer resumeId) {
-        if (!resumeJPARepository.existsById(resumeId)) {
+        if (!resumeRepository.existsById(resumeId)) {
             throw new ResumeNotFoundException(resumeId);
         }
 
-        Resume unwrappedResume = copyResume(resume);
-        return resumeJPARepository.save(unwrappedResume);
-    }
-
-    private Resume copyResume(Resume resume) {
-        Resume newResume = new Resume();
-        newResume.setId(resume.getId());
-        newResume.setPersonalInformation(resume.getPersonalInformation());
-        newResume.setContactInformation(resume.getContactInformation());
-        newResume.setSummary(resume.getSummary());
-        newResume.setEducations(resume.getEducations());
-        newResume.setTeachingAssistance(resume.getTeachingAssistance());
-        newResume.setJobExperiences(resume.getJobExperiences());
-        newResume.setFormerColleagues(resume.getFormerColleagues());
-        newResume.setResearches(resume.getResearches());
-        newResume.setCourses(resume.getCourses());
-        newResume.setHardSkills(resume.getHardSkills());
-        newResume.setSoftSkills(resume.getSoftSkills());
-        newResume.setLanguages(resume.getLanguages());
-        newResume.setProjects(resume.getProjects());
-        newResume.setPatents(resume.getPatents());
-        newResume.setPresentations(resume.getPresentations());
-        newResume.setAwards(resume.getAwards());
-        newResume.setPresentations(resume.getPresentations());
-        newResume.setVolunteerActivities(resume.getVolunteerActivities());
-        newResume.setMemberships(resume.getMemberships());
-        newResume.setHobbies(resume.getHobbies());
-        newResume.setUser(resume.getUser());
-        return newResume;
+        return resumeRepository.save(resume);
     }
 
     @Override
     public Resume downloadResume(Integer resumeId, ResumeTheme theme) {
-        Optional<Resume> optionalResume = resumeJPARepository.findById(resumeId);
+        Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
         if (optionalResume.isEmpty()) {
             throw new ResumeNotFoundException(resumeId);
         }
@@ -125,7 +92,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public List<Resume> findAllResumesByUserEmail(String userEmail) {
-        Optional<List<Resume>> allResumes = resumeJPARepository.findAllResumesByUserEmail(userEmail);
+        Optional<List<Resume>> allResumes = resumeRepository.findAllResumesByUserEmail(userEmail);
         if (allResumes.isEmpty()) {
             throw new UserNotFoundException(userEmail);
         }

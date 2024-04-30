@@ -4,11 +4,9 @@ import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,13 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @InitBinder
-    public void initBinder(WebDataBinder webDataBinder) {
-        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-        webDataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
-    }
-
-    @PostMapping(value = "/register")
+    @PostMapping(value = "")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -36,8 +28,12 @@ public class UserController {
         return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
     }
 
-    @PutMapping("/register/{userEmail}")
+    @PutMapping("/{userEmail}")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user, BindingResult result, @PathVariable String userEmail) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(userService.updateUser(user, userEmail), HttpStatus.OK);
     }
 }

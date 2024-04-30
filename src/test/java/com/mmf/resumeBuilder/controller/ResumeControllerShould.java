@@ -169,7 +169,7 @@ public class ResumeControllerShould {
         ObjectWriter ow = requestObjectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = ow.writeValueAsString(clonedResume);
 
-        MvcResult mvcResult = mockMvc.perform(post(API_ENDPOINT + "/" + resume.getId())
+        MvcResult mvcResult = mockMvc.perform(put(API_ENDPOINT + "/" + resume.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())

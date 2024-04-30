@@ -3,7 +3,6 @@ package com.mmf.resumeBuilder.service;
 import com.mmf.resumeBuilder.constants.UserRole;
 import com.mmf.resumeBuilder.entity.User;
 import com.mmf.resumeBuilder.exception.DuplicatedEmailException;
-import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
 import com.mmf.resumeBuilder.repository.UserRepository;
 import org.junit.Before;
@@ -14,8 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,32 +28,29 @@ public class UserServiceImplShould {
     @InjectMocks
     UserServiceImpl userService;
 
-    String email;
+    String email = "mmahdifarrokhy@gmail.com";
     User user;
 
     @Before
-    public void setUp() throws Exception {
-        email = "mmahdifarrokhy@gmail.com";
+    public void setUp() {
         user = new User(email, "12345678", UserRole.User, null);
     }
 
     @Test
     public void save_a_user() {
         when(userRepository.existsByEmail(email)).thenReturn(false);
-
         assertFalse(userService.existsByEmail(email));
 
         userService.saveUser(user);
 
         when(userRepository.existsByEmail(email)).thenReturn(true);
         assertTrue(userService.existsByEmail(email));
+
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userArgumentCaptor.capture());
+
         User capturedUser = userArgumentCaptor.getValue();
-        assertThat(capturedUser.getEmail()).isEqualTo(user.getEmail());
-        assertThat(capturedUser.getPassword()).isEqualTo(user.getPassword());
-        assertThat(capturedUser.getRole()).isEqualTo(user.getRole());
-        assertThat(capturedUser.getResumes()).isNull();
+        assertThat(capturedUser).isEqualTo(user);
     }
 
     @Test
@@ -65,6 +63,15 @@ public class UserServiceImplShould {
                 .withMessage("Email already taken");
 
         verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void tell_if_a_user_exists_by_its_email() {
+        when(userRepository.existsByEmail(email)).thenReturn(true);
+        assertTrue(userService.existsByEmail(email));
+
+        when(userRepository.existsByEmail(email)).thenReturn(false);
+        assertFalse(userService.existsByEmail(email));
     }
 
     @Test
@@ -83,18 +90,11 @@ public class UserServiceImplShould {
     }
 
     @Test
-    public void tell_if_a_user_exists_by_its_email() {
-        when(userRepository.existsByEmail(email)).thenReturn(false);
-        assertFalse(userService.existsByEmail(email));
-        when(userRepository.existsByEmail(email)).thenReturn(true);
-        assertTrue(userService.existsByEmail(email));
-    }
-
-    @Test
     public void update_a_user() {
         when(userRepository.findByEmail(email)).thenReturn(user);
         when(userRepository.existsByEmail(email)).thenReturn(true);
         assertTrue(userService.existsByEmail(email));
+
         String newEmail = "newEmail@gmail.com";
         String newPassword = "87654321";
         UserRole newRole = UserRole.Admin;
@@ -110,9 +110,15 @@ public class UserServiceImplShould {
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userArgumentCaptor.capture());
         User capturedUSer = userArgumentCaptor.getValue();
-        assertThat(capturedUSer.getEmail()).isEqualTo(newEmail);
-        assertThat(capturedUSer.getPassword()).isEqualTo(newPassword);
-        assertThat(capturedUSer.getRole()).isEqualTo(newRole);
-        assertThat(capturedUSer.getResumes()).isNull();
+        assertThat(capturedUSer).isEqualTo(newUser);
+    }
+
+    @Test
+    public void update_a_user_and_throw_exception_if_user_does_not_exist() {
+        when(userRepository.findByEmail(email)).thenReturn(null);
+
+        assertThatExceptionOfType(UserNotFoundException.class)
+                .isThrownBy(() -> userService.updateUser(user, email))
+                .withMessage("User with email " + email + " not found");
     }
 }
