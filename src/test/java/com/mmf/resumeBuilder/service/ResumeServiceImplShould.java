@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.service;
 
-import com.mmf.resumeBuilder.DatabaseTest;
+import com.mmf.resumeBuilder.TempResumeGenerator;
 import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.constants.hardskill.HardSkillLevel;
 import com.mmf.resumeBuilder.constants.hardskill.HardSkillType;
@@ -52,7 +52,7 @@ class ResumeServiceImplShould {
     public void setUp() {
         resumeJPARepository = mock(ResumeJPARepository.class);
         resumeService = new ResumeServiceImpl(resumeJPARepository);
-        resume = DatabaseTest.createResume();
+        resume = TempResumeGenerator.createResume();
         resume.setId(0);
     }
 

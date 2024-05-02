@@ -1,6 +1,6 @@
 package com.mmf.resumeBuilder.learningtest;
 
-import com.mmf.resumeBuilder.DatabaseTest;
+import com.mmf.resumeBuilder.TempResumeGenerator;
 import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.service.tools.word.documentgenerator.*;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +15,7 @@ public class LearnXWPFDocumentAPI {
 
     @BeforeEach
     void setUp() {
-        resume = DatabaseTest.createResume();
+        resume = TempResumeGenerator.createResume();
         resume.setId(1);
     }
 

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmf.resumeBuilder.DatabaseTest;
+import com.mmf.resumeBuilder.TempResumeGenerator;
 import com.mmf.resumeBuilder.constants.ResumeTheme;
 import com.mmf.resumeBuilder.constants.UserRole;
 import com.mmf.resumeBuilder.entity.User;
@@ -58,7 +58,7 @@ public class ResumeControllerShould {
 
     @BeforeEach
     public void init() throws CloneNotSupportedException {
-        resume = DatabaseTest.createResume();
+        resume = TempResumeGenerator.createResume();
         Resume tmpResume = (Resume) resume.clone();
         expectedResumes = new LinkedList<>();
         expectedResumes.add(resume);
