@@ -1,64 +1,154 @@
 package com.mmf.resumeBuilder.dao;
 
 import com.mmf.resumeBuilder.ResumeBuilderApplication;
-import com.mmf.resumeBuilder.repository.UserRepository;
+import com.mmf.resumeBuilder.TempResumeGenerator;
 import com.mmf.resumeBuilder.constants.UserRole;
 import com.mmf.resumeBuilder.entity.User;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import com.mmf.resumeBuilder.repository.UserRepository;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@TestPropertySource("/application-test.properties")
 @SpringBootTest(classes = ResumeBuilderApplication.class)
 public class UserDAOShould {
 
-    @Autowired
     User user;
 
-    @MockBean
-    UserRepository userDAO;
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
-    public void init() {
-        user.setEmail("mmahdi.farrokhy@gmail.com");
+    public void setup() {
+        user = new User();
+        user.setEmail("mmahdifarrokhy@gmail.com");
+        user.setPassword("12345679");
         user.setRole(UserRole.User);
+
+        jdbcTemplate.update("INSERT INTO app_user (email, password, role) VALUES ('user1@gmail.com', 'user1pass', 'User');");
+        jdbcTemplate.update("INSERT INTO app_user (email, password, role) VALUES ('user2@gmail.com', 'user2pass', 'User');");
+        jdbcTemplate.update("INSERT INTO app_user (email, password, role) VALUES ('user3@gmail.com', 'user3pass', 'User');");
+        jdbcTemplate.update("INSERT INTO app_user (email, password, role) VALUES ('user4@gmail.com', 'user4pass', 'User');");
+        jdbcTemplate.update("INSERT INTO app_user (email, password, role) VALUES ('user5@gmail.com', 'user5pass', 'User');");
+    }
+
+    @AfterEach
+    public void tear_down() {
+        jdbcTemplate.update("DELETE FROM app_user;");
     }
 
     @Test
-    public void find_a_user_by_its_email() {
-        User userByEmail = new User();
-        userByEmail.setPassword("qwe123");
-        userByEmail.setEmail("bradpitt@gmail.com");
-        userByEmail.setRole(UserRole.User);
-        when(userDAO.findByEmail(userByEmail.getEmail())).thenReturn(userByEmail);
+    void tell_if_a_user_exists_by_its_email() {
+        assertThat(userRepository.existsByEmail(user.getEmail())).isFalse();
 
-        assertEquals(userByEmail.getPassword(), userDAO.findByEmail("bradpitt@gmail.com").getPassword());
-        assertEquals(userByEmail.getRole(), userDAO.findByEmail("bradpitt@gmail.com").getRole());
-        assertEquals(userByEmail.getEmail(), userDAO.findByEmail("bradpitt@gmail.com").getEmail());
-
-        verify(userDAO, times(5)).findByEmail("bradpitt@gmail.com");
+        userRepository.save(user);
+        assertThat(userRepository.existsByEmail(user.getEmail())).isTrue();
     }
 
     @Test
-    public void return_null_for_an_invalid_email() {
-        User userByEmail = new User();
-        userByEmail.setPassword("qwe123");
-        userByEmail.setEmail("bradpitt5@gmail.com");
-        userByEmail.setRole(UserRole.User);
-        when(userDAO.findByEmail(userByEmail.getEmail())).thenReturn(null);
+    void find_a_user_by_its_email() {
+        assertThat(userRepository.findByEmail(user.getEmail())).isNull();
 
-        assertNull(userDAO.findByEmail("bradpitt@gmail.com"));
-        assertThrows(NullPointerException.class, () -> userDAO.findByEmail("bradpitt@gmail.com").getEmail());
-        assertThrows(NullPointerException.class, () -> userDAO.findByEmail("bradpitt@gmail.com").getPassword());
-        assertThrows(NullPointerException.class, () -> userDAO.findByEmail("bradpitt@gmail.com").getRole());
+        userRepository.save(user);
+        User foundUser = userRepository.findByEmail(user.getEmail());
+        assertThat(foundUser).isNotNull();
+        assertThat(foundUser).isEqualTo(user);
+    }
 
-        verify(userDAO, times(6)).findByEmail("bradpitt@gmail.com");
+    @Test
+    void find_a_user_with_its_resumes_by_email() {
+        user.setResumes(singletonList(TempResumeGenerator.createResume()));
+        userRepository.save(user);
+
+        assertThat(userRepository.findByEmailWithResumes(user.getEmail())
+                .isPresent())
+                .isTrue();
+
+        deleteEntities();
+    }
+
+    private void deleteEntities() {
+        jdbcTemplate.update("DELETE FROM contact_method;");
+        jdbcTemplate.update("DELETE FROM course;");
+        jdbcTemplate.update("DELETE FROM education;");
+        jdbcTemplate.update("DELETE FROM former_colleague;");
+        jdbcTemplate.update("DELETE FROM hard_skill;");
+        jdbcTemplate.update("DELETE FROM hobby;");
+        jdbcTemplate.update("DELETE FROM job_experience;");
+        jdbcTemplate.update("DELETE FROM language;");
+        jdbcTemplate.update("DELETE FROM location;");
+        jdbcTemplate.update("DELETE FROM membership;");
+        jdbcTemplate.update("DELETE FROM patent;");
+        jdbcTemplate.update("DELETE FROM presentation;");
+        jdbcTemplate.update("DELETE FROM project;");
+        jdbcTemplate.update("DELETE FROM publication;");
+        jdbcTemplate.update("DELETE FROM research;");
+        jdbcTemplate.update("DELETE FROM soft_skill;");
+        jdbcTemplate.update("DELETE FROM teaching_assistance;");
+        jdbcTemplate.update("DELETE FROM volunteer_activity;");
+        jdbcTemplate.update("DELETE FROM resume;");
+    }
+
+    @Test
+    void save_a_user_in_database_and_return_it() {
+        User savedUser = userRepository.save(user);
+        assertThat(savedUser).isEqualTo(user);
+        assertThat(userRepository.existsByEmail(user.getEmail())).isTrue();
+    }
+
+    @Test
+    void update_a_user() {
+        assertThat(userRepository.count()).isEqualTo(5);
+
+        userRepository.save(user);
+        assertThat(userRepository.count()).isEqualTo(6);
+
+        user.setPassword("12345678");
+        assertThat(userRepository.save(user)).isEqualTo(user);
+        assertThat(userRepository.count()).isEqualTo(6);
+
+        user.setRole(UserRole.Admin);
+        assertThat(userRepository.save(user)).isEqualTo(user);
+        assertThat(userRepository.count()).isEqualTo(6);
+
+        user.setEmail("mmahdifarrokhy2@gmail.com");
+        assertThat(userRepository.save(user)).isEqualTo(user);
+        assertThat(userRepository.count()).isEqualTo(7);
+    }
+
+    @Test
+    void read_all_users_from_database() {
+        List<User> all = userRepository.findAll();
+        assertThat(all.size()).isEqualTo(5);
+
+        assertThat(all.getFirst()).isEqualTo(new User(
+                "user1@gmail.com",
+                "user1pass",
+                UserRole.User,
+                null));
+    }
+
+    @Test
+    void delete_a_user_by_its_email() {
+        String email = "user1@gmail.com";
+        assertThat(userRepository.findByEmail(email)).isNotNull();
+        assertThat(userRepository.existsByEmail(email)).isTrue();
+
+        userRepository.delete(userRepository.findByEmail(email));
+
+        assertThat(userRepository.findByEmail(email)).isNull();
+        assertThat(userRepository.existsByEmail(email)).isFalse();
     }
 }

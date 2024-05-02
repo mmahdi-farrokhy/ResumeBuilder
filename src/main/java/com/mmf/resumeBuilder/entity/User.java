@@ -41,7 +41,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Resume> resumes;
 

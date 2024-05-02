@@ -84,7 +84,7 @@ public class Resume implements Cloneable {
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<VolunteerActivity> volunteerActivities;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "app_user_id")
     @NotNull
     private User user;
