@@ -18,7 +18,7 @@ import com.mmf.resumeBuilder.entity.resume.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class DatabaseTest {
+public class TempResumeGenerator {
     public static User createAppUser(Resume resume) {
         User appUser = new User();
         appUser.setEmail("mmahdifarrokhy12345678@gmail.com");
