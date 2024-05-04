@@ -9,8 +9,7 @@ import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.exception.InvalidResumeException;
 import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
-import com.mmf.resumeBuilder.repository.ResumeJPARepository;
-import com.mmf.resumeBuilder.repository.ResumeRepositoryImpl;
+import com.mmf.resumeBuilder.repository.ResumeRepository;
 import com.mmf.resumeBuilder.service.tools.word.WordProcessing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,10 +39,7 @@ import static org.mockito.Mockito.*;
 class ResumeServiceImplShould {
 
     @Mock
-    ResumeRepositoryImpl resumeRepository;
-
-    @Mock
-    ResumeJPARepository resumeJPARepository;
+    ResumeRepository resumeJPARepository;
 
     @InjectMocks
     ResumeServiceImpl resumeService;
@@ -50,7 +48,7 @@ class ResumeServiceImplShould {
 
     @BeforeEach
     public void setUp() {
-        resumeJPARepository = mock(ResumeJPARepository.class);
+        resumeJPARepository = mock(ResumeRepository.class);
         resumeService = new ResumeServiceImpl(resumeJPARepository);
         resume = TempResumeGenerator.createResume();
         resume.setId(0);
@@ -217,7 +215,7 @@ class ResumeServiceImplShould {
     void find_all_resumes_by_user_email() {
         String email = resume.getUser().getEmail();
         when(resumeJPARepository.findAllResumesByUserEmail(email))
-                .thenReturn(of(singletonList(resume)));
+                .thenReturn(singletonList(resume));
 
         List<Resume> allResumesByUserEmail = resumeService.findAllResumesByUserEmail(email);
         assertThat(allResumesByUserEmail).isEqualTo(singletonList(resume));
@@ -228,7 +226,7 @@ class ResumeServiceImplShould {
     void find_all_resumes_by_user_email_and_throw_exception_if_user_does_not_exist() {
         String email = resume.getUser().getEmail();
         when(resumeJPARepository.findAllResumesByUserEmail(email))
-                .thenReturn(empty());
+                .thenReturn(Collections.emptyList());
 
         assertThatExceptionOfType(UserNotFoundException.class)
                 .isThrownBy(() -> resumeService.findAllResumesByUserEmail(email))

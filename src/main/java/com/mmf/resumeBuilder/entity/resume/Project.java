@@ -3,7 +3,6 @@ package com.mmf.resumeBuilder.entity.resume;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mmf.resumeBuilder.constants.project.ProjectStatus;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +34,7 @@ public class Project extends ResumeSection {
     private LocalDate endDate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
     @Column(name = "reference_link")
@@ -63,7 +63,7 @@ public class Project extends ResumeSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
-        return Objects.equals(name, project.name) && Objects.equals(description, project.description) && Objects.equals(startDate, project.startDate) && Objects.equals(endDate, project.endDate) && status == project.status && Objects.equals(referenceLink, project.referenceLink) ;
+        return Objects.equals(name, project.name) && Objects.equals(description, project.description) && Objects.equals(startDate, project.startDate) && Objects.equals(endDate, project.endDate) && status == project.status && Objects.equals(referenceLink, project.referenceLink);
     }
 
     @Override

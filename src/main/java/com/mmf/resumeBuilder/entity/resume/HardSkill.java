@@ -21,6 +21,7 @@ public class HardSkill extends ResumeSection {
     private int id;
 
     @Column(name = "hard_skill_type")
+    @Enumerated(EnumType.STRING)
     @NonNull
     private HardSkillType type;
 

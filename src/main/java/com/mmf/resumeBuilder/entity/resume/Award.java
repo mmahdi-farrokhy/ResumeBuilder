@@ -22,7 +22,7 @@ public class Award extends ResumeSection {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "year")
+    @Column(name = "the_year")
     private int year;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})

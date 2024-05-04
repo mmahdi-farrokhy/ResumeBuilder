@@ -5,7 +5,7 @@ import com.mmf.resumeBuilder.entity.resume.Resume;
 import com.mmf.resumeBuilder.exception.InvalidResumeException;
 import com.mmf.resumeBuilder.exception.ResumeNotFoundException;
 import com.mmf.resumeBuilder.exception.UserNotFoundException;
-import com.mmf.resumeBuilder.repository.ResumeJPARepository;
+import com.mmf.resumeBuilder.repository.ResumeRepository;
 import com.mmf.resumeBuilder.service.tools.word.documentgenerator.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
-    private final ResumeJPARepository resumeRepository;
+    private final ResumeRepository resumeRepository;
 
     @Override
     public Resume findResumeById(int resumeId) {
@@ -92,11 +92,11 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public List<Resume> findAllResumesByUserEmail(String userEmail) {
-        Optional<List<Resume>> allResumes = resumeRepository.findAllResumesByUserEmail(userEmail);
+        List<Resume> allResumes = resumeRepository.findAllResumesByUserEmail(userEmail);
         if (allResumes.isEmpty()) {
             throw new UserNotFoundException(userEmail);
         }
 
-        return allResumes.get();
+        return allResumes;
     }
 }

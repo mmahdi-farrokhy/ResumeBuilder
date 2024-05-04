@@ -3,23 +3,6 @@ package com.mmf.resumeBuilder.constants.hardskill;
 import com.mmf.resumeBuilder.constants.utils.Conversion;
 
 public enum HardSkillType {
-    Hamkaran_System("همکاران سیستم"),
-    Rayvarz("رایورز"),
-    Tadbir("تدبیر"),
-    Holoo("هلو"),
-    Shygun("شایگان"),
-    Rafe("رافع"),
-    Mizan("میزان"),
-    Sepidar("سپیدار"),
-    Seyagh("sdhr"),
-    Vision("ویژن"),
-    Fanavaran("فنآوران(صدور بیمه نامه)"),
-    Shomaran_System("شماران سیستم"),
-    Rahkaran("راهکاران"),
-    Rayan_Hamafza("رایان هم افزار"),
-    Payvast("پیوست"),
-    Varanegar("ورا نگر"),
-    Sepidz("سپیدز"),
     Archicad,
     AutoCad,
     Grasshopper,
@@ -75,15 +58,9 @@ public enum HardSkillType {
     Navisworks,
     Section_Builder,
     Tekla_Structures,
-    Microsoft_Dynamics("Microsoft Dynamics"),
-    Sales_Force("Sales Force"),
-    Sugar("Sugar"),
-    Didar("دیدار"),
-    Sarv("سرو"),
-    Payam_Gostar("پیام گستر"),
-    Ravesh("روش"),
-    Ideal("ایده آل"),
-    Dana("Dana"),
+    Microsoft_Dynamics,
+    Sales_Force,
+    Sugar,
     Oracle_Database,
     PostgreSql,
     MySql,
@@ -525,16 +502,6 @@ public enum HardSkillType {
     Statius,
     Statistica,
     R;
-
-    private String persianTitle;
-
-    HardSkillType(String persianTitle) {
-        this.persianTitle = persianTitle;
-    }
-
-    HardSkillType() {
-        this.persianTitle = null;
-    }
 
     @Override
     public String toString() {
