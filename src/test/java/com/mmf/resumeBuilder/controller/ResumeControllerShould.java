@@ -191,7 +191,7 @@ public class ResumeControllerShould {
         when(resumeService.downloadResume(resume.getId(), ResumeTheme.ATSClassic))
                 .thenReturn(resume);
 
-        MvcResult mvcResult = mockMvc.perform(get(API_ENDPOINT + "/" + resume.getId() + "/theme")
+        MvcResult mvcResult = mockMvc.perform(get(API_ENDPOINT + "/" + resume.getId())
                         .param("theme", "ATSClassic"))
                 .andExpect(status().isOk())
                 .andReturn();
