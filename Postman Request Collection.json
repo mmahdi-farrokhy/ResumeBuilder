@@ -1,0 +1,231 @@
+{
+	"info": {
+		"_postman_id": "f9480093-b814-4bea-91b4-0a1e5b411d51",
+		"name": "Resume Builder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30025085",
+		"_collection_link": "https://grey-comet-343259.postman.co/workspace/Team-Workspace~668e5cdd-bb61-4581-8f21-b4c489ec0847/collection/30025085-f9480093-b814-4bea-91b4-0a1e5b411d51?action=share&source=collection_link&creator=30025085"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Update Existing User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"mmahdifarrokhy@gmail.com\",\r\n    \"password\" : \"mmf123456\",\r\n    \"role\" : \"User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7777/api/v1/user/mmahdifarrokhy@gmail.com",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"mmahdifarrokhy@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"mmahdifarrokhy@gmail.com\",\r\n    \"password\" : \"12345679\",\r\n    \"role\" : \"User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7777/api/v1/user",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resume",
+			"item": [
+				{
+					"name": "Create New Resume",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"personalInformation\" : {\r\n    \"birthDate\" : \"1999-07-29\",\r\n    \"disabilityType\" : \"None\",\r\n\t\"firstName\" : \"Mohammad Mahdi\",\r\n    \"foreigner\" : false,  \r\n    \"gender\" : \"Male\",\r\n\t\"lastName\" : \"Farrokhy\",\r\n    \"maritalStatus\" : \"Single\",\r\n    \"militaryServiceStatus\" : \"Exempted\",    \r\n    \"phoneNumber\" : \"09017743009\"\r\n  },\r\n\r\n  \"contactInformation\" : [ {\r\n    \"type\" : \"Email\",\r\n    \"content\" : \"mmahdifarrokhy@gmail.com\"\r\n  }, {\r\n    \"type\" : \"Phone_Number\",\r\n    \"content\" : \"09190763415\"\r\n  }, {\r\n    \"type\" : \"Address\",\r\n    \"content\" : \"Tehran, Pardis County\"\r\n  }, {\r\n    \"type\" : \"LinkedIn\",\r\n    \"content\" : \"https://www.linkedin.com/in/mmahdi-farrokhy/\"\r\n  }, {\r\n    \"type\" : \"GitHub\",\r\n    \"content\" : \"https://github.com/mmahdi-farrokhy\"\r\n  } ],\r\n\r\n  \"summary\" : {\r\n    \"text\" : \"As a junior software developer with 2 years of hands-on experience, I thrive on turning complex challenges into elegant solutions. My proficiency in C# .NET and Java allows me to create robust applications that seamlessly bridge user needs with technical capabilities.\\nPassionate about clean code and agile principles, I believe in the power of organized design and development to create software that stands the test of time. By adhering to best practices, I ensure that every line of code I write contributes to a maintainable and scalable product.\\nIn my journey, I've come to appreciate the collaborative nature of software development. I'm excited to work alongside like-minded professionals who share my dedication to crafting exceptional software. Let's connect and explore how we can drive innovation through code, design, and a commitment to continuous learning.\"\r\n  },\r\n\r\n  \"educations\" : [ {\r\n    \"degreeLevel\" : \"Bachelor\",\r\n    \"major\" : \"Computer_Engineering\",\r\n    \"university\" : \"Semnan University\",\r\n    \"gpa\" : 16.0,\r\n    \"startYear\" : 2017,\r\n    \"endYear\" : 2021\r\n  }, {\r\n    \"degreeLevel\" : \"Masters\",\r\n    \"major\" : \"Software_Engineering\",\r\n    \"university\" : \"Amir Kabir University of Technology (Tehran Polytechnic)\",\r\n    \"gpa\" : 19.87,\r\n    \"startYear\" : 2024,\r\n    \"endYear\" : 2026\r\n  } ],\r\n\r\n  \"teachingAssistance\" : [ {\r\n    \"title\" : \"Advanced Programming (Java)\",\r\n    \"university\" : \"Semnan University\",\r\n    \"startDate\" : \"2019-01-01\",\r\n    \"endDate\" : \"2019-06-30\"\r\n  }, {\r\n    \"title\" : \"Digital Electronic (MOSFET Transistors)\",\r\n    \"university\" : \"Semnan University\",\r\n    \"startDate\" : \"2019-01-01\",\r\n    \"endDate\" : \"2019-06-30\"\r\n  } ],\r\n\r\n  \"jobExperiences\" : [ {\r\n    \"title\" : \"Software Developer And Consultant\",\r\n    \"category\" : \"Software_Development\",\r\n    \"seniorityLevel\" : \"Junior\",\r\n    \"companyName\" : \"Negar Andishgan Co. Ltd.\",\r\n    \"description\" : \"I worked as a software developer on the EMG project of this company known as NrSign.EMG, debugged it, refactored some parts and added some new features to it.\\nFinally, I added the software connection through the network and TCP protocol to this software, which received almost 2.4 megabytes of data per second from the hardware with a sampling rate of 128,000 samples per second, with the size of each sample being 19 bytes. And I process, decode and draw it in the software.\",\r\n    \"startDate\" : [ 2023, 1, 7 ],\r\n    \"status\" : \"Occupied\",\r\n    \"location\" : {\r\n      \"city\" : \"Pardis\",\r\n      \"country\" : \"Iran\"\r\n    }\r\n  }, {\r\n    \"title\" : \"C# Developer\",\r\n    \"category\" : \"Software_Development\",\r\n    \"seniorityLevel\" : \"Junior\",\r\n    \"companyName\" : \"Zarvan Stun Khodro\",\r\n    \"description\" : \"This company has 2 software called MasterDiag and Promap, which are car diagnostics and remaps tools. I added a few new features to each of them to connect to the ECU of different cars.\\nI also developed the capability of connecting to ECUs with CAN protocol for the company's Promap software.\",\r\n    \"startDate\" : [ 2022, 4, 17 ],\r\n    \"endDate\" : [ 2022, 12, 21 ],\r\n    \"status\" : \"Finished\",\r\n    \"location\" : {\r\n      \"city\" : \"Tehran\",\r\n      \"country\" : \"Iran\"\r\n    }\r\n  }, {\r\n    \"title\" : \"Java/Spring Developer\",\r\n    \"category\" : \"Software_Development\",\r\n    \"seniorityLevel\" : \"Mid_Level\",\r\n    \"companyName\" : \"Blu Bank\",\r\n    \"description\" : \"Developing new sections in Blu environment\",\r\n    \"startDate\" : [ 2024, 4, 2 ],\r\n    \"status\" : \"Occupied\",\r\n    \"location\" : {\r\n      \"city\" : \"Tehran\",\r\n      \"country\" : \"Iran\"\r\n    }\r\n  } ],\r\n\r\n  \"formerColleagues\" : [ {\r\n    \"fullName\" : \"Ehsan Arbabi\",\r\n    \"position\" : \"Manager\",\r\n    \"organizationName\" : \"Negar Andishgan Co. Ltd.\",\r\n    \"phoneNumber\" : \"09123456789\"\r\n  }, {\r\n    \"fullName\" : \"Mohammad Hossein Ommi\",\r\n    \"position\" : \"CEO\",\r\n    \"organizationName\" : \"Zarvan Stun Khodro\",\r\n    \"phoneNumber\" : \"09123456789\"\r\n  } ],\r\n\r\n  \"researches\" : [ {\r\n    \"title\" : \"Researching about Clean Code\",\r\n    \"publisher\" : \"Mohammad Mahdi Farrokhy\",\r\n    \"referenceLink\" : \"https://github.com/mmahdi-farrokhy/CleanCodeBook\",\r\n    \"date\" : [ 2023, 7, 1 ],\r\n    \"description\" : \"In this repository you can read the simplified summary of Clean Code book by Robert C. Martin in separated chapters.\"\r\n  }, {\r\n    \"title\" : \"Convolutional Neural Networks\",\r\n    \"publisher\" : \"Mohammad Mahdi Farrokhy\",\r\n    \"referenceLink\" : \"https://github.com/mmahdi-farrokhy/Convolutional_Neural_Network\",\r\n    \"date\" : [ 2022, 11, 5 ],\r\n    \"description\" : \"I researched about CNN which is a subject under Machine Learning. And also developed a hand written digit recognition system using VHDL\"\r\n  } ],\r\n\r\n  \"courses\" : [ {\r\n    \"name\" : \"Java Expert\",\r\n    \"institute\" : \"7learn\",\r\n    \"credentialId\" : \"https://7learn.com/crt?h=bdP9hiSTF4\"\r\n  }, {\r\n    \"name\" : \"Spring Boot (Chad Darby)\",\r\n    \"institute\" : \"Udemy\"\r\n  } ],\r\n\r\n  \"hardSkills\" : [ {\r\n    \"type\" : \"Java\",\r\n    \"level\" : \"Advanced\"\r\n  }, {\r\n    \"type\" : \"Spring_Boot\",\r\n    \"level\" : \"Intermediate\"\r\n  } ],\r\n  \"softSkills\" : [ {\r\n    \"title\" : \"Instruction\"\r\n  } ],\r\n\r\n  \"languages\" : [ {\r\n    \"name\" : \"Persian\",\r\n    \"speakingLevel\" : \"Native\",\r\n    \"writingLevel\" : \"Native\",\r\n    \"readingLevel\" : \"Native\",\r\n    \"listeningLevel\" : \"Native\",\r\n    \"researchingLevel\" : \"Native\"\r\n  }, {\r\n    \"name\" : \"German\",\r\n    \"speakingLevel\" : \"Basic\",\r\n    \"writingLevel\" : \"Pre_Intermediate\",\r\n    \"readingLevel\" : \"Pre_Intermediate\",\r\n    \"listeningLevel\" : \"Pre_Intermediate\",\r\n    \"researchingLevel\" : \"Pre_Intermediate\"\r\n  }, {\r\n    \"name\" : \"English\",\r\n    \"speakingLevel\" : \"Intermediate\",\r\n    \"writingLevel\" : \"Intermediate\",\r\n    \"readingLevel\" : \"Upper_Intermediate\",\r\n    \"listeningLevel\" : \"Upper_Intermediate\",\r\n    \"researchingLevel\" : \"Upper_Intermediate\"\r\n  } ],\r\n\r\n  \"projects\" : [ {\r\n    \"name\" : \"Resume Builder\",\r\n    \"description\" : \"I designed a resume builder web application using Spring Boot.\\nThis app has the capabilities of creating a new resume, editing an existing resume and removing a resume from profile.\\n\\nStack:\\n- Back-End: Java/Spring Boot\\n- UI: HTML/CSS/Bootstrap\\n- Database: MySQL\",\r\n    \"startDate\" : [ 2023, 12, 1 ],\r\n    \"status\" : \"Active\",\r\n    \"referenceLink\" : \"https://github.com/mmahdi-farrokhy/ResumeBuilder\"\r\n  }, {\r\n    \"name\" : \"Travel Agency\",\r\n    \"description\" : \"I designed a windows application using Java 17 and JavaFX as UI framework.\\nThis app has the capabilities of booking flights, and seeing the history of the tickets bought by the user.\\n\\nStack:\\n- Back-End: Java 17\\n- UI: JavaFX\\n- Database: MySQL\",\r\n    \"startDate\" : [ 2023, 4, 17 ],\r\n    \"endDate\" : [ 2023, 8, 9 ],\r\n    \"status\" : \"Completed\",\r\n    \"referenceLink\" : \"https://github.com/mmahdi-farrokhy/TravelAgency\"\r\n  } ],\r\n  \"patents\" : [ {\r\n    \"title\" : \"Curtain Relay\",\r\n    \"registrationNumber\" : \"A1B2C3\",\r\n    \"registrationDate\" : [ 2024, 3, 5 ],\r\n    \"description\" : \"A simple product that opens and blinds the curtains\"\r\n  } ],\r\n\r\n  \"presentations\" : [ {\r\n    \"title\" : \"Introduction of new product in company\",\r\n    \"date\" : [ 2024, 5, 19 ],\r\n    \"description\" : \"In this event, I introduced my new product in the annual celebration of my company\"\r\n  } ],\r\n\r\n  \"volunteerActivities\" : [ {\r\n    \"title\" : \"Beautime Startup Core Member\",\r\n    \"year\" : 2019\r\n  }, {\r\n    \"title\" : \"Creating Clean Code Documents\",\r\n    \"year\" : 2023\r\n  } ],\r\n\r\n  \"memberships\" : [ {\r\n    \"title\" : \"Scientific Association of the Faculty of Computer Engineering\",\r\n    \"date\" : [ 2019, 1, 1 ]\r\n  } ],\r\n\r\n  \"hobbies\" : [ {\r\n    \"title\" : \"Escape Room\"\r\n  } ],\r\n  \r\n  \"user\" : {\r\n    \"email\" : \"mmahdifarrokhy@gmail.com\",\r\n    \"password\" : \"123456578\",\r\n    \"role\" : \"User\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7777/api/v1/resume",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"resume"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Resume",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:7777/api/v1/resume/7",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"resume",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Resume",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7777/api/v1/resume/32?theme=ATSClassic",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"resume",
+								"32"
+							],
+							"query": [
+								{
+									"key": "theme",
+									"value": "ATSClassic"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All Resumes By User's Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7777/api/v1/resume/all/mmahdifarrokhy@gmail.com",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"resume",
+								"all",
+								"mmahdifarrokhy@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Resume",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 41,\r\n    \"personalInformation\": {\r\n        \"id\": 43,\r\n        \"firstName\": \"Mohammad Mahdi\",\r\n        \"lastName\": \"Farrokhy\",\r\n        \"phoneNumber\": \"09017743009\",\r\n        \"maritalStatus\": \"Single\",\r\n        \"gender\": \"Male\",\r\n        \"militaryServiceStatus\": \"Exempted\",\r\n        \"birthDate\": \"1999-07-29\",\r\n        \"foreigner\": false,\r\n        \"disabilityType\": \"None\"\r\n    },\r\n    \"contactInformation\": [\r\n        {\r\n            \"id\": 201,\r\n            \"type\": \"Email\",\r\n            \"content\": \"mmahdifarrokhy@gmail.com\"\r\n        },\r\n        {\r\n            \"id\": 202,\r\n            \"type\": \"Phone_Number\",\r\n            \"content\": \"09190763415\"\r\n        },\r\n        {\r\n            \"id\": 203,\r\n            \"type\": \"Address\",\r\n            \"content\": \"Tehran, Pardis County\"\r\n        },\r\n        {\r\n            \"id\": 204,\r\n            \"type\": \"LinkedIn\",\r\n            \"content\": \"https://www.linkedin.com/in/mmahdi-farrokhy/\"\r\n        },\r\n        {\r\n            \"id\": 205,\r\n            \"type\": \"GitHub\",\r\n            \"content\": \"https://github.com/mmahdi-farrokhy\"\r\n        }\r\n    ],\r\n    \"summary\": {\r\n        \"id\": 42,\r\n        \"text\": \"As a junior software developer with 2 years of hands-on experience, I thrive on turning complex challenges into elegant solutions. My proficiency in C# .NET and Java allows me to create robust applications that seamlessly bridge user needs with technical capabilities.\\nPassionate about clean code and agile principles, I believe in the power of organized design and development to create software that stands the test of time. By adhering to best practices, I ensure that every line of code I write contributes to a maintainable and scalable product.\\nIn my journey, I've come to appreciate the collaborative nature of software development. I'm excited to work alongside like-minded professionals who share my dedication to crafting exceptional software. Let's connect and explore how we can drive innovation through code, design, and a commitment to continuous learning.\"\r\n    },\r\n    \"educations\": [\r\n        {\r\n            \"id\": 81,\r\n            \"degreeLevel\": \"Bachelor\",\r\n            \"major\": \"Computer_Engineering\",\r\n            \"university\": \"Semnan University\",\r\n            \"gpa\": 16.0,\r\n            \"startYear\": 2017,\r\n            \"endYear\": 2021\r\n        },\r\n        {\r\n            \"id\": 82,\r\n            \"degreeLevel\": \"Masters\",\r\n            \"major\": \"Software_Engineering\",\r\n            \"university\": \"Amir Kabir University of Technology (Tehran Polytechnic)\",\r\n            \"gpa\": 19.87,\r\n            \"startYear\": 2024,\r\n            \"endYear\": 2026\r\n        }\r\n    ],\r\n    \"teachingAssistance\": [\r\n        {\r\n            \"id\": 69,\r\n            \"title\": \"Advanced Programming (Java)\",\r\n            \"university\": \"Semnan University\",\r\n            \"startDate\": \"2019-01-01\",\r\n            \"endDate\": \"2019-06-30\"\r\n        },\r\n        {\r\n            \"id\": 70,\r\n            \"title\": \"Digital Electronic (MOSFET Transistors)\",\r\n            \"university\": \"Semnan University\",\r\n            \"startDate\": \"2019-01-01\",\r\n            \"endDate\": \"2019-06-30\"\r\n        }\r\n    ],\r\n    \"jobExperiences\": [\r\n        {\r\n            \"id\": 104,\r\n            \"title\": \"Software Developer And Consultant\",\r\n            \"category\": \"Software_Development\",\r\n            \"seniorityLevel\": \"Junior\",\r\n            \"companyName\": \"Negar Andishgan Co. Ltd.\",\r\n            \"description\": \"I worked as a software developer on the EMG project of this company known as NrSign.EMG, debugged it, refactored some parts and added some new features to it.\\nFinally, I added the software connection through the network and TCP protocol to this software, which received almost 2.4 megabytes of data per second from the hardware with a sampling rate of 128,000 samples per second, with the size of each sample being 19 bytes. And I process, decode and draw it in the software.\",\r\n            \"startDate\": \"2023-01-07\",\r\n            \"endDate\": null,\r\n            \"status\": \"Occupied\",\r\n            \"location\": {\r\n                \"id\": 104,\r\n                \"city\": \"Pardis\",\r\n                \"country\": \"Iran\"\r\n            }\r\n        },\r\n        {\r\n            \"id\": 105,\r\n            \"title\": \"C# Developer\",\r\n            \"category\": \"Software_Development\",\r\n            \"seniorityLevel\": \"Junior\",\r\n            \"companyName\": \"Zarvan Stun Khodro\",\r\n            \"description\": \"This company has 2 software called MasterDiag and Promap, which are car diagnostics and remaps tools. I added a few new features to each of them to connect to the ECU of different cars.\\nI also developed the capability of connecting to ECUs with CAN protocol for the company's Promap software.\",\r\n            \"startDate\": \"2022-04-17\",\r\n            \"endDate\": \"2022-12-21\",\r\n            \"status\": \"Finished\",\r\n            \"location\": {\r\n                \"id\": 105,\r\n                \"city\": \"Tehran\",\r\n                \"country\": \"Iran\"\r\n            }\r\n        },\r\n        {\r\n            \"id\": 106,\r\n            \"title\": \"Java/Spring Developer\",\r\n            \"category\": \"Software_Development\",\r\n            \"seniorityLevel\": \"Mid_Level\",\r\n            \"companyName\": \"Blu Bank\",\r\n            \"description\": \"Developing new sections in Blu environment\",\r\n            \"startDate\": \"2024-04-02\",\r\n            \"endDate\": null,\r\n            \"status\": \"Occupied\",\r\n            \"location\": {\r\n                \"id\": 106,\r\n                \"city\": \"Tehran\",\r\n                \"country\": \"Iran\"\r\n            }\r\n        }\r\n    ],\r\n    \"formerColleagues\": [\r\n        {\r\n            \"id\": 81,\r\n            \"fullName\": \"Ehsan Arbabi\",\r\n            \"position\": \"Manager\",\r\n            \"organizationName\": \"Negar Andishgan Co. Ltd.\",\r\n            \"phoneNumber\": \"09123456789\"\r\n        },\r\n        {\r\n            \"id\": 82,\r\n            \"fullName\": \"Mohammad Hossein Ommi\",\r\n            \"position\": \"CEO\",\r\n            \"organizationName\": \"Zarvan Stun Khodro\",\r\n            \"phoneNumber\": \"09123456789\"\r\n        }\r\n    ],\r\n    \"researches\": [\r\n        {\r\n            \"id\": 69,\r\n            \"title\": \"Researching about Clean Code\",\r\n            \"publisher\": \"Mohammad Mahdi Farrokhy\",\r\n            \"referenceLink\": \"https://github.com/mmahdi-farrokhy/CleanCodeBook\",\r\n            \"date\": \"2023-07-01\",\r\n            \"description\": \"In this repository you can read the simplified summary of Clean Code book by Robert C. Martin in separated chapters.\"\r\n        },\r\n        {\r\n            \"id\": 70,\r\n            \"title\": \"Convolutional Neural Networks\",\r\n            \"publisher\": \"Mohammad Mahdi Farrokhy\",\r\n            \"referenceLink\": \"https://github.com/mmahdi-farrokhy/Convolutional_Neural_Network\",\r\n            \"date\": \"2022-11-05\",\r\n            \"description\": \"I researched about CNN which is a subject under Machine Learning. And also developed a hand written digit recognition system using VHDL\"\r\n        }\r\n    ],\r\n    \"courses\": [\r\n        {\r\n            \"id\": 85,\r\n            \"name\": \"Java Expert\",\r\n            \"institute\": \"7learn\",\r\n            \"credentialId\": \"https://7learn.com/crt?h=bdP9hiSTF4\"\r\n        },\r\n        {\r\n            \"id\": 86,\r\n            \"name\": \"Spring Boot (Chad Darby)\",\r\n            \"institute\": \"Udemy\",\r\n            \"credentialId\": null\r\n        },\r\n        {\r\n            \"name\": \"The Complete Spring Boot Development Bootcamp\",\r\n            \"institute\": \"Learn The Part\",\r\n            \"credentialId\": null\r\n        }\r\n    ],\r\n    \"hardSkills\": [\r\n        {\r\n            \"id\": 81,\r\n            \"type\": \"Java\",\r\n            \"level\": \"Advanced\"\r\n        },\r\n        {\r\n            \"id\": 82,\r\n            \"type\": \"Spring_Boot\",\r\n            \"level\": \"Intermediate\"\r\n        }\r\n    ],\r\n    \"softSkills\": [\r\n        {\r\n            \"id\": 35,\r\n            \"title\": \"Instruction\"\r\n        }\r\n    ],\r\n    \"languages\": [\r\n        {\r\n            \"id\": 103,\r\n            \"name\": \"Persian\",\r\n            \"speakingLevel\": \"Native\",\r\n            \"writingLevel\": \"Native\",\r\n            \"readingLevel\": \"Native\",\r\n            \"listeningLevel\": \"Native\",\r\n            \"researchingLevel\": \"Native\"\r\n        },\r\n        {\r\n            \"id\": 104,\r\n            \"name\": \"German\",\r\n            \"speakingLevel\": \"Basic\",\r\n            \"writingLevel\": \"Pre_Intermediate\",\r\n            \"readingLevel\": \"Pre_Intermediate\",\r\n            \"listeningLevel\": \"Pre_Intermediate\",\r\n            \"researchingLevel\": \"Pre_Intermediate\"\r\n        },\r\n        {\r\n            \"id\": 105,\r\n            \"name\": \"English\",\r\n            \"speakingLevel\": \"Intermediate\",\r\n            \"writingLevel\": \"Intermediate\",\r\n            \"readingLevel\": \"Upper_Intermediate\",\r\n            \"listeningLevel\": \"Upper_Intermediate\",\r\n            \"researchingLevel\": \"Upper_Intermediate\"\r\n        }\r\n    ],\r\n    \"projects\": [\r\n        {\r\n            \"id\": 69,\r\n            \"name\": \"Resume Builder\",\r\n            \"description\": \"I designed a resume builder web application using Spring Boot.\\nThis app has the capabilities of creating a new resume, editing an existing resume and removing a resume from profile.\\n\\nStack:\\n- Back-End: Java/Spring Boot\\n- UI: HTML/CSS/Bootstrap\\n- Database: MySQL\",\r\n            \"startDate\": \"2023-12-01\",\r\n            \"endDate\": null,\r\n            \"status\": \"Active\",\r\n            \"referenceLink\": \"https://github.com/mmahdi-farrokhy/ResumeBuilder\"\r\n        },\r\n        {\r\n            \"id\": 70,\r\n            \"name\": \"Travel Agency\",\r\n            \"description\": \"I designed a windows application using Java 17 and JavaFX as UI framework.\\nThis app has the capabilities of booking flights, and seeing the history of the tickets bought by the user.\\n\\nStack:\\n- Back-End: Java 17\\n- UI: JavaFX\\n- Database: MySQL\",\r\n            \"startDate\": \"2023-04-17\",\r\n            \"endDate\": \"2023-08-09\",\r\n            \"status\": \"Completed\",\r\n            \"referenceLink\": \"https://github.com/mmahdi-farrokhy/TravelAgency\"\r\n        }\r\n    ],\r\n    \"patents\": [\r\n        {\r\n            \"id\": 35,\r\n            \"title\": \"Curtain Relay\",\r\n            \"registrationNumber\": \"A1B2C3\",\r\n            \"registrationDate\": \"2024-03-05\",\r\n            \"referenceLink\": null,\r\n            \"description\": \"A simple product that opens and blinds the curtains\"\r\n        }\r\n    ],\r\n    \"presentations\": [\r\n        {\r\n            \"id\": 35,\r\n            \"title\": \"Introduction of new product in company\",\r\n            \"date\": \"2024-05-19\",\r\n            \"referenceLink\": null,\r\n            \"description\": \"In this event, I introduced my new product in the annual celebration of my company\"\r\n        }\r\n    ],\r\n    \"awards\": [],\r\n    \"publications\": [],\r\n    \"memberships\": [\r\n        {\r\n            \"id\": 35,\r\n            \"title\": \"Scientific Association of the Faculty of Computer Engineering\",\r\n            \"date\": \"2019-01-01\"\r\n        }\r\n    ],\r\n    \"hobbies\": [\r\n        {\r\n            \"id\": 40,\r\n            \"title\": \"Escape Room\"\r\n        }\r\n    ],\r\n    \"volunteerActivities\": [\r\n        {\r\n            \"id\": 69,\r\n            \"title\": \"Beautime Startup Core Member\",\r\n            \"year\": 2019\r\n        },\r\n        {\r\n            \"id\": 70,\r\n            \"title\": \"Creating Clean Code Documents\",\r\n            \"year\": 2023\r\n        }\r\n    ],\r\n    \"user\": {\r\n        \"email\": \"mmahdifarrokhy@gmail.com\",\r\n        \"password\": \"mmf123456\",\r\n        \"role\": \"User\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7777/api/v1/resume/41",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"resume",
+								"41"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
