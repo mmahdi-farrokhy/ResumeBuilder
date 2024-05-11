@@ -19,7 +19,7 @@ The API supports various themes for the generated documents:
 To use this API you should go through the steps below:
 1. Clone this repository on your local system using the command below:
 
-``` git clone https://github.com/mmahdi-farrokhy/ResumeBuilder.git```
+  ``` git clone https://github.com/mmahdi-farrokhy/ResumeBuilder.git```
 
 3. Open [Postman](https://dl.pstmn.io/download/latest/win64) to send requests to the API.
 4. Import the prepared requests from this [path](https://github.com/mmahdi-farrokhy/ResumeBuilder/blob/main/Postman%20Request%20Collection.json) in Postman, fill the request body with your customized data, and send the requests.
