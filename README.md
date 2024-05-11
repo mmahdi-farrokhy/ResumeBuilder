@@ -13,7 +13,6 @@ The API supports various themes for the generated documents:
 * <strong>Language<strong>: Java 21
 * <strong>Database<strong>: MySQL
 * <strong>ORM<strong>: Hibernate
-* <strong>Authentication<strong>: Spring Security
 * <strong>Documentation<strong>: Swagger
 
 ## How to use the API?
