@@ -22,4 +22,5 @@ To use this API you should first clone this repository on your local system usin
 
 You also should have [Postman](https://dl.pstmn.io/download/latest/win64) installed to send requests to the API.
 Import the prepared requests from this [path](https://github.com/mmahdi-farrokhy/ResumeBuilder/blob/main/Postman%20Request%20Collection.json) in Postman, fill the request body with your customized data, and send the requests.
-  * You should have in mind to set new resume's id for all child entities manually, After creating it in the database.
+  * Inportant
+    * You should have in mind to set new resume's id for all child entities manually, After creating it in the database.
