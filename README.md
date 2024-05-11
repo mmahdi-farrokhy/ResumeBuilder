@@ -26,5 +26,5 @@ To use this API you should go through the steps below:
 4. Fill the request body with your customized data.
 5. Send the requests.
     * Inportant notes
-      * First create a user, them use its data in 'Create New Resume' request body.
+      * First create a user, then use its data in 'Create New Resume' request body for object 'user'.
       * Set new resume's id for all child entities manually(resume_id column), after creating it in the database.
