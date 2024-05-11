@@ -1,6 +1,12 @@
 # Resume Generator API
 ## Project Overview
-Welcome to the resume generator API! This project provides a Spring Boot API for generating resume files as Word documents.Users can sign up or login to create, edit, or delete their resumes. The API supports various themes for the generated documents.
+Welcome to the resume generator API!
+This project provides a Spring Boot API for generating resume files as Word documents. Users can sign up or login to create or edit, or delete their resumes.
+The API supports various themes for the generated documents:
+  1. ATS Classic
+  2. Wood Working
+  3. Simple Florist
+  4. Classic Accounting
 
 ## Technology Stack
 * <strong>Framework<strong>: Spring Boot
