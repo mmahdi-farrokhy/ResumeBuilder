@@ -21,7 +21,7 @@ To use this API you should go through the steps below:
 
     ``` git clone https://github.com/mmahdi-farrokhy/ResumeBuilder.git```
 
-2. Open [Postman](https://dl.pstmn.io/download/latest/win64) to send requests to the API.
+2. Launch [Postman](https://dl.pstmn.io/download/latest/win64) to send requests to the API.
 3. Import the prepared requests from this [path](https://github.com/mmahdi-farrokhy/ResumeBuilder/blob/main/Postman%20Request%20Collection.json) in Postman.
 4. Fill the request body with your customized data.
 5. Send the requests.
