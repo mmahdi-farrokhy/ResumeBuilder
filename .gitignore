@@ -21,3 +21,5 @@ target/
 *.vsdx
 
 /src/main/resumes
+/Complete Resume JSON Representation.json
+/Realistic Resume JSON Representation.json
