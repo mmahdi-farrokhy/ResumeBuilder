@@ -32,3 +32,11 @@ To use this API you should go through the steps below:
 
 ## Sample Generated Resumes
 Here you can see my own resumes generated using '[Resume Builder API](https://github.com/mmahdi-farrokhy/ResumeBuilder)'
+
+[ATS Classic - Mohammad Mahdi Farrokhy.pdf](https://github.com/mmahdi-farrokhy/ResumeBuilder/files/15283698/ATS.Classic.-.Mohammad.Mahdi.Farrokhy.pdf)
+
+[Classic Accounting - Mohammad Mahdi Farrokhy.pdf](https://github.com/mmahdi-farrokhy/ResumeBuilder/files/15283704/Classic.Accounting.-.Mohammad.Mahdi.Farrokhy.pdf)
+
+[Simple Florist - Mohammad Mahdi Farrokhy.pdf](https://github.com/mmahdi-farrokhy/ResumeBuilder/files/15283707/Simple.Florist.-.Mohammad.Mahdi.Farrokhy.pdf)
+
+[Woodworking - Mohammad Mahdi Farrokhy.pdf](https://github.com/mmahdi-farrokhy/ResumeBuilder/files/15283711/Woodworking.-.Mohammad.Mahdi.Farrokhy.pdf)
