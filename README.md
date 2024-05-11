@@ -21,4 +21,4 @@ To use this API you should first clone this repository on your local system usin
 ``` git clone https://github.com/mmahdi-farrokhy/ResumeBuilder.git```
 
 You also should have [Postman](https://dl.pstmn.io/download/latest/win64) installed to send requests to the API.
-Import the prepared requests from this [path](https://github.com/mmahdi-farrokhy/ResumeBuilder/Postman Request Collection.json) in Postman, fill the request body with you customized data, and send the request.
+Import the prepared requests from this [path](https://github.com/mmahdi-farrokhy/ResumeBuilder/blob/main/Postman%20Request%20Collection.json) in Postman, fill the request body with you customized data, and send the request.
