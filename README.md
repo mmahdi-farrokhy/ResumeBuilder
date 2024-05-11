@@ -28,3 +28,4 @@ To use this API you should go through the steps below:
     * Inportant notes
       * First create a user, then use its data in 'Create New Resume' request body for object 'user'.
       * Set new resume's id for all child entities manually(resume_id column), after creating it in the database.
+6. 'Download Resume' request fetches a resume with all its child entities from database and creates a resume file with .docx extension (MS Word) in 'resumes' folder in project's path.
