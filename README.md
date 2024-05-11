@@ -10,7 +10,7 @@ The API supports various themes for the generated documents:
 
 ## Technology Stack
 * <strong>Framework<strong>: Spring Boot
-* <strong>Language<strong>: Java
+* <strong>Language<strong>: Java 21
 * <strong>Database<strong>: MySQL
 * <strong>ORM<strong>: Hibernate
 * <strong>Authentication<strong>: Spring Security
