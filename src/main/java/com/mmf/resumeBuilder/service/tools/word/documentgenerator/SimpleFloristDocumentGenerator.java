@@ -1,6 +1,7 @@
 package com.mmf.resumeBuilder.service.tools.word.documentgenerator;
 
 import com.mmf.resumeBuilder.constants.ResumeTheme;
+import com.mmf.resumeBuilder.constants.contactinformation.ContactType;
 import com.mmf.resumeBuilder.entity.resume.*;
 import com.mmf.resumeBuilder.service.tools.word.FontProperties;
 import com.mmf.resumeBuilder.service.tools.word.Symbol;
@@ -144,20 +145,41 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
     }
 
     private void addContactInformationToDocument(XWPFDocument document, List<ContactMethod> contactInformation) {
-        XWPFParagraph contactParagraph = document.createParagraph();
-        contactParagraph.setAlignment(ParagraphAlignment.CENTER);
+        XWPFParagraph paragraph = document.createParagraph();
+        paragraph.setAlignment(ParagraphAlignment.CENTER);
 
-        int methodNumber = 0;
-        for (ContactMethod method : contactInformation) {
-            methodNumber++;
-            addRunToParagraph(contactParagraph, method.getContent(), BODY_FONT, false);
+//        int methodNumber = 0;
+//        for (ContactMethod method : contactInformation) {
+//            methodNumber++;
+//            addRunToParagraph(contactParagraph, method.getContent(), BODY_FONT, false);
+//
+//            if (methodNumber < contactInformation.size()) {
+//                addSymbolToParagraph(contactParagraph, BULLET, BODY_FONT.getSize());
+//            }
+//        }
+//
+//        insertNewLine(contactParagraph);
 
-            if (methodNumber < contactInformation.size()) {
-                addSymbolToParagraph(contactParagraph, BULLET, BODY_FONT.getSize());
+        Map<String, String> list = new LinkedHashMap<>();
+        for (ContactMethod contactMethod : contactInformation) {
+            if (contactMethod.getType() != ContactType.Address) {
+                String content = contactMethod.getContent();
+                ContactType type = contactMethod.getType();
+
+                String link = content;
+
+                if (type == ContactType.Email) {
+                    link = "mailto:" + content;
+                } else if (type == ContactType.Phone_Number) {
+                    link = "tel:" + content.replaceFirst("0", "+98");
+                }
+
+                list.put(contactMethod.getType().toString(), link);
             }
         }
 
-        insertNewLine(contactParagraph);
+        addHyperlinkRunToParagraph(paragraph, list, BODY_FONT, BULLET, false, ParagraphAlignment.CENTER);
+        insertNewLine(paragraph);
     }
 
     private void addSummary(XWPFTable table, Summary summary) {
@@ -271,17 +293,19 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
                 put(project.getStatus().toString(), project.getReferenceLink());
             }};
 
-            addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
+            addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true, ParagraphAlignment.LEFT);
 
-            int projectNumber = 0;
-            String[] descriptionText = project.getDescription().split("\\n");
-            for (String descriptionBlock : descriptionText) {
-                projectNumber++;
-                XWPFParagraph descriptionParagraph = bodyCell.addParagraph();
-                addRunToParagraph(descriptionParagraph, descriptionBlock, BODY_FONT, false);
+            if (project.getDescription() != null) {
+                int paragraphNumber = 0;
+                String[] descriptionText = project.getDescription().split("\\n");
+                for (String descriptionBlock : descriptionText) {
+                    paragraphNumber++;
+                    XWPFParagraph descriptionParagraph = bodyCell.addParagraph();
+                    addRunToParagraph(descriptionParagraph, descriptionBlock, BODY_FONT, false);
 
-                if (projectNumber == descriptionText.length)
-                    insertNewLine(descriptionParagraph);
+                    if (paragraphNumber == descriptionText.length)
+                        insertNewLine(descriptionParagraph);
+                }
             }
         }
 
@@ -397,7 +421,7 @@ public class SimpleFloristDocumentGenerator implements DocumentGenerator {
             }};
             List<String> descriptionText = Arrays.stream(research.getDescription().split("\\n")).toList();
 
-            addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
+            addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true, ParagraphAlignment.LEFT);
             addRunToParagraph(bodyParagraph, descriptionText, BODY_FONT, NEW_LINE, false);
             insertNewLine(bodyParagraph);
         }

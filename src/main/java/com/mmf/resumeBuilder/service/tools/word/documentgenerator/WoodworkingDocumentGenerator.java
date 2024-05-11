@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 import static com.mmf.resumeBuilder.service.tools.date.DateCalculation.calculateDuration;
 import static com.mmf.resumeBuilder.service.tools.date.DateCalculation.calculateYearDuration;
+import static com.mmf.resumeBuilder.service.tools.word.WordProcessing.*;
 import static java.lang.String.valueOf;
 
 public class WoodworkingDocumentGenerator implements DocumentGenerator {
@@ -145,9 +146,9 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
         XWPFTableRow row = WordProcessing.createRow(table);
         String abbreviation = generateFullNameAbbreviation(fullName);
 
-        WordProcessing.addRunToParagraph(WordProcessing.createCell(row, TWO_INCH_WIDTH).addParagraph(), abbreviation, NAME_ABBREVIATION_FONT, true);
+        addRunToParagraph(WordProcessing.createCell(row, TWO_INCH_WIDTH).addParagraph(), abbreviation, NAME_ABBREVIATION_FONT, true);
 //        addRunToParagraph(createCell(row, HALF_INCH_WIDTH).addParagraph(), "", NAME_ABBREVIATION_FONT, true);
-        WordProcessing.addRunToParagraph(WordProcessing.createCell(row, FIVE_INCH_WIDTH).addParagraph(), fullName, NAME_FONT, true);
+        addRunToParagraph(WordProcessing.createCell(row, FIVE_INCH_WIDTH).addParagraph(), fullName, NAME_FONT, true);
     }
 
     private String generateFullNameAbbreviation(String fullName) {
@@ -162,24 +163,24 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addSummary(XWPFTable table, Summary summary) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Summary", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Summary", HEADING_FONT, true);
 
         List<String> list = Arrays.stream(summary.getText().split("\\n")).toList();
         XWPFParagraph bodyParagraph = rowCell.addParagraph();
-        WordProcessing.addRunToParagraph(bodyParagraph, list, BODY_FONT, NEW_LINE, false);
+        addRunToParagraph(bodyParagraph, list, BODY_FONT, NEW_LINE, false);
         rowCell.addParagraph();
     }
 
     private void addJobExperiencesToDocument(XWPFTable table, List<JobExperience> jobExperiences) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Experiences", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Experiences", HEADING_FONT, true);
 
         int jobNumber = 0;
         for (JobExperience job : jobExperiences) {
             jobNumber++;
             String jobDuration = calculateDuration(job.getStartDate(), job.getEndDate());
-            WordProcessing.addRunToParagraph(rowCell.addParagraph(), jobDuration, DATE_FONT, false);
+            addRunToParagraph(rowCell.addParagraph(), jobDuration, DATE_FONT, false);
 
             XWPFParagraph titleParagraph = rowCell.addParagraph();
             List<String> titleParts = Arrays.asList(job.getTitle(),
@@ -187,12 +188,12 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
                     job.getLocation().getCity());
             List<String> split = Arrays.stream(job.getDescription().split("\\n")).toList();
 
-            WordProcessing.addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, true);
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, true);
             XWPFParagraph paragraph = rowCell.addParagraph();
-            WordProcessing.addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
+            addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
 
             if (jobNumber < jobExperiences.size())
-                WordProcessing.insertNewLine(paragraph);
+                insertNewLine(paragraph);
         }
 
         rowCell.addParagraph();
@@ -201,7 +202,7 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addFormerColleaguesToDocument(XWPFTable table, List<FormerColleague> formerColleagues) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Former Colleagues", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Former Colleagues", HEADING_FONT, true);
 
         for (FormerColleague formerColleague : formerColleagues) {
             XWPFParagraph titleParagraph = rowCell.addParagraph();
@@ -209,8 +210,8 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
                     formerColleague.getPosition(),
                     formerColleague.getPhoneNumber());
 
-            WordProcessing.addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
-            WordProcessing.addRunToParagraph(titleParagraph, titleParts, BODY_FONT, BULLET, false);
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, BULLET, false);
         }
 
         rowCell.addParagraph();
@@ -219,7 +220,7 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addSkillsToDocument(XWPFTable table, List<HardSkill> hardSkills, List<SoftSkill> softSkills) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Skills", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Skills", HEADING_FONT, true);
 
         List<String> skills = new LinkedList<>();
 
@@ -233,21 +234,21 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
         }
 
         XWPFParagraph titleParagraph = rowCell.addParagraph();
-        WordProcessing.addRunToParagraph(titleParagraph, skills, BODY_FONT, BULLET, false);
+        addRunToParagraph(titleParagraph, skills, BODY_FONT, BULLET, false);
         rowCell.addParagraph();
     }
 
     private void addCoursesToDocument(XWPFTable table, List<Course> courses) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Courses", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Courses", HEADING_FONT, true);
 
         for (Course course : courses) {
             XWPFParagraph titleParagraph = rowCell.addParagraph();
             List<String> titleParts = Arrays.asList(course.getName(), course.getInstitute());
 
-            WordProcessing.addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
-            WordProcessing.addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         rowCell.addParagraph();
@@ -256,7 +257,7 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addProjectsToDocument(XWPFTable table, List<Project> projects) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Projects", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Projects", HEADING_FONT, true);
 
         for (Project project : projects) {
             XWPFParagraph titleParagraph = rowCell.addParagraph();
@@ -268,12 +269,14 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
                 put(project.getStatus().toString(), project.getReferenceLink());
             }};
 
-            WordProcessing.addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
+            addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true, ParagraphAlignment.LEFT);
 
-            String[] descriptionText = project.getDescription().split("\\n");
-            for (String descriptionBlock : descriptionText) {
-                XWPFParagraph descriptionParagraph = rowCell.addParagraph();
-                WordProcessing.addRunToParagraph(descriptionParagraph, descriptionBlock, BODY_FONT, false);
+            if (project.getDescription() != null) {
+                String[] descriptionText = project.getDescription().split("\\n");
+                for (String descriptionBlock : descriptionText) {
+                    XWPFParagraph descriptionParagraph = rowCell.addParagraph();
+                    addRunToParagraph(descriptionParagraph, descriptionBlock, BODY_FONT, false);
+                }
             }
         }
 
@@ -283,18 +286,18 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addEducationsToDocument(XWPFTable table, List<Education> educations) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Education", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Education", HEADING_FONT, true);
 
         for (Education education : educations) {
             XWPFParagraph titleParagraph = rowCell.addParagraph();
             String major = education.getDegreeLevel() + " of " + education.getMajor();
             String educationDuration = calculateYearDuration(education.getStartYear(), education.getEndYear());
 
-            WordProcessing.addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
             List<String> titleParts = Arrays.asList(major,
                     education.getUniversity(),
                     educationDuration);
-            WordProcessing.addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         rowCell.addParagraph();
@@ -303,7 +306,7 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addTeachingAssistanceToDocument(XWPFTable table, List<TeachingAssistance> teachingAssistance) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Teaching Assistance", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Teaching Assistance", HEADING_FONT, true);
 
         for (TeachingAssistance ta : teachingAssistance) {
             XWPFParagraph paragraph = rowCell.addParagraph();
@@ -312,8 +315,8 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
                     ta.getUniversity(),
                     duration);
 
-            WordProcessing.addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
-            WordProcessing.addRunToParagraph(paragraph, titleParts, BODY_FONT, PIPE, false);
+            addSymbolToParagraph(paragraph, DASH, BODY_FONT.getSize());
+            addRunToParagraph(paragraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         rowCell.addParagraph();
@@ -322,25 +325,25 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addPresentationsToDocument(XWPFTable table, List<Presentation> presentations) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Presentations", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Presentations", HEADING_FONT, true);
 
         for (Presentation presentation : presentations) {
             XWPFParagraph presentationParagraph = rowCell.addParagraph();
 
             List<String> titlePArt = Arrays.asList(presentation.getTitle(), presentation.getDate().toString());
 
-            WordProcessing.addSymbolToParagraph(presentationParagraph, DASH, TITLE_FONT.getSize());
-            WordProcessing.addRunToParagraph(presentationParagraph, titlePArt, BODY_FONT, PIPE, true);
+            addSymbolToParagraph(presentationParagraph, DASH, TITLE_FONT.getSize());
+            addRunToParagraph(presentationParagraph, titlePArt, BODY_FONT, PIPE, true);
 
             String[] descriptionText = presentation.getDescription().split("\\n");
             int paragraphNumber = 0;
             for (String descriptionParagraph : descriptionText) {
                 paragraphNumber++;
                 XWPFParagraph paragraph = rowCell.addParagraph();
-                WordProcessing.addRunToParagraph(paragraph, descriptionParagraph, BODY_FONT, false);
+                addRunToParagraph(paragraph, descriptionParagraph, BODY_FONT, false);
 
                 if (paragraphNumber < descriptionText.length)
-                    WordProcessing.insertNewLine(paragraph);
+                    insertNewLine(paragraph);
             }
         }
 
@@ -350,24 +353,24 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addPatentsToDocument(XWPFTable table, List<Patent> patents) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Patents", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Patents", HEADING_FONT, true);
 
         for (Patent patent : patents) {
             XWPFParagraph patentParagraph = rowCell.addParagraph();
             List<String> titleParts = Arrays.asList(patent.getTitle(), patent.getRegistrationNumber(), patent.getRegistrationDate().toString());
 
-            WordProcessing.addSymbolToParagraph(patentParagraph, DASH, TITLE_FONT.getSize());
-            WordProcessing.addRunToParagraph(patentParagraph, titleParts, BODY_FONT, PIPE, true);
+            addSymbolToParagraph(patentParagraph, DASH, TITLE_FONT.getSize());
+            addRunToParagraph(patentParagraph, titleParts, BODY_FONT, PIPE, true);
 
             String[] descriptionText = patent.getDescription().split("\\n");
             int paragraphNumber = 0;
             for (String descriptionParagraph : descriptionText) {
                 paragraphNumber++;
                 XWPFParagraph paragraph = rowCell.addParagraph();
-                WordProcessing.addRunToParagraph(paragraph, descriptionParagraph, BODY_FONT, false);
+                addRunToParagraph(paragraph, descriptionParagraph, BODY_FONT, false);
 
                 if (paragraphNumber < descriptionText.length)
-                    WordProcessing.insertNewLine(paragraph);
+                    insertNewLine(paragraph);
             }
         }
 
@@ -377,7 +380,7 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addResearchesToDocument(XWPFTable table, List<Research> researches) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Researches", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Researches", HEADING_FONT, true);
 
         int researchNumber = 0;
         for (Research research : researches) {
@@ -387,18 +390,18 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
 
             Map<String, String> titleParts = new LinkedHashMap<>() {{
 
-                WordProcessing.addSymbolToParagraph(titleParagraph, DASH, TITLE_FONT.getSize());
+                addSymbolToParagraph(titleParagraph, DASH, TITLE_FONT.getSize());
                 put(research.getTitle(), research.getReferenceLink());
                 put(research.getPublisher(), research.getReferenceLink());
                 put(research.getDate().toString(), research.getReferenceLink());
             }};
             List<String> descriptionText = Arrays.stream(research.getDescription().split("\\n")).toList();
 
-            WordProcessing.addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true);
-            WordProcessing.addRunToParagraph(bodyParagraph, descriptionText, BODY_FONT, NEW_LINE, false);
+            addHyperlinkRunToParagraph(titleParagraph, titleParts, TITLE_FONT, PIPE, true, ParagraphAlignment.LEFT);
+            addRunToParagraph(bodyParagraph, descriptionText, BODY_FONT, NEW_LINE, false);
 
             if (researchNumber < researches.size())
-                WordProcessing.insertNewLine(bodyParagraph);
+                insertNewLine(bodyParagraph);
         }
 
         rowCell.addParagraph();
@@ -407,19 +410,19 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addLanguagesToDocument(XWPFTable table, List<Language> languages) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Languages", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Languages", HEADING_FONT, true);
 
         XWPFParagraph titleParagraph = rowCell.addParagraph();
         int languageNumber = 0;
         for (Language language : languages) {
             languageNumber++;
-            WordProcessing.addRunToParagraph(titleParagraph, language.getName().toString(), BODY_FONT, false);
-            WordProcessing.addSymbolToParagraph(titleParagraph, COLON, BODY_FONT.getSize());
+            addRunToParagraph(titleParagraph, language.getName().toString(), BODY_FONT, false);
+            addSymbolToParagraph(titleParagraph, COLON, BODY_FONT.getSize());
 
-            WordProcessing.addRunToParagraph(titleParagraph, language.estimateAverageLevel().toString(), BODY_FONT, false);
+            addRunToParagraph(titleParagraph, language.estimateAverageLevel().toString(), BODY_FONT, false);
 
             if (languageNumber < languages.size())
-                WordProcessing.addSymbolToParagraph(titleParagraph, BULLET, BODY_FONT.getSize());
+                addSymbolToParagraph(titleParagraph, BULLET, BODY_FONT.getSize());
         }
 
         rowCell.addParagraph();
@@ -428,7 +431,7 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addHobbiesToDocument(XWPFTable table, List<Hobby> hobbies) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Hobbies", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Hobbies", HEADING_FONT, true);
 
         XWPFParagraph titleParagraph = rowCell.addParagraph();
 
@@ -437,21 +440,21 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
             hobbyList.add(hobby.getTitle());
         }
 
-        WordProcessing.addRunToParagraph(titleParagraph, hobbyList, BODY_FONT, BULLET, false);
+        addRunToParagraph(titleParagraph, hobbyList, BODY_FONT, BULLET, false);
         rowCell.addParagraph();
     }
 
     private void addMembershipsToDocument(XWPFTable table, List<Membership> memberships) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Memberships", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Memberships", HEADING_FONT, true);
 
         for (Membership membership : memberships) {
             XWPFParagraph titleParagraph = rowCell.addParagraph();
             List<String> titleParts = Arrays.asList(membership.getTitle(), membership.getDate().toString());
 
-            WordProcessing.addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
-            WordProcessing.addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         rowCell.addParagraph();
@@ -460,14 +463,14 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
     private void addVolunteerActivitiesToDocument(XWPFTable table, List<VolunteerActivity> volunteerActivities) {
         XWPFTableRow row = table.createRow();
         XWPFTableCell rowCell = WordProcessing.getRowCell(row, 1);
-        WordProcessing.addRunToParagraph(rowCell.addParagraph(), "Volunteer Activities", HEADING_FONT, true);
+        addRunToParagraph(rowCell.addParagraph(), "Volunteer Activities", HEADING_FONT, true);
 
         for (VolunteerActivity activity : volunteerActivities) {
             XWPFParagraph titleParagraph = rowCell.addParagraph();
             List<String> titleParts = Arrays.asList(activity.getTitle(), valueOf(activity.getYear()));
 
-            WordProcessing.addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
-            WordProcessing.addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
+            addSymbolToParagraph(titleParagraph, DASH, BODY_FONT.getSize());
+            addRunToParagraph(titleParagraph, titleParts, BODY_FONT, PIPE, false);
         }
 
         rowCell.addParagraph();
@@ -495,53 +498,53 @@ public class WoodworkingDocumentGenerator implements DocumentGenerator {
 
         if (phone.isPresent()) {
             String phoneLink = "tel:" + phone.get().getContent().replaceFirst("0", "+98");
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.addHyperlinkRunToParagraph(paragraph, phoneLink, phone.get().getContent(), CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.insertNewLine(paragraph);
+            insertNewLine(paragraph);
+            addHyperlinkRunToParagraph(paragraph, phoneLink, phone.get().getContent(), CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            insertNewLine(paragraph);
         }
 
         if (email.isPresent()) {
             String emailLink = "mailto:" + email.get().getContent();
-            WordProcessing.addHyperlinkRunToParagraph(paragraph, emailLink, email.get().getContent(), CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.insertNewLine(paragraph);
+            addHyperlinkRunToParagraph(paragraph, emailLink, email.get().getContent(), CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            insertNewLine(paragraph);
         }
 
         if (address.isPresent()) {
-            WordProcessing.addRunToParagraph(paragraph, address.get().getContent(), CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.insertNewLine(paragraph);
+            addRunToParagraph(paragraph, address.get().getContent(), CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            insertNewLine(paragraph);
         }
 
         if (linkedIn.isPresent()) {
-            WordProcessing.addHyperlinkRunToParagraph(paragraph, linkedIn.get().getContent(), "LinkedIn", CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.insertNewLine(paragraph);
+            addHyperlinkRunToParagraph(paragraph, linkedIn.get().getContent(), "LinkedIn", CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            insertNewLine(paragraph);
         }
 
         if (gitHub.isPresent()) {
-            WordProcessing.addHyperlinkRunToParagraph(paragraph, gitHub.get().getContent(), "GitHub", CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.insertNewLine(paragraph);
+            addHyperlinkRunToParagraph(paragraph, gitHub.get().getContent(), "GitHub", CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            insertNewLine(paragraph);
         }
 
         if (others.isPresent()) {
-            WordProcessing.addRunToParagraph(paragraph, others.get().getContent(), CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
-            WordProcessing.insertNewLine(paragraph);
-            WordProcessing.insertNewLine(paragraph);
+            addRunToParagraph(paragraph, others.get().getContent(), CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            addRunToParagraph(paragraph, separator, CONTACT_INFO_FONT, false);
+            insertNewLine(paragraph);
+            insertNewLine(paragraph);
         }
 
         cell.addParagraph();

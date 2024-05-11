@@ -5,6 +5,7 @@ import com.mmf.resumeBuilder.constants.contactinformation.ContactType;
 import com.mmf.resumeBuilder.entity.resume.*;
 import com.mmf.resumeBuilder.service.tools.word.FontProperties;
 import com.mmf.resumeBuilder.service.tools.word.Symbol;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
@@ -257,16 +258,18 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
                 put(projectDuration, project.getReferenceLink());
                 put(project.getStatus().toString(), project.getReferenceLink());
             }};
-            addHyperlinkRunToParagraph(paragraph, titleParts, TITLE_FONT, PIPE, true);
+            addHyperlinkRunToParagraph(paragraph, titleParts, TITLE_FONT, PIPE, true, ParagraphAlignment.LEFT);
 
             insertNewLine(paragraph);
 
-            var split = Arrays.stream(project.getDescription().split("\\n")).toList();
-            addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
-            insertNewLine(paragraph);
-
-            if (projectNumber < projects.size())
+            if (project.getDescription() != null) {
+                var split = Arrays.stream(project.getDescription().split("\\n")).toList();
+                addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, false);
                 insertNewLine(paragraph);
+
+                if (projectNumber < projects.size())
+                    insertNewLine(paragraph);
+            }
         }
     }
 
@@ -366,7 +369,7 @@ public class ClassicAccountingDocumentGenerator implements DocumentGenerator {
             }};
 
             addSymbolToParagraph(paragraph, DASH, TITLE_FONT.getSize());
-            addHyperlinkRunToParagraph(paragraph, links, TITLE_FONT, PIPE, true);
+            addHyperlinkRunToParagraph(paragraph, links, TITLE_FONT, PIPE, true, ParagraphAlignment.LEFT);
             insertNewLine(paragraph);
 
             var split = Arrays.stream(research.getDescription().split("\\n")).toList();

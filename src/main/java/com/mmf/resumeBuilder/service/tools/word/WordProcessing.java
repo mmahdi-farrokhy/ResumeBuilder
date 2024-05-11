@@ -77,8 +77,8 @@ public class WordProcessing {
         }
     }
 
-    public static void addHyperlinkRunToParagraph(XWPFParagraph paragraph, Map<String, String> textParts, FontProperties font, Symbol symbol, boolean bold) {
-        paragraph.setAlignment(ParagraphAlignment.LEFT);
+    public static void addHyperlinkRunToParagraph(XWPFParagraph paragraph, Map<String, String> textParts, FontProperties font, Symbol symbol, boolean bold, ParagraphAlignment alignment) {
+        paragraph.setAlignment(alignment);
 
         int counter = 0;
         for (Map.Entry<String, String> textPart : textParts.entrySet()) {

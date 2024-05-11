@@ -1,8 +1,8 @@
 package com.mmf.resumeBuilder.service.tools.word.documentgenerator;
 
 import com.mmf.resumeBuilder.constants.ResumeTheme;
+import com.mmf.resumeBuilder.constants.contactinformation.ContactType;
 import com.mmf.resumeBuilder.entity.resume.*;
-import com.mmf.resumeBuilder.service.tools.date.DateCalculation;
 import com.mmf.resumeBuilder.service.tools.word.FontProperties;
 import com.mmf.resumeBuilder.service.tools.word.Symbol;
 import com.mmf.resumeBuilder.service.tools.word.WordProcessing;
@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static com.mmf.resumeBuilder.service.tools.date.DateCalculation.calculateDuration;
 import static com.mmf.resumeBuilder.service.tools.date.DateCalculation.calculateYearDuration;
+import static com.mmf.resumeBuilder.service.tools.word.WordProcessing.*;
 import static java.lang.String.valueOf;
 
 public class ATSClassicDocumentGenerator implements DocumentGenerator {
@@ -138,20 +140,33 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
     private static void createNameTitle(XWPFDocument document, PersonalInformation personalInformation) {
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.CENTER);
-        WordProcessing.addHeadingRunToParagraph(paragraph, personalInformation.generateFullName(), nameTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(paragraph, personalInformation.generateFullName(), nameTitleFont, FILL_COLOR);
     }
 
     private static void addContactInformation(XWPFDocument document, List<ContactMethod> contactInformation) {
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.CENTER);
 
-        List<String> list = new LinkedList<>();
+        Map<String, String> list = new LinkedHashMap<>();
         for (ContactMethod contactMethod : contactInformation) {
-            list.add(contactMethod.getContent());
+            if (contactMethod.getType() != ContactType.Address) {
+                String content = contactMethod.getContent();
+                ContactType type = contactMethod.getType();
+
+                String link = content;
+
+                if (type == ContactType.Email) {
+                    link = "mailto:" + content;
+                } else if (type == ContactType.Phone_Number) {
+                    link = "tel:" + content.replaceFirst("0", "+98");
+                }
+
+                list.put(contactMethod.getType().toString(), link);
+            }
         }
 
-        WordProcessing.addRunToParagraph(paragraph, list, BODY_FONT, BULLET, false);
-        WordProcessing.insertNewLine(paragraph);
+        addHyperlinkRunToParagraph(paragraph, list, BODY_FONT, BULLET, false, ParagraphAlignment.CENTER);
+        insertNewLine(paragraph);
     }
 
     private static void addSummary(XWPFDocument document, Summary summary) {
@@ -159,8 +174,8 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         paragraph.setAlignment(ParagraphAlignment.LEFT);
         var split = Arrays.stream(summary.getText().split("\\n")).toList();
 
-        WordProcessing.addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, true);
-        WordProcessing.insertNewLine(paragraph);
+        addRunToParagraph(paragraph, split, BODY_FONT, NEW_LINE, true);
+        insertNewLine(paragraph);
     }
 
     private static void addJobExperiencesToDocument(XWPFDocument document, List<JobExperience> jobExperiences) {
@@ -168,7 +183,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Experiences", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Experiences", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
         bodyParagraph.setIndentationLeft(INDENTATION);
@@ -176,41 +191,41 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         int jobExperienceNumber = 0;
         for (JobExperience jobExperience : jobExperiences) {
             jobExperienceNumber++;
-            WordProcessing.addRunToParagraph(bodyParagraph, DateCalculation.calculateDuration(jobExperience.getStartDate(), jobExperience.getEndDate()), BODY_FONT, false);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, calculateDuration(jobExperience.getStartDate(), jobExperience.getEndDate()), BODY_FONT, false);
+            insertNewLine(bodyParagraph);
 
             List<String> titleParts = Arrays.asList(jobExperience.getTitle(),
                     jobExperience.getCompanyName(),
                     jobExperience.getLocation().getCity());
 
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
+            insertNewLine(bodyParagraph);
 
             var split = Arrays.stream(jobExperience.getDescription().split("\\n")).toList();
 
-            WordProcessing.addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
+            insertNewLine(bodyParagraph);
 
             if (jobExperienceNumber < jobExperiences.size())
-                WordProcessing.insertNewLine(bodyParagraph);
+                insertNewLine(bodyParagraph);
         }
     }
 
     private static void addFormerColleaguesToDocument(XWPFDocument document, List<FormerColleague> formerColleagues) {
         XWPFParagraph titleParagraph = document.createParagraph();
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Former Colleagues", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Former Colleagues", sectionTitleFont, FILL_COLOR);
 
         XWPFParagraph bodyParagraph = document.createParagraph();
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
         for (FormerColleague formerColleague : formerColleagues) {
             bodyParagraph.setIndentationLeft(300);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
 
             List<String> titleParts = Arrays.asList(formerColleague.getFullName(), formerColleague.getPosition(), formerColleague.getPhoneNumber());
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, BULLET, false);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, BULLET, false);
+            insertNewLine(bodyParagraph);
         }
     }
 
@@ -218,7 +233,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph titleParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Skills", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Skills", sectionTitleFont, FILL_COLOR);
 
         XWPFParagraph bodyParagraph = document.createParagraph();
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
@@ -235,8 +250,8 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             skills = Stream.concat(skills.stream(), softSkillList.stream()).toList();
         }
 
-        WordProcessing.addRunToParagraph(bodyParagraph, skills, BODY_FONT, BULLET, false);
-        WordProcessing.insertNewLine(bodyParagraph);
+        addRunToParagraph(bodyParagraph, skills, BODY_FONT, BULLET, false);
+        insertNewLine(bodyParagraph);
     }
 
     private static void addCoursesToDocument(XWPFDocument document, List<Course> courses) {
@@ -244,16 +259,16 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Courses", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Courses", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
         for (Course course : courses) {
             bodyParagraph.setIndentationLeft(INDENTATION);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             List<String> titleParts = Arrays.asList(course.getName(), course.getInstitute());
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
+            insertNewLine(bodyParagraph);
         }
     }
 
@@ -262,7 +277,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Projects", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Projects", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
@@ -270,31 +285,27 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Project project : projects) {
             projectNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
-            String projectDuration = DateCalculation.calculateDuration(project.getStartDate(), project.getEndDate());
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            String projectDuration = calculateDuration(project.getStartDate(), project.getEndDate());
             Map<String, String> links = new LinkedHashMap<>() {{
                 put(project.getName(), project.getReferenceLink());
                 put(projectDuration, project.getReferenceLink());
                 put(project.getStatus().toString(), project.getReferenceLink());
             }};
 
-            WordProcessing.addHyperlinkRunToParagraph(bodyParagraph, links, BODY_FONT, PIPE, true);
-
-            WordProcessing.insertNewLine(bodyParagraph);
-            if (project.getReferenceLink() != null) {
-                WordProcessing.addHyperlinkRunToParagraph(bodyParagraph, project.getReferenceLink(), "Click to open the project", BODY_FONT, false);
-                WordProcessing.insertNewLine(bodyParagraph);
-            }
+            addHyperlinkRunToParagraph(bodyParagraph, links, BODY_FONT, PIPE, true, ParagraphAlignment.LEFT);
 
             if (project.getDescription() != null) {
                 var split = Arrays.stream(project.getDescription().split("\\n")).toList();
-                WordProcessing.addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
-                WordProcessing.insertNewLine(bodyParagraph);
+                addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
+                insertNewLine(bodyParagraph);
             }
 
             if (projectNumber < projects.size())
-                WordProcessing.insertNewLine(bodyParagraph);
+                insertNewLine(bodyParagraph);
         }
+
+        insertNewLine(bodyParagraph);
     }
 
     private static void addEducationsToDocument(XWPFDocument document, List<Education> educations) {
@@ -302,7 +313,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Education", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Education", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
         int educationNumber = 0;
@@ -310,19 +321,20 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             educationNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
             String duration = calculateYearDuration(education.getStartYear(), education.getEndYear());
-            WordProcessing.addRunToParagraph(bodyParagraph, duration, BODY_FONT, false);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, duration, BODY_FONT, false);
+
+            addSymbolToParagraph(bodyParagraph, PIPE, BODY_FONT.getSize());
 
             List<String> titleParts = Arrays.asList(education.getMajor().toString(),
                     education.getUniversity(),
                     education.getDegreeLevel().toString());
 
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
 
-            WordProcessing.insertNewLine(bodyParagraph);
+            insertNewLine(bodyParagraph);
 
             if (educationNumber < educations.size())
-                WordProcessing.insertNewLine(bodyParagraph);
+                insertNewLine(bodyParagraph);
         }
     }
 
@@ -331,20 +343,20 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Teaching Assistance", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Teaching Assistance", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
         for (TeachingAssistance ta : teachingAssistance) {
             bodyParagraph.setIndentationLeft(INDENTATION);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
 
             List<String> titleParts = Arrays.asList(ta.getTitle(),
                     ta.getUniversity(),
-                    DateCalculation.calculateDuration(ta.getStartDate(), ta.getEndDate()));
+                    calculateDuration(ta.getStartDate(), ta.getEndDate()));
 
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
+            insertNewLine(bodyParagraph);
         }
     }
 
@@ -353,7 +365,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Presentations", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Presentations", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
@@ -361,24 +373,24 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Presentation presentation : presentations) {
             presentationNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
 
             List<String> titleParts = Arrays.asList(presentation.getTitle(), presentation.getDate().toString());
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
+            insertNewLine(bodyParagraph);
 
             if (presentation.getReferenceLink() != null) {
-                WordProcessing.addHyperlinkRunToParagraph(bodyParagraph, presentation.getReferenceLink(), "More about the presentation", BODY_FONT, false);
-                WordProcessing.insertNewLine(bodyParagraph);
+                addHyperlinkRunToParagraph(bodyParagraph, presentation.getReferenceLink(), "More about the presentation", BODY_FONT, false);
+                insertNewLine(bodyParagraph);
             }
 
             if (presentation.getDescription() != null) {
-                WordProcessing.addRunToParagraph(bodyParagraph, presentation.getDescription(), BODY_FONT, false);
-                WordProcessing.insertNewLine(bodyParagraph);
+                addRunToParagraph(bodyParagraph, presentation.getDescription(), BODY_FONT, false);
+                insertNewLine(bodyParagraph);
             }
 
             if (presentationNumber < presentations.size())
-                WordProcessing.insertNewLine(bodyParagraph);
+                insertNewLine(bodyParagraph);
         }
     }
 
@@ -387,7 +399,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Patents", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Patents", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
@@ -395,24 +407,24 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Patent patent : patents) {
             patentNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
 
             List<String> titleParts = Arrays.asList(patent.getTitle(), patent.getRegistrationNumber(), patent.getRegistrationDate().toString());
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
+            insertNewLine(bodyParagraph);
 
             if (patent.getReferenceLink() != null) {
-                WordProcessing.addHyperlinkRunToParagraph(bodyParagraph, patent.getReferenceLink(), "More about the patent", BODY_FONT, false);
-                WordProcessing.insertNewLine(bodyParagraph);
+                addHyperlinkRunToParagraph(bodyParagraph, patent.getReferenceLink(), "More about the patent", BODY_FONT, false);
+                insertNewLine(bodyParagraph);
             }
 
             if (patent.getDescription() != null) {
-                WordProcessing.addRunToParagraph(bodyParagraph, patent.getDescription(), BODY_FONT, false);
-                WordProcessing.insertNewLine(bodyParagraph);
+                addRunToParagraph(bodyParagraph, patent.getDescription(), BODY_FONT, false);
+                insertNewLine(bodyParagraph);
             }
 
             if (patentNumber < patents.size())
-                WordProcessing.insertNewLine(bodyParagraph);
+                insertNewLine(bodyParagraph);
         }
     }
 
@@ -421,7 +433,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Researches", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Researches", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
@@ -429,7 +441,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         for (Research research : researches) {
             researchNumber++;
             bodyParagraph.setIndentationLeft(INDENTATION);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
 
             if (research.getReferenceLink() != null) {
                 Map<String, String> titleParts = new LinkedHashMap<>() {{
@@ -438,18 +450,18 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
                     put(research.getDate().toString(), research.getReferenceLink());
                 }};
 
-                WordProcessing.addHyperlinkRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true);
-                WordProcessing.insertNewLine(bodyParagraph);
+                addHyperlinkRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, true, ParagraphAlignment.LEFT);
+                insertNewLine(bodyParagraph);
             }
 
             if (research.getDescription() != null) {
                 var split = Arrays.stream(research.getDescription().split("\\n")).toList();
-                WordProcessing.addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
-                WordProcessing.insertNewLine(bodyParagraph);
+                addRunToParagraph(bodyParagraph, split, BODY_FONT, NEW_LINE, false);
+                insertNewLine(bodyParagraph);
             }
 
             if (researchNumber < researches.size())
-                WordProcessing.insertNewLine(bodyParagraph);
+                insertNewLine(bodyParagraph);
         }
     }
 
@@ -458,7 +470,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Languages", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Languages", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
         bodyParagraph.setIndentationLeft(INDENTATION);
@@ -466,16 +478,16 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         int languageNumber = 0;
         for (Language language : languages) {
             languageNumber++;
-            WordProcessing.addRunToParagraph(bodyParagraph, language.getName().toString(), BODY_FONT, false);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, COLON, BODY_FONT.getSize());
+            addRunToParagraph(bodyParagraph, language.getName().toString(), BODY_FONT, false);
+            addSymbolToParagraph(bodyParagraph, COLON, BODY_FONT.getSize());
 
-            WordProcessing.addRunToParagraph(bodyParagraph, language.estimateAverageLevel().toString(), BODY_FONT, false);
+            addRunToParagraph(bodyParagraph, language.estimateAverageLevel().toString(), BODY_FONT, false);
 
             if (languageNumber < languages.size())
-                WordProcessing.addSymbolToParagraph(bodyParagraph, BULLET, BODY_FONT.getSize());
+                addSymbolToParagraph(bodyParagraph, BULLET, BODY_FONT.getSize());
         }
 
-        WordProcessing.insertNewLine(bodyParagraph);
+        insertNewLine(bodyParagraph);
     }
 
     private static void addHobbiesToDocument(XWPFDocument document, List<Hobby> hobbies) {
@@ -483,7 +495,7 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Hobbies", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Hobbies", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
@@ -492,8 +504,8 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
             hobbyList.add(hobby.getTitle());
         }
 
-        WordProcessing.addRunToParagraph(bodyParagraph, hobbyList, BODY_FONT, BULLET, false);
-        WordProcessing.insertNewLine(bodyParagraph);
+        addRunToParagraph(bodyParagraph, hobbyList, BODY_FONT, BULLET, false);
+        insertNewLine(bodyParagraph);
     }
 
     private static void addMembershipsToDocument(XWPFDocument document, List<Membership> memberships) {
@@ -501,16 +513,16 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Memberships", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Memberships", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
         for (Membership membership : memberships) {
             bodyParagraph.setIndentationLeft(INDENTATION);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
             List<String> titleParts = Arrays.asList(membership.getTitle(), valueOf(membership.getDate().getYear()));
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
+            insertNewLine(bodyParagraph);
         }
     }
 
@@ -519,17 +531,17 @@ public class ATSClassicDocumentGenerator implements DocumentGenerator {
         XWPFParagraph bodyParagraph = document.createParagraph();
 
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        WordProcessing.addHeadingRunToParagraph(titleParagraph, "Volunteer Activities", sectionTitleFont, FILL_COLOR);
+        addHeadingRunToParagraph(titleParagraph, "Volunteer Activities", sectionTitleFont, FILL_COLOR);
 
         bodyParagraph.setAlignment(ParagraphAlignment.LEFT);
 
         for (VolunteerActivity volunteerActivity : volunteerActivities) {
             bodyParagraph.setIndentationLeft(INDENTATION);
-            WordProcessing.addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
+            addSymbolToParagraph(bodyParagraph, DASH, BODY_SIZE);
 
             List<String> titleParts = Arrays.asList(volunteerActivity.getTitle(), valueOf(volunteerActivity.getYear()));
-            WordProcessing.addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
-            WordProcessing.insertNewLine(bodyParagraph);
+            addRunToParagraph(bodyParagraph, titleParts, BODY_FONT, PIPE, false);
+            insertNewLine(bodyParagraph);
         }
     }
 }
