@@ -13,7 +13,7 @@ The API supports various themes for the generated documents:
 * <strong>Language<strong>: Java 21
 * <strong>Database<strong>: MySQL
 * <strong>ORM<strong>: Hibernate
-* <strong>Documentation<strong>: Swagger
+* <strong>Documentation<strong>: Swagger UI/Spring OpenAPI
 
 ## How to use the API?
 To use this API you should go through the steps below:
@@ -21,22 +21,14 @@ To use this API you should go through the steps below:
 
     ``` git clone https://github.com/mmahdi-farrokhy/ResumeBuilder.git```
 
-2. Open [Postman](https://dl.pstmn.io/download/latest/win64) to send requests to the API.
+2. Launch [Postman](https://dl.pstmn.io/download/latest/win64) to send requests to the API.
 3. Import the prepared requests from this [path](https://github.com/mmahdi-farrokhy/ResumeBuilder/blob/main/Postman%20Request%20Collection.json) in Postman.
 4. Fill the request body with your customized data.
 5. Send the requests.
-    * Inportant notes
+    * Important notes
       * First create a user, then use its data in 'Create New Resume' request body for object 'user'.
       * Set new resume's id for all child entities manually(resume_id column), after creating it in the database.
 6. 'Download Resume' request fetches a resume with all its child entities from database and creates a resume file with .docx extension (MS Word) in 'resumes' folder in project's path.
 
 ## Sample Generated Resumes
-Here you can see my own resumes generated using '[Resume Builder API](https://github.com/mmahdi-farrokhy/ResumeBuilder)'
-
-[ATS Classic - Mohammad Mahdi Farrokhy.pdf](https://github.com/mmahdi-farrokhy/ResumeBuilder/files/15283698/ATS.Classic.-.Mohammad.Mahdi.Farrokhy.pdf)
-
-[Classic Accounting - Mohammad Mahdi Farrokhy.pdf](https://github.com/mmahdi-farrokhy/ResumeBuilder/files/15283704/Classic.Accounting.-.Mohammad.Mahdi.Farrokhy.pdf)
-
-[Simple Florist - Mohammad Mahdi Farrokhy.pdf](https://github.com/mmahdi-farrokhy/ResumeBuilder/files/15283707/Simple.Florist.-.Mohammad.Mahdi.Farrokhy.pdf)
-
-[Woodworking - Mohammad Mahdi Farrokhy.pdf](https://github.com/mmahdi-farrokhy/ResumeBuilder/files/15283711/Woodworking.-.Mohammad.Mahdi.Farrokhy.pdf)
+[Here](https://github.com/mmahdi-farrokhy/ResumeBuilder/tree/main/Sample%20Resumes) you can see my own resumes generated using '[Resume Builder API](https://github.com/mmahdi-farrokhy/ResumeBuilder)'
